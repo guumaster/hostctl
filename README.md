@@ -28,6 +28,10 @@ Go to [release page](https://github.com/guumaster/hostctl/releases) and download
   * add profiles directly from a `.etchosts` file that you can add to your vcs.
   
   
+## Sample Usage
+[![sample usage](docs/hostctl.gif)]
+
+
 ## Linux/Mac/Windows and permissions
 
 **WARNING**: this should work on any system, but currently this is only being tested on Linux. 
@@ -87,12 +91,9 @@ Use "hostctl [command] --help" for more information about a command.
 +---------+--------+----------------+----------------------------+
 | lite    | on     | 192.168.1.51   | jupyter.toolkit-lite.local |
 +---------+--------+----------------+----------------------------+
-| toolkit | on     | 192.168.99.119 | minio.toolkit.local        |
 | toolkit | on     | 192.168.99.119 | app.toolkit.local          |
 | toolkit | on     | 192.168.99.119 | gitea.toolkit.local        |
 | toolkit | on     | 192.168.99.119 | jupyter.toolkit.local      |
-| toolkit | on     | 192.168.99.119 | drone.toolkit.local        |
-| toolkit | on     | 192.168.99.119 | code.toolkit.local         |
 +---------+--------+----------------+----------------------------+
 ```
 
@@ -140,11 +141,7 @@ Disabling a profile does not remove the content from the hosts file, this way yo
 +---------+--------+----------------+------------------------------+
 | PROFILE | STATUS |       IP       |            DOMAIN            |
 +---------+--------+----------------+------------------------------+
-| default | on     | 127.0.0.1      | localhost                    |
-| default | on     | 127.0.1.1      | some-existing.local          |
-| default | on     | ::1            | ip6-localhost                |
-+---------+--------+----------------+------------------------------+
-| another | off    | 192.168.1.51   | jupyter.toolkit-lite.local   |
+...
 +---------+--------+----------------+------------------------------+
 | awesome | off    | 127.0.0.1      | web.my-awesome-project.local |
 | awesome | off    | 127.0.0.1      | api.my-awesome-project.local |
@@ -157,11 +154,7 @@ Disabling a profile does not remove the content from the hosts file, this way yo
 +---------+--------+----------------+------------------------------+
 | PROFILE | STATUS |       IP       |            DOMAIN            |
 +---------+--------+----------------+------------------------------+
-| default | on     | 127.0.0.1      | localhost                    |
-| default | on     | 127.0.1.1      | some-existing.local          |
-| default | on     | ::1            | ip6-localhost                |
-+---------+--------+----------------+------------------------------+
-| another | off    | 192.168.1.51   | jupyter.toolkit-lite.local   |
+...
 +---------+--------+----------------+------------------------------+
 | awesome | on     | 127.0.0.1      | web.my-awesome-project.local |
 | awesome | on     | 127.0.0.1      | api.my-awesome-project.local |
