@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -35,7 +37,13 @@ It will be  listed as "on" while it is enabled.
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
-		return host.CheckProfile(profile)
+		all, _ := cmd.Flags().GetBool("all")
+
+		if !all && profile == "" {
+			return errors.New("missing profile name")
+		}
+
+		return host.ValidProfile(profile)
 	},
 }
 
