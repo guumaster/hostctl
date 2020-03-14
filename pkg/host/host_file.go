@@ -44,6 +44,8 @@ func ReadHostFileStrict(file string) (*hostFile, error) {
 	return Read(fromFile, true)
 }
 
+// Read returns hosts file content grouped by profiles.
+// If you pass strict=true it would remove all comments.
 func Read(r io.Reader, strict bool) (*hostFile, error) {
 	h := &hostFile{
 		profiles: profileMap{},
@@ -83,6 +85,7 @@ func Read(r io.Reader, strict bool) (*hostFile, error) {
 	return h, nil
 }
 
+// IsHostLine checks if a line is a host line or a comment line.
 func IsHostLine(line string) bool {
 	p := strings.Split(cleanLine(line), " ")
 	i := 0
@@ -154,6 +157,9 @@ func WriteToFile(f *os.File, h *hostFile) error {
 
 func addProfile(f *os.File, profile string, hl hostLines) error {
 	_, err := f.WriteString(fmt.Sprintf("# profile %s\n", profile))
+	if err != nil {
+		return err
+	}
 	for _, l := range hl {
 		_, err = f.WriteString(l + "\n")
 		if err != nil {

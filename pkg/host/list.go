@@ -7,6 +7,7 @@ import (
 	"github.com/guumaster/tablewriter"
 )
 
+// ListOptions contains available options for listing.
 type ListOptions struct {
 	Profile string
 }

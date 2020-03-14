@@ -36,6 +36,8 @@ If you try it on a different system please let me know [here](https://github.com
 The tool recognize your system and use the right hosts file, it will use `/etc/hosts` on Linux/Mac 
 and `C:\Windows\System32\Drivers\etc\hosts` on Windows.
 
+**SUDO**: You will need permissions for any action that modify hosts file, add `sudo` to the commands below when needed.
+
 
 ## Usage
 
@@ -129,7 +131,7 @@ You can add that content as a profile with this command:
 
 ### Enable/Disable profile
 
-You can enable/disable any profile and the routing will react to it state. 
+You can enable/disable any profile, the routing will react to it state. 
 Disabling a profile does not remove the content from the hosts file, this way you can re-enable it later on.
 
 `$> hostctl disable -p awesome` 
