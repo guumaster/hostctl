@@ -205,10 +205,6 @@ You can restore a previous backup of your hosts file with this command:
 It would **overwrite** your hosts file with the content of your backup.
 
 
-
-`hostctl restore -f path_to_file`
-
-
 ### TODO
 
 Features that I'd like to add: 
@@ -221,8 +217,7 @@ Features that I'd like to add:
   * [ ] `hostctl rm domains` dom1,dom2 [-p profile]
 
 
-
-#### References
+### References
 
 * Dependencies:
   * [spf13/cobra](https://github.com/spf13/cobra)
