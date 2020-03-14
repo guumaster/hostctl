@@ -15,7 +15,7 @@ func ValidProfile(p string) error {
 
 // NotEmptyProfile controls the profile name.
 func NotEmptyProfile(p string) error {
-	if p != "" {
+	if p == "" {
 		return errors.New("profile can't be empty")
 	}
 

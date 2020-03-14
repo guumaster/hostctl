@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"runtime"
 
@@ -21,6 +22,13 @@ You can have multiple profiles, enable/disable exactly what
 you need each time with a simple interface.
 `,
 	SilenceUsage: true,
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		host, _ := cmd.Flags().GetString("host-file")
+
+		fmt.Printf("Using hosts file: %s\n", host)
+
+		return nil
+	},
 }
 
 func Execute() {
