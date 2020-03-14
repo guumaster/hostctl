@@ -189,7 +189,7 @@ You can save a copy of your hosts file with this command:
 It would create a file `/tmp/hosts.20200314` with the content of your hosts file.
 
 
-### Backuo a hosts file
+### Restore a hosts file
 
 You can restore a previous backup of your hosts file with this command:
 
