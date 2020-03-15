@@ -89,7 +89,7 @@ func Read(r io.Reader, strict bool) (*hostFile, error) {
 func IsHostLine(line string) bool {
 	p := strings.Split(cleanLine(line), " ")
 	i := 0
-	if p[0] == "#" {
+	if p[0] == "#" && len(p) > 1 {
 		i = 1
 	}
 	ip := net.ParseIP(p[i])
