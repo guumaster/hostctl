@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"github.com/guumaster/tablewriter"
 	"log"
 	"os"
 
@@ -30,7 +31,13 @@ as extension.
 		src, _ := cmd.Flags().GetString("host-file")
 		dst, _ := cmd.Flags().GetString("path")
 
-		return host.BackupFile(src, dst)
+		backupFile, err := host.BackupFile(src, dst)
+
+		table := tablewriter.NewWriter(os.Stdout)
+		table.Append([]string{backupFile})
+		table.Render()
+
+		return err
 	},
 }
 
