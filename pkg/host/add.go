@@ -5,31 +5,77 @@ import (
 	"os"
 )
 
+// commonAddOptions contains common options for adding.
+type commonAddOptions struct {
+	Dst     string
+	Profile string
+	Reset   bool
+}
+
+// AddFromFileOptions contains available options for adding from file.
+type AddFromFileOptions struct {
+	Dst     string
+	Profile string
+	Reset   bool
+	From string
+}
+
+// AddFromArgsOptions contains available options for adding from arguments.
+type AddFromArgsOptions struct {
+	Dst     string
+	Profile string
+	Reset   bool
+	Domains []string
+	IP      string
+}
+
 // AddFromFile reads content from a file and adds it as a profile into your hosts file.
 // If you pass reset=true it will delete all previous content of the profile.
-func AddFromFile(from, dst, profile string, reset bool) error {
-	if from == "" {
+func AddFromFile(opts *AddFromFileOptions) error {
+	if opts.From == "" {
 		return errors.New("missing source file")
 	}
-	if dst == "" {
+	newData, _ := ReadHostFileStrict(opts.From)
+
+	return add(newData, &commonAddOptions{
+		opts.Dst,
+		opts.Profile,
+		opts.Reset,
+	})
+}
+
+func AddFromArgs(opts *AddFromArgsOptions) error {
+	if len(opts.Domains) == 0 {
+		return errors.New("missing domains")
+	}
+	newData := ReadFromArgs(opts.Domains, opts.IP)
+
+	return add(newData, &commonAddOptions{
+		opts.Dst,
+		opts.Profile,
+		opts.Reset,
+	})
+}
+
+func add(n *hostFile, opts *commonAddOptions) error {
+	if opts.Dst == "" {
 		return errors.New("missing destination file")
 	}
-	if profile == "" {
-		profile = "default"
+	if opts.Profile == "" {
+		opts.Profile = "default"
 	}
 
-	currData, err := ReadHostFile(dst)
+	currData, err := ReadHostFile(opts.Dst)
 	if err != nil {
 		return err
 	}
-	newData, _ := ReadHostFileStrict(from)
 
-	if reset {
-		currData.profiles[profile] = hostLines{}
+	if opts.Reset {
+		currData.profiles[opts.Profile] = hostLines{}
 	}
-	currData.profiles[profile] = append(currData.profiles[profile], newData.profiles["default"]...)
+	currData.profiles[opts.Profile] = append(currData.profiles[opts.Profile], n.profiles["default"]...)
 
-	dstFile, err := os.OpenFile(dst, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	dstFile, err := os.OpenFile(opts.Dst, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		return err
 	}

@@ -85,6 +85,20 @@ func Read(r io.Reader, strict bool) (*hostFile, error) {
 	return h, nil
 }
 
+// ReadFromArgs read arguments into a hostFile struct
+func ReadFromArgs(domains []string, ip string) *hostFile {
+	dom := make([]string, len(domains))
+	for k, d := range domains {
+		dom[k] = fmt.Sprintf("%s\t%s", ip, d)
+	}
+	newData := &hostFile{
+		profiles: profileMap{
+			"default": dom,
+		},
+	}
+	return newData
+}
+
 // IsHostLine checks if a line is a host line or a comment line.
 func IsHostLine(line string) bool {
 	p := strings.Split(cleanLine(line), " ")
