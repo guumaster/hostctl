@@ -22,12 +22,10 @@ If the profile already exists it will be overwritten.
 		h, _ := cmd.Flags().GetString("host-file")
 
 		err := host.AddFromFile(&host.AddFromFileOptions{
-			From: from,
-			CommonAddOptions: &host.CommonAddOptions{
-				Dst:     h,
-				Profile: profile,
-				Reset:   true,
-			},
+			From:    from,
+			Dst:     h,
+			Profile: profile,
+			Reset:   true,
 		})
 		if err != nil {
 			return err

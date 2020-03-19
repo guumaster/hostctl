@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-// CommonAddOptions contains common options for adding.
-type CommonAddOptions struct {
+// commonAddOptions contains common options for adding.
+type commonAddOptions struct {
 	Dst     string
 	Profile string
 	Reset   bool
@@ -14,13 +14,17 @@ type CommonAddOptions struct {
 
 // AddFromFileOptions contains available options for adding from file.
 type AddFromFileOptions struct {
-	*CommonAddOptions
+	Dst     string
+	Profile string
+	Reset   bool
 	From string
 }
 
 // AddFromArgsOptions contains available options for adding from arguments.
 type AddFromArgsOptions struct {
-	*CommonAddOptions
+	Dst     string
+	Profile string
+	Reset   bool
 	Domains []string
 	IP      string
 }
@@ -33,7 +37,11 @@ func AddFromFile(opts *AddFromFileOptions) error {
 	}
 	newData, _ := ReadHostFileStrict(opts.From)
 
-	return add(newData, opts.CommonAddOptions)
+	return add(newData, &commonAddOptions{
+		opts.Dst,
+		opts.Profile,
+		opts.Reset,
+	})
 }
 
 func AddFromArgs(opts *AddFromArgsOptions) error {
@@ -42,10 +50,14 @@ func AddFromArgs(opts *AddFromArgsOptions) error {
 	}
 	newData := ReadFromArgs(opts.Domains, opts.IP)
 
-	return add(newData, opts.CommonAddOptions)
+	return add(newData, &commonAddOptions{
+		opts.Dst,
+		opts.Profile,
+		opts.Reset,
+	})
 }
 
-func add(n *hostFile, opts *CommonAddOptions) error {
+func add(n *hostFile, opts *commonAddOptions) error {
 	if opts.Dst == "" {
 		return errors.New("missing destination file")
 	}

@@ -21,12 +21,10 @@ If the profile already exists it will be added to it.`,
 		h, _ := cmd.Flags().GetString("host-file")
 
 		err := host.AddFromFile(&host.AddFromFileOptions{
-			From: from,
-			CommonAddOptions: &host.CommonAddOptions{
-				Dst:     h,
-				Profile: profile,
-				Reset:   false,
-			},
+			From:    from,
+			Dst:     h,
+			Profile: profile,
+			Reset:   false,
 		})
 		if err != nil {
 			return err
@@ -68,11 +66,9 @@ If the profile already exists it will be added to it.`,
 		err := host.AddFromArgs(&host.AddFromArgsOptions{
 			Domains: args,
 			IP:      ip,
-			CommonAddOptions: &host.CommonAddOptions{
-				Dst:     h,
-				Profile: profile,
-				Reset:   false,
-			},
+			Dst:     h,
+			Profile: profile,
+			Reset:   false,
 		})
 		if err != nil {
 			return err
