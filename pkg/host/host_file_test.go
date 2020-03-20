@@ -14,7 +14,7 @@ func TestReadFromArgs(t *testing.T) {
 		}
 		for k, d := range domains {
 			got := data.profiles["default"][k]
-			want := fmt.Sprintf("%s\t%s", ip, d)
+			want := fmt.Sprintf("%s %s", ip, d)
 			if got != want {
 				t.Fatalf("unexpected record; got %s; want %s", got, want)
 			}
