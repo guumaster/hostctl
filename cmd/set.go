@@ -14,6 +14,18 @@ var setFromFileCmd = &cobra.Command{
 Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be overwritten.
 `,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		profile, _ := cmd.Flags().GetString("profile")
+
+		if profile == "" {
+			return host.MissingProfileError
+		}
+
+		if profile == "default" {
+			return host.DefaultProfileError
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
@@ -35,16 +47,6 @@ If the profile already exists it will be overwritten.
 			Profile: profile,
 		})
 	},
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		err := host.NotEmptyProfile(profile)
-		if err != nil {
-			return err
-		}
-
-		return host.ValidProfile(profile)
-	},
 }
 
 // setDomainsCmd represents the fromFile command
@@ -54,14 +56,26 @@ var setDomainsCmd = &cobra.Command{
 	Long: `
 Set content in your hosts file.
 If the profile already exists it will be added to it.`,
+	PreRunE: func(cmd *cobra.Command, domains []string) error {
+		profile, _ := cmd.Flags().GetString("profile")
+
+		if profile == "" {
+			return host.MissingProfileError
+		}
+
+		if profile == "default" {
+			return host.DefaultProfileError
+		}
+
+		if len(domains) == 0 {
+			return host.MissingDomainsError
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		ip, _ := cmd.Flags().GetString("ip")
 		profile, _ := cmd.Flags().GetString("profile")
-		if profile == "" {
-			profile = "other"
-		}
-
 		h, _ := cmd.Flags().GetString("host-file")
 
 		err := host.AddFromArgs(&host.AddFromArgsOptions{
@@ -78,11 +92,6 @@ If the profile already exists it will be added to it.`,
 		return host.ListProfiles(src, &host.ListOptions{
 			Profile: profile,
 		})
-	},
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		return host.ValidProfile(profile)
 	},
 }
 

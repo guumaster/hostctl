@@ -1,7 +1,6 @@
 package host
 
 import (
-	"errors"
 	"fmt"
 	"os"
 )
@@ -10,7 +9,7 @@ import (
 // The content remains on the file and can be enabled later.
 func Disable(dst, profile string) error {
 	if dst == "" {
-		return errors.New("missing destination file")
+		return MissingDestError
 	}
 
 	h, err := ReadHostFile(dst)

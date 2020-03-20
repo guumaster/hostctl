@@ -71,6 +71,7 @@ func appendProfile(profile string, table *tablewriter.Table, data hostLines) {
 		status := "on"
 		ip, domain := rs[0], rs[1]
 		if IsDisabled(r) {
+			// skip empty comments lines
 			if rs[1] == "" {
 				continue
 			}

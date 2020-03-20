@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"errors"
-
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -16,6 +14,19 @@ var enableCmd = &cobra.Command{
 Disable an existing profile from your hosts file without removing it.
 It will be  listed as "on" while it is enabled.
 `,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		profile, _ := cmd.Flags().GetString("profile")
+		all, _ := cmd.Flags().GetBool("all")
+
+		if !all && profile == "" {
+			return host.MissingProfileError
+		}
+
+		if profile == "default" {
+			return host.DefaultProfileError
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 
@@ -34,16 +45,6 @@ It will be  listed as "on" while it is enabled.
 		return host.ListProfiles(src, &host.ListOptions{
 			Profile: profile,
 		})
-	},
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-		all, _ := cmd.Flags().GetBool("all")
-
-		if !all && profile == "" {
-			return errors.New("missing profile name")
-		}
-
-		return host.ValidProfile(profile)
 	},
 }
 

@@ -1,7 +1,6 @@
 package host
 
 import (
-	"errors"
 	"os"
 )
 
@@ -17,7 +16,7 @@ type AddFromFileOptions struct {
 	Dst     string
 	Profile string
 	Reset   bool
-	From string
+	From    string
 }
 
 // AddFromArgsOptions contains available options for adding from arguments.
@@ -33,7 +32,7 @@ type AddFromArgsOptions struct {
 // If you pass reset=true it will delete all previous content of the profile.
 func AddFromFile(opts *AddFromFileOptions) error {
 	if opts.From == "" {
-		return errors.New("missing source file")
+		return MissingSourceError
 	}
 	newData, _ := ReadHostFileStrict(opts.From)
 
@@ -46,7 +45,7 @@ func AddFromFile(opts *AddFromFileOptions) error {
 
 func AddFromArgs(opts *AddFromArgsOptions) error {
 	if len(opts.Domains) == 0 {
-		return errors.New("missing domains")
+		return MissingDomainsError
 	}
 	newData := ReadFromArgs(opts.Domains, opts.IP)
 
@@ -59,7 +58,7 @@ func AddFromArgs(opts *AddFromArgsOptions) error {
 
 func add(n *hostFile, opts *commonAddOptions) error {
 	if opts.Dst == "" {
-		return errors.New("missing destination file")
+		return MissingDestError
 	}
 	if opts.Profile == "" {
 		opts.Profile = "default"

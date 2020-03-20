@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/spf13/cobra"
 
@@ -29,7 +30,15 @@ WARNING: the complete hosts file will be overwritten with the backup data.
 		dst, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
 
-		return host.RestoreFile(from, dst)
+		err := host.RestoreFile(from, dst)
+		if err != nil {
+			return err
+		}
+		_ = host.ListProfiles(dst, &host.ListOptions{})
+
+		fmt.Printf("Restore completed.")
+
+		return nil
 	},
 }
 

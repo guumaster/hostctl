@@ -29,7 +29,7 @@ Go to [release page](https://github.com/guumaster/hostctl/releases) and download
   
   
 ## Sample Usage
-[![sample usage](docs/hostctl.gif)]
+![sample usage](docs/hostctl.gif)
 
 
 ## Linux/Mac/Windows and permissions

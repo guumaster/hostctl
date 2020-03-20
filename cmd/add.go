@@ -37,12 +37,14 @@ If the profile already exists it will be added to it.`,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
 
-		err := host.NotEmptyProfile(profile)
-		if err != nil {
-			return err
+		if profile == "" {
+			return host.MissingProfileError
 		}
 
-		return host.ValidProfile(profile)
+		if profile == "default" {
+			return host.DefaultProfileError
+		}
+		return nil
 	},
 }
 
@@ -53,14 +55,22 @@ var addDomainsCmd = &cobra.Command{
 	Long: `
 Set content in your hosts file.
 If the profile already exists it will be added to it.`,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		profile, _ := cmd.Flags().GetString("profile")
+
+		if profile == "" {
+			return host.MissingProfileError
+		}
+
+		if profile == "default" {
+			return host.DefaultProfileError
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		ip, _ := cmd.Flags().GetString("ip")
 		profile, _ := cmd.Flags().GetString("profile")
-		if profile == "" {
-			profile = "other"
-		}
-
 		h, _ := cmd.Flags().GetString("host-file")
 
 		err := host.AddFromArgs(&host.AddFromArgsOptions{
@@ -74,14 +84,14 @@ If the profile already exists it will be added to it.`,
 			return err
 		}
 
+		err = host.Enable(src, profile)
+		if err != nil {
+			return err
+		}
+
 		return host.ListProfiles(src, &host.ListOptions{
 			Profile: profile,
 		})
-	},
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		return host.ValidProfile(profile)
 	},
 }
 

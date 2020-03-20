@@ -1,7 +1,6 @@
 package host
 
 import (
-	"errors"
 	"fmt"
 	"os"
 )
@@ -9,7 +8,7 @@ import (
 // Remove removes a profile from a hosts file.
 func Remove(dst, profile string) error {
 	if dst == "" {
-		return errors.New("missing destination file")
+		return MissingDestError
 	}
 
 	h, err := ReadHostFile(dst)

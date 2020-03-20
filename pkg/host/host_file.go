@@ -89,7 +89,7 @@ func Read(r io.Reader, strict bool) (*hostFile, error) {
 func ReadFromArgs(domains []string, ip string) *hostFile {
 	dom := make([]string, len(domains))
 	for k, d := range domains {
-		dom[k] = fmt.Sprintf("%s\t%s", ip, d)
+		dom[k] = fmt.Sprintf("%s %s", ip, d)
 	}
 	newData := &hostFile{
 		profiles: profileMap{

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"errors"
-	"github.com/guumaster/tablewriter"
+	"fmt"
 	"log"
 	"os"
 
@@ -32,12 +32,15 @@ as extension.
 		dst, _ := cmd.Flags().GetString("path")
 
 		backupFile, err := host.BackupFile(src, dst)
+		if err != nil {
+			return err
+		}
 
-		table := tablewriter.NewWriter(os.Stdout)
-		table.Append([]string{backupFile})
-		table.Render()
+		_ = host.ListProfiles(backupFile, &host.ListOptions{})
 
-		return err
+		fmt.Printf("Backup completed.")
+
+		return nil
 	},
 }
 
