@@ -18,11 +18,9 @@ If the profile already exists it will be added to it.`,
 		from, _ := cmd.Flags().GetString("from")
 		profile, _ := cmd.Flags().GetString("profile")
 
-		h, _ := cmd.Flags().GetString("host-file")
-
 		err := host.AddFromFile(&host.AddFromFileOptions{
 			From:    from,
-			Dst:     h,
+			Dst:     src,
 			Profile: profile,
 			Reset:   false,
 		})
@@ -71,12 +69,11 @@ If the profile already exists it will be added to it.`,
 		src, _ := cmd.Flags().GetString("host-file")
 		ip, _ := cmd.Flags().GetString("ip")
 		profile, _ := cmd.Flags().GetString("profile")
-		h, _ := cmd.Flags().GetString("host-file")
 
 		err := host.AddFromArgs(&host.AddFromArgsOptions{
 			Domains: args,
 			IP:      ip,
-			Dst:     h,
+			Dst:     src,
 			Profile: profile,
 			Reset:   false,
 		})
