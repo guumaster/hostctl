@@ -183,3 +183,33 @@ func addProfile(f *os.File, profile string, hl hostLines) error {
 	_, err = f.WriteString("# end\n")
 	return err
 }
+
+func getHostData(dst, profile string) (*hostFile, error) {
+	h := &hostFile{
+		profiles: profileMap{},
+	}
+
+	if dst == "" {
+		return h, MissingDestError
+	}
+
+	h, err := ReadHostFile(dst)
+	if err != nil {
+		return h, err
+	}
+	_, ok := h.profiles[profile]
+	if profile != "" && !ok {
+		return h, fmt.Errorf("profile '%s' doesn't exists in file", profile)
+	}
+
+	return h, nil
+}
+
+func writeHostData(dst string, h *hostFile) error {
+	dstFile, err := os.OpenFile(dst, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	if err != nil {
+		return err
+	}
+
+	return WriteToFile(dstFile, h)
+}

@@ -1,39 +1,85 @@
 package host
 
 import (
-	"fmt"
-	"os"
+	"strings"
 )
 
-// Remove removes a profile from a hosts file.
-func Remove(dst, profile string) error {
-	if dst == "" {
-		return MissingDestError
-	}
+type RemoveProfileOptions struct {
+	Dst     string
+	Profile string
+}
 
-	h, err := ReadHostFile(dst)
+type RemoveDomainsOptions struct {
+	Dst     string
+	Profile string
+	Domains []string
+}
+
+// RemoveProfile removes a profile from a hosts file.
+func RemoveProfile(opts *RemoveProfileOptions) error {
+	h, err := getHostData(opts.Dst, opts.Profile)
 	if err != nil {
 		return err
 	}
-	_, ok := h.profiles[profile]
-	if profile != "" && !ok {
-		return fmt.Errorf("profile '%s' doesn't exists in file", profile)
-	}
 
-	if profile == "" {
+	if opts.Profile == "" {
 		for p := range h.profiles {
 			if p != "default" {
 				delete(h.profiles, p)
 			}
 		}
 	} else {
-		delete(h.profiles, profile)
+		delete(h.profiles, opts.Profile)
 	}
 
-	dstFile, err := os.OpenFile(dst, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	return writeHostData(opts.Dst, h)
+}
+
+// RemoveDomains removes domains from a hosts file.
+func RemoveDomains(opts *RemoveDomainsOptions) error {
+	h, err := getHostData(opts.Dst, opts.Profile)
 	if err != nil {
 		return err
 	}
 
-	return WriteToFile(dstFile, h)
+	if opts.Profile == "" {
+		for p := range h.profiles {
+			if p != "default" {
+				domains := h.profiles[p]
+				h.profiles[p] = removeFromProfile(domains, opts.Domains)
+			}
+		}
+	} else {
+		domains := h.profiles[opts.Profile]
+		h.profiles[opts.Profile] = removeFromProfile(domains, opts.Domains)
+	}
+
+	return writeHostData(opts.Dst, h)
+}
+
+func removeFromProfile(lines hostLines, remove []string) hostLines {
+	newProfile := make([]string, 0)
+	for _, l := range lines {
+		rs := strings.Split(cleanLine(l), " ")
+		domain := rs[1]
+		if IsDisabled(l) {
+			// skip empty comments lines
+			if rs[1] == "" {
+				continue
+			}
+			domain = rs[2]
+		}
+		canAdd := true
+		for _, r := range remove {
+			if r == domain {
+				canAdd = false
+				break
+			}
+		}
+		if canAdd {
+			newProfile = append(newProfile, l)
+		}
+	}
+
+	return newProfile
 }
