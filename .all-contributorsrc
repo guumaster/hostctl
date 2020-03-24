@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "pacodes",
+      "name": "Pacodes",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/28688410?v=4",
+      "profile": "https://github.com/pacodes",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "hostctl",
+  "projectOwner": "guumaster",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
