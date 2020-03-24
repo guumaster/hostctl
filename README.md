@@ -17,8 +17,14 @@ It is a tedious task to handle the `hosts` file by editing manually. With this t
 
 ## Installation
 
+### Pre-built binary
+
 Go to [release page](https://github.com/guumaster/hostctl/releases) and download the binary you need.
 
+### Arch Linux
+
+`hostctl` has an AUR package: <https://aur.archlinux.org/packages/hostctl/>. 
+You can install it using your [AUR helper](https://wiki.archlinux.org/index.php/AUR_helpers) of choice.
 
 ## Features
 
