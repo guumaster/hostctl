@@ -1,4 +1,7 @@
 [![Tests](https://img.shields.io/github/workflow/status/guumaster/hostctl/Test)](https://github.com/guumaster/hostctl/actions?query=workflow%3ATest)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![GitHub Release](https://img.shields.io/github/release/guumaster/hostctl.svg?logo=github&labelColor=262b30)](https://github.com/guumaster/hostctl/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/guumaster/hostctl)](https://goreportcard.com/report/github.com/guumaster/hostctl)
 [![License](https://img.shields.io/github/license/guumaster/hostctl)](https://github.com/guumaster/hostctl/LICENSE)
@@ -17,8 +20,14 @@ It is a tedious task to handle the `hosts` file by editing manually. With this t
 
 ## Installation
 
+### Pre-built binary
+
 Go to [release page](https://github.com/guumaster/hostctl/releases) and download the binary you need.
 
+### Arch Linux
+
+`hostctl` has an AUR package: <https://aur.archlinux.org/packages/hostctl/>. 
+You can install it using your [AUR helper](https://wiki.archlinux.org/index.php/AUR_helpers) of choice.
 
 ## Features
 
@@ -34,13 +43,12 @@ Go to [release page](https://github.com/guumaster/hostctl/releases) and download
 
 ## Linux/Mac/Windows and permissions
 
-**WARNING**: this should work on any system, but currently this is only being tested on Linux. 
-If you try it on a different system please let me know [here](https://github.com/guumaster/hostctl/issues/new).
+The tool recognize your system and use the right hosts file, it will use `/etc/hosts` on Linux/Mac and `C:/Windows/System32/Drivers/etc/hosts` on Windows.
 
-The tool recognize your system and use the right hosts file, it will use `/etc/hosts` on Linux/Mac 
-and `C:\Windows\System32\Drivers\etc\hosts` on Windows.
+**SUDO/ADMIN**: You will need permissions for any action that modify hosts file, add `sudo` to the commands below when needed. If you are on windows, make sure you run it as administrator.
 
-**SUDO**: You will need permissions for any action that modify hosts file, add `sudo` to the commands below when needed.
+**WARNING**: it should work on any system. It's tested on Ubuntu and Windows 10. If you can confirm it works on other system, please let me know [here](https://github.com/guumaster/hostctl/issues/new).
+
 
 
 ## Usage
@@ -226,3 +234,24 @@ Features that I'd like to add:
 
 ### Author(s)
 * [guumaster](https://github.com/guumaster)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/pacodes"><img src="https://avatars2.githubusercontent.com/u/28688410?v=4" width="100px;" alt=""/><br /><sub><b>Pacodes</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Tests">⚠️</a> <a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/gkze"><img src="https://avatars0.githubusercontent.com/u/3131232?v=4" width="100px;" alt=""/><br /><sub><b>George Kontridze</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=gkze" title="Code">💻</a></td>
+    <td align="center"><a href="https://772424.com"><img src="https://avatars3.githubusercontent.com/u/64371?v=4" width="100px;" alt=""/><br /><sub><b>BarbUk</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=BarbUk" title="Code">💻</a></td>
+</tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

@@ -206,7 +206,7 @@ func getHostData(dst, profile string) (*hostFile, error) {
 }
 
 func writeHostData(dst string, h *hostFile) error {
-	dstFile, err := os.OpenFile(dst, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	dstFile, err := os.OpenFile(dst, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
