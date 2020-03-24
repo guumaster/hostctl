@@ -40,13 +40,12 @@ You can install it using your [AUR helper](https://wiki.archlinux.org/index.php/
 
 ## Linux/Mac/Windows and permissions
 
-**WARNING**: this should work on any system, but currently this is only being tested on Linux. 
-If you try it on a different system please let me know [here](https://github.com/guumaster/hostctl/issues/new).
+The tool recognize your system and use the right hosts file, it will use `/etc/hosts` on Linux/Mac and `C:/Windows/System32/Drivers/etc/hosts` on Windows.
 
-The tool recognize your system and use the right hosts file, it will use `/etc/hosts` on Linux/Mac 
-and `C:\Windows\System32\Drivers\etc\hosts` on Windows.
+**SUDO/ADMIN**: You will need permissions for any action that modify hosts file, add `sudo` to the commands below when needed. If you are on windows, make sure you run it as administrator.
 
-**SUDO**: You will need permissions for any action that modify hosts file, add `sudo` to the commands below when needed.
+**WARNING**: it should work on any system. It's tested on Ubuntu and Windows 10. If you can confirm it works on other system, please let me know [here](https://github.com/guumaster/hostctl/issues/new).
+
 
 
 ## Usage
