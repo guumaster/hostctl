@@ -1,6 +1,6 @@
 module github.com/guumaster/hostctl
 
-go 1.13
+go 1.14
 
 require (
 	github.com/guumaster/tablewriter v0.0.4-separator
