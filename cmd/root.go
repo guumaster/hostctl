@@ -41,7 +41,7 @@ func init() {
 	defaultHostsFile := "/etc/hosts"
 
 	if runtime.GOOS == "windows" {
-		defaultHostsFile = `C:\Windows\System32\Drivers\etc\hosts`
+		defaultHostsFile = `C:/Windows/System32/Drivers/etc/hosts`
 	}
 
 	envHostFile := os.Getenv("HOSTCTL_FILE")
