@@ -6,6 +6,15 @@
   "commit": false,
   "contributors": [
     {
+      "login": "gkze",
+      "name": "George Kontridze",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3131232?v=4",
+      "profile": "https://github.com/gkze",
+      "contributions": [
+        "code"
+      ]
+    },
+     {
       "login": "pacodes",
       "name": "Pacodes",
       "avatar_url": "https://avatars2.githubusercontent.com/u/28688410?v=4",
