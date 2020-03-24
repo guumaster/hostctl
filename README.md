@@ -1,4 +1,7 @@
 [![Tests](https://img.shields.io/github/workflow/status/guumaster/hostctl/Test)](https://github.com/guumaster/hostctl/actions?query=workflow%3ATest)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![GitHub Release](https://img.shields.io/github/release/guumaster/hostctl.svg?logo=github&labelColor=262b30)](https://github.com/guumaster/hostctl/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/guumaster/hostctl)](https://goreportcard.com/report/github.com/guumaster/hostctl)
 [![License](https://img.shields.io/github/license/guumaster/hostctl)](https://github.com/guumaster/hostctl/LICENSE)
@@ -231,3 +234,22 @@ Features that I'd like to add:
 
 ### Author(s)
 * [guumaster](https://github.com/guumaster)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/pacodes"><img src="https://avatars2.githubusercontent.com/u/28688410?v=4" width="100px;" alt=""/><br /><sub><b>Pacodes</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Tests">⚠️</a> <a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
