@@ -47,11 +47,17 @@ func RemoveDomains(opts *RemoveDomainsOptions) error {
 			if p != "default" {
 				domains := h.profiles[p]
 				h.profiles[p] = removeFromProfile(domains, opts.Domains)
+				if len(h.profiles[p]) == 0 {
+					delete(h.profiles, p)
+				}
 			}
 		}
 	} else {
 		domains := h.profiles[opts.Profile]
 		h.profiles[opts.Profile] = removeFromProfile(domains, opts.Domains)
+		if len(h.profiles[opts.Profile]) == 0 {
+			delete(h.profiles, opts.Profile)
+		}
 	}
 
 	return writeHostData(opts.Dst, h)
