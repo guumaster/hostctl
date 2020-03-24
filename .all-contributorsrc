@@ -23,6 +23,15 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "BarbUk",
+      "name": "BarbUk",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/64371?v=4",
+      "profile": "https://772424.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
