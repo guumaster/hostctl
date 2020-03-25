@@ -17,6 +17,12 @@ builds:
 
 changelog:
   sort: desc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
 
 archives:
   - format_overrides:
@@ -45,3 +51,43 @@ nfpms:
     homepage: https://github.com/guumaster/hostctl
     maintainer: guumaster <guuweb@gmail.com>
     description: manage your hosts file like a pro
+
+brews:
+  - name: hostctl
+    github:
+      owner: guumaster
+      name: hostctl
+    folder: Formula
+    homepage:  https://github.com/guumaster/hostctl
+    description: manage your hosts file like a pro
+    commit_author:
+      name: goreleaserbot
+      email: guuweb@gmail.com
+    caveats: "Remember to add sudo to modify your hosts file."
+
+scoop:
+  bucket:
+    owner: guumaster
+    name: hostctl
+  homepage:  https://github.com/guumaster/hostctl
+  description: manage your hosts file like a pro
+  license: MIT
+
+snapcrafts:
+  - id: hostctl
+    name: hostctl
+    summary: manage your hosts file like a pro
+    description: manage your hosts file like a pro.
+    grade: stable
+    confinement: strict
+    license: MIT
+    publish: true
+    apps:
+      hostctl:
+        plugs: ["system-files"]
+    plugs:
+      system-files:
+        read:
+          - /etc/hosts
+        write:
+          - /etc/hosts
