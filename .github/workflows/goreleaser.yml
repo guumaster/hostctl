@@ -22,6 +22,8 @@ jobs:
 
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
+        with:
+          snapcraft_token: ${{ secrets.snapcraft_token }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
