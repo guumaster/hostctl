@@ -1,7 +1,11 @@
-[![Tests](https://img.shields.io/github/workflow/status/guumaster/hostctl/Test)](https://github.com/guumaster/hostctl/actions?query=workflow%3ATest)
-[![GitHub Release](https://img.shields.io/github/release/guumaster/hostctl.svg?logo=github&labelColor=262b30)](https://github.com/guumaster/hostctl/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/guumaster/hostctl)](https://goreportcard.com/report/github.com/guumaster/hostctl)
-[![License](https://img.shields.io/github/license/guumaster/hostctl)](https://github.com/guumaster/hostctl/LICENSE)
+[![Tests][tests-badge]][tests-link]
+[![GitHub Release][release-badge]][release-link]
+[![Go Report Card][report-badge]][report-link]
+[![License][license-badge]][license-link]
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 
 # hostctl
 
@@ -21,10 +25,28 @@ It is a tedious task to handle the `hosts` file by editing manually. With this t
 
 Go to [release page](https://github.com/guumaster/hostctl/releases) and download the binary you need.
 
+
 ### Arch Linux
 
 `hostctl` has an AUR package: <https://aur.archlinux.org/packages/hostctl/>. 
 You can install it using your [AUR helper](https://wiki.archlinux.org/index.php/AUR_helpers) of choice.
+
+
+### HomeBrew
+
+_ Doc to be added after being tested on Mac _. See [Issue #14](https://github.com/guumaster/hostctl/issues/14) for helping with this.
+
+
+### Snap
+
+_ Doc to be added after being published and tested _. See [Issue #14](https://github.com/guumaster/hostctl/issues/14) for helping with this.
+
+
+### Scoop
+
+_ Doc to be added after being tested on Windows _. See [Issue #14](https://github.com/guumaster/hostctl/issues/14) for helping with this.
+
+
 
 ## Features
 
@@ -233,9 +255,6 @@ Features that I'd like to add:
 * [guumaster](https://github.com/guumaster)
 
 ## Contributors ✨
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -255,3 +274,18 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+
+<!-- JUST BADGES & LINKS -->
+[tests-badge]: https://img.shields.io/github/workflow/status/guumaster/hostctl/Test
+[tests-link]: https://github.com/guumaster/hostctl/actions?query=workflow%3ATest
+
+[release-badge]: https://img.shields.io/github/release/guumaster/hostctl.svg?logo=github&labelColor=262b30
+[release-link]: https://github.com/guumaster/hostctl/releases
+
+[report-badge]: https://goreportcard.com/badge/github.com/guumaster/hostctl
+[report-link]: https://goreportcard.com/report/github.com/guumaster/hostctl
+
+[license-badge]: https://img.shields.io/github/license/guumaster/hostctl
+[license-link]: https://github.com/guumaster/hostctl/LICENSE
+
