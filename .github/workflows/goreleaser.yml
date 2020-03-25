@@ -25,6 +25,9 @@ jobs:
         with:
           snapcraft_token: ${{ secrets.snapcraft_token }}
 
+      - name: check snapcraft
+        run: snapcraft whoami
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:
