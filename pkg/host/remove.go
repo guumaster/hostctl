@@ -4,63 +4,43 @@ import (
 	"strings"
 )
 
-type RemoveProfileOptions struct {
-	Dst     string
-	Profile string
-}
-
-type RemoveDomainsOptions struct {
-	Dst     string
-	Profile string
-	Domains []string
-}
-
 // RemoveProfile removes a profile from a hosts file.
-func RemoveProfile(opts *RemoveProfileOptions) error {
-	h, err := getHostData(opts.Dst, opts.Profile)
+func RemoveProfile(dst, profile string) error {
+	h, err := getHostData(dst, profile)
 	if err != nil {
 		return err
 	}
 
-	if opts.Profile == "" {
+	if profile == "" {
 		for p := range h.profiles {
 			if p != "default" {
 				delete(h.profiles, p)
 			}
 		}
 	} else {
-		delete(h.profiles, opts.Profile)
+		delete(h.profiles, profile)
 	}
 
-	return writeHostData(opts.Dst, h)
+	return writeHostData(dst, h)
 }
 
 // RemoveDomains removes domains from a hosts file.
-func RemoveDomains(opts *RemoveDomainsOptions) error {
-	h, err := getHostData(opts.Dst, opts.Profile)
+func RemoveDomains(dst, profile string, domains []string) error {
+	if len(domains) == 0 {
+		return MissingDomainsError
+	}
+	h, err := getHostData(dst, profile)
 	if err != nil {
 		return err
 	}
 
-	if opts.Profile == "" {
-		for p := range h.profiles {
-			if p != "default" {
-				domains := h.profiles[p]
-				h.profiles[p] = removeFromProfile(domains, opts.Domains)
-				if len(h.profiles[p]) == 0 {
-					delete(h.profiles, p)
-				}
-			}
-		}
-	} else {
-		domains := h.profiles[opts.Profile]
-		h.profiles[opts.Profile] = removeFromProfile(domains, opts.Domains)
-		if len(h.profiles[opts.Profile]) == 0 {
-			delete(h.profiles, opts.Profile)
-		}
+	lines := h.profiles[profile]
+	h.profiles[profile] = removeFromProfile(lines, domains)
+	if len(h.profiles[profile]) == 0 {
+		delete(h.profiles, profile)
 	}
 
-	return writeHostData(opts.Dst, h)
+	return writeHostData(dst, h)
 }
 
 func removeFromProfile(lines hostLines, remove []string) hostLines {

@@ -36,10 +36,7 @@ use 'hosts disable' instead.
 		profile, _ := cmd.Flags().GetString("profile")
 		dst, _ := cmd.Flags().GetString("host-file")
 
-		err := host.RemoveProfile(&host.RemoveProfileOptions{
-			Dst:     dst,
-			Profile: profile,
-		})
+		err := host.RemoveProfile(dst, profile)
 		if err != nil {
 			return err
 		}
@@ -60,9 +57,8 @@ It cannot be undone unless you have a backup and restore it.
 `,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
-		all, _ := cmd.Flags().GetBool("all")
 
-		if !all && profile == "" {
+		if profile == "" {
 			return host.MissingProfileError
 		}
 
@@ -75,11 +71,7 @@ It cannot be undone unless you have a backup and restore it.
 		profile, _ := cmd.Flags().GetString("profile")
 		dst, _ := cmd.Flags().GetString("host-file")
 
-		err := host.RemoveDomains(&host.RemoveDomainsOptions{
-			Dst:     dst,
-			Profile: profile,
-			Domains: args,
-		})
+		err := host.RemoveDomains(dst, profile, args)
 		if err != nil {
 			return err
 		}
@@ -95,5 +87,4 @@ func init() {
 	removeCmd.Flags().Bool("all", false, "Remove all profiles")
 
 	removeCmd.AddCommand(removeDomainsCmd)
-	removeDomainsCmd.Flags().Bool("all", false, "Remove all domains")
 }
