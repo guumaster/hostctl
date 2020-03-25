@@ -81,7 +81,8 @@ snapcrafts:
     grade: stable
     confinement: strict
     license: MIT
-    publish: true
+    # Disabled until passed review on snap store
+    publish: false
     apps:
       hostctl:
         plugs: ["system-files"]
