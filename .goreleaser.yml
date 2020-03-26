@@ -56,7 +56,7 @@ brews:
   - name: hostctl
     github:
       owner: guumaster
-      name: hostctl
+      name: homebrew-tap
     folder: Formula
     homepage:  https://github.com/guumaster/hostctl
     description: manage your hosts file like a pro
