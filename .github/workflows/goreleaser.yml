@@ -20,6 +20,12 @@ jobs:
         with:
           go-version: 1.14.x
 
+      - name: Checkout homebrew-tap repo
+        uses: actions/checkout@v2
+        with:
+          repository: guumaster/homebrew-tap
+          path: homebrew-tap
+
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
         with:
@@ -33,3 +39,17 @@ jobs:
           key: ${{ secrets.YOUR_PRIVATE_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit homebrew files
+        run: |
+          cd homebrew-tap
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Add changes" -a
+
+      - name: Push changes to homebrew-tap
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          directory: homebrew-tap
+          repository: guumaster/homebrew-tap
