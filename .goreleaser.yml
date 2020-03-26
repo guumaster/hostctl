@@ -57,8 +57,6 @@ brews:
     github:
       owner: guumaster
       name: homebrew-tap
-    folder: homebrew-tap
-    skip_upload: true
     homepage:  https://github.com/guumaster/hostctl
     description: manage your hosts file like a pro
     commit_author:
