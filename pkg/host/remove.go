@@ -1,23 +1,14 @@
 package host
 
 import (
-	"fmt"
-	"os"
+	"strings"
 )
 
-// Remove removes a profile from a hosts file.
-func Remove(dst, profile string) error {
-	if dst == "" {
-		return MissingDestError
-	}
-
-	h, err := ReadHostFile(dst)
+// RemoveProfile removes a profile from a hosts file.
+func RemoveProfile(dst, profile string) error {
+	h, err := getHostData(dst, profile)
 	if err != nil {
 		return err
-	}
-	_, ok := h.profiles[profile]
-	if profile != "" && !ok {
-		return fmt.Errorf("profile '%s' doesn't exists in file", profile)
 	}
 
 	if profile == "" {
@@ -30,10 +21,51 @@ func Remove(dst, profile string) error {
 		delete(h.profiles, profile)
 	}
 
-	dstFile, err := os.OpenFile(dst, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	return writeHostData(dst, h)
+}
+
+// RemoveDomains removes domains from a hosts file.
+func RemoveDomains(dst, profile string, domains []string) error {
+	if len(domains) == 0 {
+		return MissingDomainsError
+	}
+	h, err := getHostData(dst, profile)
 	if err != nil {
 		return err
 	}
 
-	return WriteToFile(dstFile, h)
+	lines := h.profiles[profile]
+	h.profiles[profile] = removeFromProfile(lines, domains)
+	if len(h.profiles[profile]) == 0 {
+		delete(h.profiles, profile)
+	}
+
+	return writeHostData(dst, h)
+}
+
+func removeFromProfile(lines hostLines, remove []string) hostLines {
+	newProfile := make([]string, 0)
+	for _, l := range lines {
+		rs := strings.Split(cleanLine(l), " ")
+		domain := rs[1]
+		if IsDisabled(l) {
+			// skip empty comments lines
+			if rs[1] == "" {
+				continue
+			}
+			domain = rs[2]
+		}
+		canAdd := true
+		for _, r := range remove {
+			if r == domain {
+				canAdd = false
+				break
+			}
+		}
+		if canAdd {
+			newProfile = append(newProfile, l)
+		}
+	}
+
+	return newProfile
 }

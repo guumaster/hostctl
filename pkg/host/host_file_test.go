@@ -25,3 +25,20 @@ func TestReadFromArgs(t *testing.T) {
 	f([]string{"dom1.local"}, "127.0.0.1")
 	f([]string{"dom3.local", "dom4.local"}, "localhost")
 }
+
+func TestCleanLine(t *testing.T) {
+	f := func(line, want string) {
+		t.Helper()
+		clearLine := cleanLine(line)
+		if clearLine != want {
+			t.Fatalf("unexpected record; got %s; want %s", clearLine, want)
+		}
+	}
+	f("", "")
+	f("#", "#")
+	f("##", "##")
+	f("#   line", "# line")
+	f(fmt.Sprintf("#   line\tdot"), "# line dot")
+	f(fmt.Sprintf("#\tline   dot"), "# line dot")
+	f("#line	dot", "#line dot")
+}
