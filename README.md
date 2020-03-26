@@ -34,8 +34,6 @@ You can install it using your [AUR helper](https://wiki.archlinux.org/index.php/
 
 ### HomeBrew
 
-_ Doc to be added after being tested on Mac _. See [Issue #14](https://github.com/guumaster/hostctl/issues/14) for helping with this.
-
 `brew install guumaster/tap/hostctl`
 
 
