@@ -13,6 +13,7 @@ jobs:
         uses: guumaster/aur-publish-docker-action@master
         with:
           package_name: hostctl
+          version: ${{ github.ref }}
           commit_username: guumaster
           commit_email: ${{ secrets.AUR_PUBLISH_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
