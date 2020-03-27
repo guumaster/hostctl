@@ -39,5 +39,5 @@ jobs:
         with:
           package_name: hostctl
           commit_username: guumaster
-          commit_email: {{ secrets.AUR_PUBLISH_EMAIL }}
-          ssh_private_key: {{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_email: ${{ secrets.AUR_PUBLISH_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
