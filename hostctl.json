@@ -6,7 +6,7 @@
             "bin": [
                 "hostctl.exe"
             ],
-            "hash": "c0450d0654098ffe4fb0920fb2bef41ce86b87d78e6900c39448582d0f7a5e12"
+            "hash": "97c2aa3ed724401dc355089dd622782c8eb02c31865e2288181f4b6b0dc9e320"
         }
     },
     "homepage": "https://github.com/guumaster/hostctl",
