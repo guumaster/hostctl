@@ -1,12 +1,12 @@
 {
-    "version": "0.5.3",
+    "version": "0.5.4",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/guumaster/hostctl/releases/download/v0.5.3/hostctl_0.5.3_windows_64-bit.zip",
+            "url": "https://github.com/guumaster/hostctl/releases/download/v0.5.4/hostctl_0.5.4_windows_64-bit.zip",
             "bin": [
                 "hostctl.exe"
             ],
-            "hash": "31d9b0b262f2079661164113e6c59a2ca2d3cb4998b4e9466c3b55a0a89be6ec"
+            "hash": "cbd831e654960b98503731c32c08bed23d67e3d776e07cfa1accb124ac01687f"
         }
     },
     "homepage": "https://github.com/guumaster/hostctl",
