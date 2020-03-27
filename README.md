@@ -44,7 +44,12 @@ _ Doc to be added after being published and tested _. See [Issue #14](https://gi
 
 ### Scoop
 
-_ Doc to be added after being tested on Windows _. See [Issue #14](https://github.com/guumaster/hostctl/issues/14) for helping with this.
+```
+scoop bucket add hostctl https://github.com/guumaster/hostctl.git
+scoop install hostctl
+```
+
+*NOTE*: If you also installed `sudo` with Scoop, you can run the examples below with `sudo` instead of starting your terminal as administrator.
 
 
 
