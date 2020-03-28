@@ -78,10 +78,6 @@ If the profile already exists it will be added to it.`,
 		profile, _ := cmd.Flags().GetString("profile")
 		h, _ := cmd.Flags().GetString("host-file")
 
-		if ip == "" {
-			ip = "127.0.0.1"
-		}
-
 		err := host.AddFromArgs(&host.AddFromArgsOptions{
 			Domains: args,
 			IP:      ip,
@@ -106,5 +102,5 @@ func init() {
 
 	setFromFileCmd.AddCommand(setDomainsCmd)
 
-	setDomainsCmd.Flags().String("ip", "", "domains ip")
+	setDomainsCmd.Flags().String("ip", "127.0.0.1", "domains ip")
 }

@@ -63,17 +63,12 @@ If the profile already exists it will be added to it.`,
 		if profile == "default" {
 			return host.DefaultProfileError
 		}
-
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		ip, _ := cmd.Flags().GetString("ip")
 		profile, _ := cmd.Flags().GetString("profile")
-
-		if ip == "" {
-			ip = "127.0.0.1"
-		}
 
 		err := host.AddFromArgs(&host.AddFromArgsOptions{
 			Domains: args,
@@ -104,5 +99,5 @@ func init() {
 
 	addFromFileCmd.AddCommand(addDomainsCmd)
 
-	addDomainsCmd.Flags().String("ip", "", "domains ip")
+	addDomainsCmd.Flags().String("ip", "127.0.0.1", "domains ip")
 }
