@@ -134,7 +134,7 @@ Use "hostctl [command] --help" for more information about a command.
 +---------+--------+----------------+----------------------------+
 ```
 
-### Add new profile
+### Add new profile from a file
 
 You can store routing as a separate file and add it to the global hosts file when you need.
 
@@ -166,6 +166,28 @@ You can add that content as a profile with this command:
 +---------+--------+----------------+------------------------------+
 ```
 
+### Add new profile from cli
+
+You can add a new profile or add new domain to a specific profile directly from the cli:
+
+You can add that content as a profile with this command:
+
+`$>hostctl -p test add domains test.com --ip 123.123.123.123 `
+
+```
+// Output:
++---------+--------+-----------------+------------------------------+
+| PROFILE | STATUS |       IP        |            DOMAIN            |
++---------+--------+-----------------+------------------------------+
+| default | on     | 127.0.0.1       | localhost                    |
+| default | on     | 127.0.1.1       | some-existing.local          |
+| default | on     | ::1             | ip6-localhost                |
++---------+--------+-----------------+------------------------------+
+| another | on     | 192.168.1.51    | jupyter.toolkit-lite.local   |
++---------+--------+-----------------+------------------------------+
+| test    | on     | 123.123.123.123 | test.com                     |
++---------+--------+-----------------+------------------------------+
+```
 
 ### Enable/Disable profile
 
