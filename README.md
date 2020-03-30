@@ -18,8 +18,9 @@ This tool gives you more control over the use of your `hosts` file. You can have
 
 It is a tedious task to handle the `hosts` file by editing manually. With this tool you can automate some aspects to do it cleaner and quick. 
 
+## Table of content
 <details>
-<summary>Table of content (click to open)</summary>
+<summary>expand</summary>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
