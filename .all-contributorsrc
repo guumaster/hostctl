@@ -42,6 +42,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "spekulatius",
+      "name": "Peter Thaleikis",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/8433587?v=4",
+      "profile": "https://peterthaleikis.com",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "projectName": "hostctl",
