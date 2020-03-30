@@ -18,6 +18,43 @@ This tool gives you more control over the use of your `hosts` file. You can have
 
 It is a tedious task to handle the `hosts` file by editing manually. With this tool you can automate some aspects to do it cleaner and quick. 
 
+<details>
+<summary>Table of content (click to open)</summary>
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Sample Usage](#sample-usage)
+- [Installation](#installation)
+  - [Pre-built binary](#pre-built-binary)
+  - [Arch Linux](#arch-linux)
+  - [HomeBrew](#homebrew)
+  - [Snap](#snap)
+  - [Scoop](#scoop)
+- [Features](#features)
+- [Linux/Mac/Windows and permissions](#linuxmacwindows-and-permissions)
+- [Usage](#usage)
+  - [List profiles](#list-profiles)
+  - [Add new profile from a file](#add-new-profile-from-a-file)
+  - [Add new profile from cli](#add-new-profile-from-cli)
+  - [Enable/Disable profile](#enabledisable-profile)
+  - [Remove a profile](#remove-a-profile)
+  - [Backup hosts file](#backup-hosts-file)
+  - [Restore a hosts file](#restore-a-hosts-file)
+  - [TODO](#todo)
+  - [References](#references)
+  - [LICENSE](#license)
+  - [Author(s)](#authors)
+- [Contributors ✨](#contributors-)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+</details>
+
+
+## Sample Usage
+![sample usage](docs/hostctl.gif)
+
 
 ## Installation
 
@@ -65,10 +102,6 @@ scoop install hostctl
   * add/remove groups of host names.
   * add profiles directly from a `.etchosts` file that you can add to your vcs.
   
-  
-## Sample Usage
-![sample usage](docs/hostctl.gif)
-
 
 ## Linux/Mac/Windows and permissions
 
