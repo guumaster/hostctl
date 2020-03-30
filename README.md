@@ -1,8 +1,7 @@
 [![Tests][tests-badge]][tests-link]
 [![GitHub Release][release-badge]][release-link]
 [![Go Report Card][report-badge]][report-link]
-[![License][license-badge]][license-link]
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![License][license-badge]][license-link]<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -45,9 +44,10 @@ It is a tedious task to handle the `hosts` file by editing manually. With this t
   - [Restore a hosts file](#restore-a-hosts-file)
   - [TODO](#todo)
   - [References](#references)
-  - [LICENSE](#license)
-  - [Author(s)](#authors)
+- [Contributing](#contributing)
 - [Contributors ✨](#contributors-)
+- [LICENSE](#license)
+- [Author(s)](#authors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 </details>
@@ -313,13 +313,15 @@ Features that I'd like to add:
   * [txn2/txeh: CLI for /etc/hosts management](https://github.com/txn2/txeh)
 
 
-### LICENSE
- [MIT license](LICENSE)
+## Contributing
 
+Be sure to read [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md).
+ 
+Pull requests are welcome.
+ 
+For major changes, please open an issue first to discuss what you would like to change.
 
-### Author(s)
-
-* [guumaster](https://github.com/guumaster)
+Please make sure to update tests if your code affects existing tests.
 
 
 ## Contributors ✨
@@ -343,6 +345,17 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+
+## LICENSE
+
+ [MIT license](LICENSE)
+
+
+## Author(s)
+
+* [guumaster](https://github.com/guumaster)
+
 
 
 <!-- JUST BADGES & LINKS -->
