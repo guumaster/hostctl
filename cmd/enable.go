@@ -11,8 +11,8 @@ var enableCmd = &cobra.Command{
 	Use:   "enable",
 	Short: "Enable a profile on your hosts file.",
 	Long: `
-Disable an existing profile from your hosts file without removing it.
-It will be  listed as "on" while it is enabled.
+Enables an existing profile.
+It will be listed as "on" while it is enabled.
 `,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")

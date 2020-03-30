@@ -12,7 +12,7 @@ var disableCmd = &cobra.Command{
 	Short: "Disable a profile from your hosts file.",
 	Long: `
 Disable a profile from your hosts file without removing it.
-It will be  listed as "off" while it is disabled.
+It will be listed as "off" while it is disabled.
 `,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
