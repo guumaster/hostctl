@@ -80,11 +80,10 @@ snapcrafts:
     grade: stable
     confinement: strict
     license: MIT
-    # Disabled until passed review on snap store
-    publish: false
+    publish: true
     apps:
       hostctl:
-        plugs: ["system-files"]
+        plugs: ["network-control"]
     plugs:
       system-files:
         read:
