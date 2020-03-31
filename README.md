@@ -82,7 +82,9 @@ yay -Sy hostctl
 
 ### Snap
 
-_ Doc to be added after being published and tested _. See [Issue #14](https://github.com/guumaster/hostctl/issues/14) for helping with this.
+**WARNING**: Still working out a permission issue * [ hostctl snap - store-requests](https://forum.snapcraft.io/t/plugs-system-files-for-hostctl-snap/16199/5) 
+
+`[sudo] snap install hostctl`
 
 
 ### Scoop
