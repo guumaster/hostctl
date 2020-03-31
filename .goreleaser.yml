@@ -84,9 +84,4 @@ snapcrafts:
     apps:
       hostctl:
         plugs: ["network-control"]
-    plugs:
-      network-control:
-        read:
-          - /etc/hosts
-        write:
-          - /etc/hosts
+
