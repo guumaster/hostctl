@@ -291,18 +291,6 @@ You can restore a previous backup of your hosts file with this command:
 It would **overwrite** your hosts file with the content of your backup.
 
 
-### TODO
-
-Features that I'd like to add: 
-
-  * [ ] `hostctl from-k8s -n namespace`
-  * [ ] `hostctl from-minikube -n namespace`
-  * [ ] `hostctl set ip` IP  [-p profile]
-  * [ ] `hostctl set domains` dom1,dom2,etc [-p profile]
-  * [ ] `hostctl add domains` dom1,dom2 [-p profile]
-  * [ ] `hostctl rm domains` dom1,dom2 [-p profile]
-
-
 ### References
 
 * Dependencies:
