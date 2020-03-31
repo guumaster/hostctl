@@ -85,7 +85,7 @@ snapcrafts:
       hostctl:
         plugs: ["network-control"]
     plugs:
-      system-files:
+      network-control:
         read:
           - /etc/hosts
         write:
