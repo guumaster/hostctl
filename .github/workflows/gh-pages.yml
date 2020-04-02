@@ -16,7 +16,8 @@ jobs:
 
       - name: Get contributors
         run: |
-          git checkout master -- .all-contributorsrc
+          git fetch origin master
+          git checkout origin/master -- .all-contributorsrc
           cp .all-contributorsrc docs/data/contributors.json
 
       - name: Setup Hugo
