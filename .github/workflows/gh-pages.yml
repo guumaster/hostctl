@@ -15,7 +15,6 @@ jobs:
           submodules: true
 
       - name: Get contributors
-        uses: actions/checkout@v2
         run: |
           git checkout master -- .all-contributorsrc
           cp .all-contributorsrc docs/data/contributors.json
