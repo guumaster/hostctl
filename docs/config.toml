@@ -1,0 +1,76 @@
+baseURL="https://guumaster.github.io/hostctl/"
+title = "hostctl"
+theme = "tract"
+disableKinds = ["taxonomy", "taxonomyTerm"]
+defaultContentLanguageInSubdir = false
+
+disableLanguages = ["de", "fr"]
+copyright = "guumaster"
+
+
+[params]
+description = "Manage your hosts file like a PRO!"
+icon_set = "ionicons"
+headerSize = "small"
+
+[params.colors]
+primary = "#659dbd"
+secondary = "#daad86"
+
+[markup.highlight]
+style = "fruity"
+
+[outputs]
+home = ["HTML", "JSON"]
+
+[[params.fonts]]
+name = "Alata"
+sizes = [400]
+type = "sans_serif"
+
+[[params.fonts]]
+name = "Roboto Mono"
+sizes = [400]
+type = "monospace"
+
+[params.social.twitter]
+handle = "@guumaster"
+
+[params.social.github]
+repo = "guumaster/hostctl"
+
+[[menu.main]]
+name = "Docs"
+identifier = "docs"
+url = "/getting-started/"
+weight = 1
+
+[[menu.main]]
+name = "Installation"
+parent = "docs"
+url = "/installation/"
+weight = 2
+
+[[menu.main]]
+name = "Getting started"
+parent = "docs"
+url = "/getting-started/"
+weight = 3
+
+[[menu.main]]
+name = "Usage"
+parent = "docs"
+url = "/usage/"
+weight = 4
+
+[[menu.main]]
+name = "Contributing"
+parent = "docs"
+url = "/contributing/"
+weight = 4
+
+[[menu.main]]
+name = "About"
+parent = "docs"
+url = "/about/"
+weight = 6

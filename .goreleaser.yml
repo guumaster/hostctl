@@ -81,10 +81,11 @@ snapcrafts:
     summary: manage your hosts file like a pro
     description: manage your hosts file like a pro.
     grade: stable
-    confinement: strict
+    confinement: devmode
     license: MIT
     publish: true
     apps:
       hostctl:
-        plugs: ["network-control"]
+        plugs: ["personal-files", "network-control"]
+
 
