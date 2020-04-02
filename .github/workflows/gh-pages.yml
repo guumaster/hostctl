@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-        ref: docs
         with:
+          ref: docs
           submodules: true
 
       - name: Get contributors
