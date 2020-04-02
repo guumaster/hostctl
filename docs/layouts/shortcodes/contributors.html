@@ -1,0 +1,9 @@
+<ul class="contributors">
+  {{ range $.Site.Data.contributors.contributors }}
+    <li>
+      <a href="https://github.com/{{ .login }}">
+        <img src="{{ .avatar_url }}" alt="{{ .name }}"/><br/><strong>{{ .name }}</strong>
+      </a>
+    </li>
+  {{ end }}
+</ul>

@@ -1,0 +1,38 @@
+{{ define "link" }}
+  {{ $url        := replace ( .URL | relLangURL ) "hostctl/hostctl" "hostctl" }}
+  {{ $isExternal := hasPrefix .URL "http" }}
+  <a class="navbar-item"{{ with $url }} href="{{ . }}"{{ end }}{{ if $isExternal }} target="_blank"{{ end }}>
+  <span>
+    {{ .Name }}
+  </span>
+    {{ if $isExternal }}
+      <span class="icon has-text-primary">
+    {{ partial "components/icon.html" (dict "icon" "open") }}
+  </span>
+    {{ end }}
+  </a>
+{{ end }}
+
+{{ range . }}
+  {{ if .HasChildren }}
+    {{ $url := replace ( .URL | relLangURL ) "hostctl/hostctl" "hostctl" }}
+    <div class="navbar-item has-dropdown is-hoverable">
+      <a class="navbar-link is-arrowless"{{ with $url }} href="{{ . }}"{{ end }}>
+    <span>
+      {{ .Name }}
+    </span>
+        <span class="icon has-text-primary">
+      {{ partial "components/icon.html" (dict "icon" "arrow-dropdown") }}
+    </span>
+      </a>
+
+      <div class="navbar-dropdown">
+        {{ range .Children }}
+          {{ template "link" . }}
+        {{ end }}
+      </div>
+    </div>
+  {{ else }}
+    {{ template "link" . }}
+  {{ end }}
+{{ end }}

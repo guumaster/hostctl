@@ -1,0 +1,53 @@
+{{ $hasToc := gt (len .TableOfContents) 32 }}
+{{ $inServerMode := site.IsServer }}
+{{ $includePaths := (slice "node_modules") }}
+{{ $sass         := "sass/style.sass" }}
+{{ $cssOutput    := "css/style.css" }}
+{{ $devOpts      := (dict "targetPath" $cssOutput "includePaths" $includePaths "enableSourceMap" true) }}
+{{ $prodOpts     := (dict "targetPath" $cssOutput "includePaths" $includePaths "outputStyle" "compressed") }}
+{{ $cssOpts      := cond $inServerMode $devOpts $prodOpts }}
+{{ $css          := resources.Get $sass | resources.ExecuteAsTemplate $sass . | toCSS $cssOpts }}
+{{ $iconSet      := site.Params.icon_set | default site.Data.defaults.icon_set }}
+{{ if $inServerMode }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+{{ else }}
+  {{ $prodCss      := $css | fingerprint }}
+  <link rel="stylesheet" href="{{ $prodCss.RelPermalink }}" integrity="{{ $prodCss.Data.Integrity }}">
+{{ end }}
+{{ if eq $iconSet "ionicons" }}
+  <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+{{ end }}
+
+{{ if $hasToc }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.10.0/tocbot.css"
+        integrity="sha256-XUbSD3m+xLW27W/mp9kMn+fI9AU2MoBkiMMSVVYWI+o=" crossorigin="anonymous"/>
+{{ end }}
+
+{{ if .Params.asciinema }}
+  <link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/asciinema-player.css"/>
+{{ end }}
+
+<style>
+  ul.contributors {
+    list-style-type: none;
+  }
+
+  ul.contributors:after {
+    content: '';
+    width: 100%;
+  }
+
+  .contributors li {
+    text-align: center;
+    display: inline-block;
+    padding-bottom: 20px;
+    margin-left: 10px;
+    width: 150px;
+  }
+
+  .contributors li img {
+    text-align: center;
+    width: 100px;
+    border-radius: 50%;
+  }
+</style>

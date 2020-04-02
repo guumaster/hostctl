@@ -1,0 +1,62 @@
+{
+    "files": [
+        "README.md"
+    ],
+    "imageSize": 50,
+    "contributorsPerLine": 12,
+    "commit": false,
+    "contributors": [
+        {
+            "login": "gkze",
+            "name": "George Kontridze",
+            "avatar_url": "https://avatars0.githubusercontent.com/u/3131232?v=4",
+            "profile": "https://github.com/gkze",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "pacodes",
+            "name": "Pacodes",
+            "avatar_url": "https://avatars2.githubusercontent.com/u/28688410?v=4",
+            "profile": "https://github.com/pacodes",
+            "contributions": [
+                "test",
+                "code"
+            ]
+        },
+        {
+            "login": "BarbUk",
+            "name": "BarbUk",
+            "avatar_url": "https://avatars3.githubusercontent.com/u/64371?v=4",
+            "profile": "https://772424.com",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "devopsbrett",
+            "name": "Brett Mack",
+            "avatar_url": "https://avatars1.githubusercontent.com/u/4403441?v=4",
+            "profile": "https://github.com/devopsbrett",
+            "contributions": [
+                "code"
+            ]
+        },
+        {
+            "login": "spekulatius",
+            "name": "Peter Thaleikis",
+            "avatar_url": "https://avatars0.githubusercontent.com/u/8433587?v=4",
+            "profile": "https://peterthaleikis.com",
+            "contributions": [
+                "code",
+                "doc"
+            ]
+        }
+    ],
+    "projectName": "hostctl",
+    "projectOwner": "guumaster",
+    "repoType": "github",
+    "repoHost": "https://github.com",
+    "skipCi": true
+}
