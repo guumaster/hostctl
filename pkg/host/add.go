@@ -1,6 +1,7 @@
 package host
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -34,7 +35,10 @@ func AddFromFile(opts *AddFromFileOptions) error {
 	if opts.From == "" {
 		return MissingSourceError
 	}
-	newData, _ := ReadHostFileStrict(opts.From)
+	newData, err := ReadHostFileStrict(opts.From)
+	if err != nil {
+		return fmt.Errorf("ERROR READING FILE: %w", err)
+	}
 
 	return add(newData, &commonAddOptions{
 		opts.Dst,

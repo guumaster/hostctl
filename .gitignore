@@ -3,4 +3,5 @@
 dist
 hostctl
 hostctl.exe
-homebrew-tap
+.etchosts
+docs/public
