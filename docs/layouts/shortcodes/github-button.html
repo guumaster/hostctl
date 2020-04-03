@@ -1,16 +1,31 @@
-{{ $showCount := default  "true"  (.Get "count") }}
-{{ $btnSize := default  "large" (.Get "size") }}
-{{ $repo := .Get "repo" }}
-{{ $type := default "star" (.Get "type")  }}
-{{ $btnLabel := default $type (.Get "label") }}
-{{ $extraPath := "" }}
-{{ if (eq $type "fork") }}
-  {{ $extraPath = "/fork" }}
-{{end}}
+{{- $theme := default "" (.Get "theme")  -}}
+{{- $type := default "star" (.Get "type") -}}
+{{- $defaultCount := "true" -}}
+{{- $extraPath := "" -}}
+
+{{- if (eq $type "fork") -}}
+  {{- $extraPath = "/fork" -}}
+{{- else if (eq $type "issues") -}}
+  {{- $extraPath = "/issues" -}}
+{{- end -}}
+
+{{- if (eq $theme "dark") -}}
+  {{- $theme = "no-preference: dark; light: dark; dark: dark;\"" -}}
+{{- else if (eq $theme "light") -}}
+  {{- $theme = "no-preference: light; light: light; dark: light;" -}}
+{{- end -}}
+
+{{- $showCount := default  $defaultCount  (.Get "count") -}}
+{{- $btnSize := default  "large" (.Get "size") -}}
+{{- $repo := .Get "repo" -}}
+{{- $btnLabel := default $type (.Get "label") -}}
 <a
         class="github-button"
         href="https://github.com/{{ $repo }}{{ $extraPath }}"
         data-size="{{ $btnSize }}"
+        {{- if $theme }}
+          data-color-scheme="{{ $theme }}"
+        {{- end }}
         data-show-count="{{ $showCount }}"
         aria-label="{{ $type | title }} {{ $repo }} on GitHub"
 >{{ $btnLabel | title }}</a>
