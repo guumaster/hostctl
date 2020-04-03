@@ -20,9 +20,13 @@ The "default"" profile is all the content that is not handled by hostctl tool.
 		profile, _ := cmd.Flags().GetString("profile")
 
 		src, _ := cmd.Flags().GetString("host-file")
+		raw, _ := cmd.Flags().GetBool("raw")
+		cols, _ := cmd.Flags().GetStringSlice("columns")
 
 		err := host.ListProfiles(src, &host.ListOptions{
-			Profile: profile,
+			Profile:  profile,
+			RawTable: raw,
+			Columns:  cols,
 		})
 
 		return err
@@ -31,4 +35,7 @@ The "default"" profile is all the content that is not handled by hostctl tool.
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringSliceP("column", "c", nil, "Columns to show on lists")
+	listCmd.Flags().Bool("raw", false, "Output without table borders")
 }

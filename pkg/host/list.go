@@ -7,9 +7,14 @@ import (
 	"github.com/guumaster/tablewriter"
 )
 
+// DefaultColumns is the list of default columns to use when showing table list
+var DefaultColumns = []string{"profile", "status", "ip", "domain"}
+
 // ListOptions contains available options for listing.
 type ListOptions struct {
-	Profile string
+	Profile  string
+	RawTable bool
+	Columns  []string
 }
 
 // ListProfiles shows a table with profile names status and routing information
@@ -28,12 +33,32 @@ func ListProfiles(src string, opts *ListOptions) error {
 	}
 
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Profile", "Status", "IP", "Domain"})
+
+	cols := opts.Columns
+	if len(cols) == 0 {
+		cols = DefaultColumns
+	}
+
+	table.SetHeader(cols)
+
+	if opts.RawTable {
+		table.SetAutoWrapText(false)
+		table.SetAutoFormatHeaders(true)
+		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+		table.SetAlignment(tablewriter.ALIGN_LEFT)
+		table.SetCenterSeparator("")
+		table.SetColumnSeparator("\t")
+		table.SetRowSeparator("")
+		table.SetHeaderLine(false)
+		table.SetBorder(false)
+		table.SetTablePadding("\t") // pad with tabs
+		table.SetNoWhiteSpace(true)
+	}
 
 	if profile == "default" || profile == "" {
-		appendProfile("default", table, h.profiles["default"])
+		appendProfile("default", table, cols, h.profiles["default"])
 
-		if len(h.profiles) > 1 {
+		if len(h.profiles) > 1 && !opts.RawTable {
 			table.AddSeparator()
 		}
 	}
@@ -48,9 +73,9 @@ func ListProfiles(src string, opts *ListOptions) error {
 			continue
 		}
 
-		appendProfile(p, table, data)
+		appendProfile(p, table, cols, data)
 
-		if i < len(h.profiles) {
+		if i < len(h.profiles) && !opts.RawTable {
 			table.AddSeparator()
 		}
 	}
@@ -58,7 +83,7 @@ func ListProfiles(src string, opts *ListOptions) error {
 	return nil
 }
 
-func appendProfile(profile string, table *tablewriter.Table, data hostLines) {
+func appendProfile(profile string, table *tablewriter.Table, cols []string, data hostLines) {
 	for _, r := range data {
 		if r == "" {
 			continue
@@ -78,11 +103,19 @@ func appendProfile(profile string, table *tablewriter.Table, data hostLines) {
 			status = "off"
 			ip, domain = rs[1], rs[2]
 		}
-		table.Append([]string{
-			profile,
-			status,
-			ip,
-			domain,
-		})
+		var row []string
+		for _, c := range cols {
+			switch c {
+			case "profile":
+				row = append(row, profile)
+			case "status":
+				row = append(row, status)
+			case "ip", "ips":
+				row = append(row, ip)
+			case "domain", "domains":
+				row = append(row, domain)
+			}
+		}
+		table.Append(row)
 	}
 }
