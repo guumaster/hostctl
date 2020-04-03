@@ -48,3 +48,7 @@
 {{ if .Params.asciinema }}
   <script src="{{ .Site.BaseURL }}js/asciinema-player.js"></script>
 {{ end }}
+
+{{ if site.Params.githubButton }}
+  <script async defer src="//buttons.github.io/buttons.js"></script>
+{{ end }}

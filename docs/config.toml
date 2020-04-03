@@ -12,6 +12,7 @@ copyright = "guumaster"
 description = "Manage your hosts file like a PRO!"
 icon_set = "ionicons"
 headerSize = "small"
+githubButton = "true"
 
 [params.colors]
 primary = "#659dbd"

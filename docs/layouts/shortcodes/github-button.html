@@ -1,0 +1,11 @@
+{{ $showCount := default (.Get "count") "true" }}
+{{ $btnSize := default (.Get "size") "large" }}
+{{ $btnLabel := default (.Get "label") "Star" }}
+{{ $repo := .Get "repo" }}
+<a
+        class="github-button"
+        href="https://github.com/{{ $repo }}"
+        data-size="{{ $btnSize }}"
+        data-show-count="{{ $showCount }}"
+        aria-label="Star {{ $repo }} on GitHub"
+>{{ $btnLabel }}</a>
