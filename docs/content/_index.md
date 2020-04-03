@@ -6,7 +6,8 @@ size="big"
 color="secondary"
 +++
 
-{{<github-button repo="guumaster/hostctl" count="true" >}}
+{{<github-button repo="guumaster/hostctl" >}}
+{{<github-button repo="guumaster/hostctl" type="fork" >}}
 ## Why?
 
 Because it is a tedious task to handle the `hosts` file by editing manually. 
