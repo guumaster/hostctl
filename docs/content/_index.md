@@ -1,4 +1,12 @@
++++
+[[buttons]]
+text="Getting Started"
+url="/getting-started/"
+size="big"
+color="secondary"
++++
 
+{{<github-button repo="guumaster/hostctl" count="true" >}}
 ## Why?
 
 Because it is a tedious task to handle the `hosts` file by editing manually. 
