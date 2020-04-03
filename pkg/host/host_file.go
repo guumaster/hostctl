@@ -37,6 +37,10 @@ func ReadHostFile(file string) (*hostFile, error) {
 
 // ReadHostFileStrict open a file an read content into a hostFile struct. removes all comments.
 func ReadHostFileStrict(file string) (*hostFile, error) {
+	_, err := os.Stat(file)
+	if err != nil {
+		return nil, err
+	}
 	fromFile, err := os.Open(file)
 	if err != nil {
 		return nil, err
@@ -128,7 +132,7 @@ func EnableLine(line string) string {
 func banner() string {
 	return `
 ##################################################################
-# Content under this line is handled by hostctl. DO NOT EDIT. 
+# Content under this line is handled by hostctl. DO NOT EDIT.
 ##################################################################`
 }
 

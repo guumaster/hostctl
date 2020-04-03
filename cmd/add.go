@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -18,12 +21,23 @@ If the profile already exists it will be added to it.`,
 		from, _ := cmd.Flags().GetString("from")
 		profile, _ := cmd.Flags().GetString("profile")
 
-		err := host.AddFromFile(&host.AddFromFileOptions{
-			From:    from,
-			Dst:     src,
-			Profile: profile,
-			Reset:   false,
-		})
+		var err error
+		if isPiped() {
+			fmt.Println("IS PIPED")
+			err = host.AddFromReader(os.Stdin, &host.AddFromFileOptions{
+				Dst:     src,
+				Profile: profile,
+				Reset:   false,
+			})
+		} else {
+			fmt.Println("FROM FILE")
+			err = host.AddFromFile(&host.AddFromFileOptions{
+				From:    from,
+				Dst:     src,
+				Profile: profile,
+				Reset:   false,
+			})
+		}
 		if err != nil {
 			return err
 		}

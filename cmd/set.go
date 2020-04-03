@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -33,12 +35,21 @@ If the profile already exists it will be overwritten.
 
 		h, _ := cmd.Flags().GetString("host-file")
 
-		err := host.AddFromFile(&host.AddFromFileOptions{
-			From:    from,
-			Dst:     h,
-			Profile: profile,
-			Reset:   true,
-		})
+		var err error
+		if isPiped() {
+			err = host.AddFromReader(os.Stdin, &host.AddFromFileOptions{
+				Dst:     h,
+				Profile: profile,
+				Reset:   true,
+			})
+		} else {
+			err = host.AddFromFile(&host.AddFromFileOptions{
+				From:    from,
+				Dst:     h,
+				Profile: profile,
+				Reset:   true,
+			})
+		}
 		if err != nil {
 			return err
 		}

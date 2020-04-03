@@ -2,6 +2,7 @@ package host
 
 import (
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -36,8 +37,27 @@ func AddFromFile(opts *AddFromFileOptions) error {
 		return MissingSourceError
 	}
 	newData, err := ReadHostFileStrict(opts.From)
+	if os.IsNotExist(err) {
+		return fmt.Errorf("%w: %s", MissingSourceError, opts.From)
+	}
 	if err != nil {
-		return fmt.Errorf("ERROR READING FILE: %w", err)
+		return err
+	}
+
+	return add(newData, &commonAddOptions{
+		opts.Dst,
+		opts.Profile,
+		opts.Reset,
+	})
+}
+
+func AddFromReader(reader io.Reader, opts *AddFromFileOptions) error {
+	newData, err := Read(reader, opts.Reset)
+	if os.IsNotExist(err) {
+		return fmt.Errorf("%w: %s", MissingSourceError, opts.From)
+	}
+	if err != nil {
+		return err
 	}
 
 	return add(newData, &commonAddOptions{

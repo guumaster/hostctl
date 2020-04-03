@@ -13,11 +13,11 @@ var rootCmd = &cobra.Command{
 	Use:   "hostctl",
 	Short: "Manage your hosts file like a pro",
 	Long: `
- _     _  _____  _______ _______ _______ _______       
- |_____| |     | |______    |    |          |    |     
+ _     _  _____  _______ _______ _______ _______
+ |_____| |     | |______    |    |          |    |
  |     | |_____| ______|    |    |_____     |    |_____
 
-hostctl is a CLI tool to manage your hosts file with ease. 
+hostctl is a CLI tool to manage your hosts file with ease.
 You can have multiple profiles, enable/disable exactly what
 you need each time with a simple interface.
 `,
@@ -51,4 +51,14 @@ func init() {
 
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "Choose a profile")
 	rootCmd.PersistentFlags().String("host-file", defaultHostsFile, "Hosts file path")
+}
+
+// isPiped detect if there is any input through STDIN
+func isPiped() bool {
+	info, err := os.Stdin.Stat()
+	if err != nil {
+		panic(err)
+	}
+	notPipe := info.Mode()&os.ModeNamedPipe == 0
+	return !notPipe || info.Size() > 0
 }
