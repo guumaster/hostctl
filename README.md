@@ -22,8 +22,9 @@ It is a tedious task to handle the `hosts` file by editing manually. With this t
 
   * Manage groups of host names by profile.
   * Enable/disable complete profiles.
-  * add/remove groups of host names.
-  * add profiles directly from a `.etchosts` file that you can add to your vcs.
+  * Add/remove groups of host names.
+  * Add profiles directly from a `.etchosts` file that you can add to your git repo or any VCS.
+  * Sync a profile with Docker or Docker Compose containers.
   
 
 ## Documentation
