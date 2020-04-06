@@ -1,7 +1,7 @@
 +++
 [[buttons]]
 text="Getting Started"
-url="/getting-started/"
+url="/docs/getting-started/"
 size="big"
 color="secondary"
 +++
@@ -22,9 +22,11 @@ With this tool you can automate some aspects to do it cleaner and quick.
   
   * Enable/disable complete profiles.
   
-  * add/remove groups of host names.
+  * Add/remove groups of host names.
   
-  * add profiles directly from a `.etchosts` file that you can add to your vcs.
+  * Add profiles directly from a `.etchosts` file that you can add to your git repo or any VCS.
+
+  * Sync a profile with Docker or Docker Compose containers.
 
 
 ## All Feedback is welcome!

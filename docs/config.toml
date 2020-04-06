@@ -43,35 +43,33 @@ repo = "guumaster/hostctl"
 [[menu.main]]
 name = "Docs"
 identifier = "docs"
-url = "/getting-started/"
+url = "/docs/getting-started/"
 weight = 1
 
 [[menu.main]]
 name = "Installation"
 parent = "docs"
-url = "/installation/"
+url = "/docs/installation/"
 weight = 2
 
 [[menu.main]]
 name = "Getting started"
 parent = "docs"
-url = "/getting-started/"
+url = "/docs/getting-started/"
 weight = 3
 
 [[menu.main]]
 name = "Usage"
 parent = "docs"
-url = "/usage/"
+url = "/docs/usage/"
 weight = 4
 
 [[menu.main]]
-name = "Contributing"
-parent = "docs"
+name = "Community"
 url = "/contributing/"
 weight = 4
 
 [[menu.main]]
 name = "About"
-parent = "docs"
 url = "/about/"
 weight = 6
