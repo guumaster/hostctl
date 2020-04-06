@@ -21,7 +21,7 @@ The "default"" profile is all the content that is not handled by hostctl tool.
 
 		src, _ := cmd.Flags().GetString("host-file")
 		raw, _ := cmd.Flags().GetBool("raw")
-		cols, _ := cmd.Flags().GetStringSlice("columns")
+		cols, _ := cmd.Flags().GetStringSlice("column")
 
 		err := host.ListProfiles(src, &host.ListOptions{
 			Profile:  profile,

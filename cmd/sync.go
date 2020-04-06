@@ -157,6 +157,6 @@ func init() {
 	syncDockerComposeCmd.Flags().String("project-name", "", "docker compose project name")
 	syncDockerComposeCmd.Flags().Bool("prefix", false, "keep project name prefix from domain name")
 
-	syncCmd.PersistentFlags().StringP("network", "n", "", "Filter containers from a specific network")
-	syncCmd.PersistentFlags().StringP("domain", "d", "", "domain where your docker containers will be added")
+	syncCmd.PersistentFlags().String("network", "", "Filter containers from a specific network")
+	syncCmd.PersistentFlags().StringP("domain", "d", "loc", "domain where your docker containers will be added")
 }

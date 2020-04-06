@@ -13,9 +13,7 @@ var rootCmd = &cobra.Command{
 	Use:   "hostctl",
 	Short: "Manage your hosts file like a pro",
 	Long: `
- _     _  _____  _______ _______ _______ _______
- |_____| |     | |______    |    |          |    |
- |     | |_____| ______|    |    |_____     |    |_____
+ 🄷🄾🅂🅃🄲🅃🄻
 
 hostctl is a CLI tool to manage your hosts file with ease.
 You can have multiple profiles, enable/disable exactly what
