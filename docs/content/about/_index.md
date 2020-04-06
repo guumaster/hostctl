@@ -1,16 +1,27 @@
 ---
-title: About
-
+title: Contributing
+weight: 10
 ---
 
+## Be part of it
 
-### Dependencies
+Be sure to read [CONTRIBUTING][CONTRIBUTING] and [CODE OF CONDUCT][CODE_OF_CONDUCT].
+ 
+For major changes, please open an issue first to discuss what you would like to change.
 
-  * [spf13/cobra](https://github.com/spf13/cobra)
-  * [docker/docker](https://github.com/docker/docker)
-  * [guumaster/tablewriter](https://github.com/guumaster/tablewriter)
-  * [go-yaml/yaml](https://github.com/go-yaml/yaml)
+Please make sure to update tests if your code affects existing tests.
 
-### Thanks
+Issues and pull requests are welcome. Check here which issues you can contribute to:
 
-This tool is inspired by [txn2/txeh](https://github.com/txn2/txeh)
+{{<github-button repo="guumaster/hostctl" type="issues" label="Open issues" >}}
+ 
+
+[CONTRIBUTING]:https://github.com/guumaster/hostctl/blob/master/CONTRIBUTING.md
+[CODE_OF_CONDUCT]:https://github.com/guumaster/hostctl/blob/master/CODE_OF_CONDUCT.md
+
+
+## Contributors
+
+The original author of this repo is [@guumaster](https://github.com/guumaster), and all this wonderful people help to make it better:
+
+{{<contributors>}}
