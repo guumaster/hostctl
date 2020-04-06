@@ -66,10 +66,5 @@ weight = 4
 
 [[menu.main]]
 name = "Community"
-url = "/contributing/"
-weight = 4
-
-[[menu.main]]
-name = "About"
 url = "/about/"
-weight = 6
+weight = 4
