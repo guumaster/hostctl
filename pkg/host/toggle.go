@@ -11,9 +11,9 @@ func Toggle(dst, profile string) error {
 	status := getProfileStatus(h, profile)
 
 	switch status {
-	case ENABLED:
+	case Enabled:
 		disableProfile(h, profile)
-	case DISABLED:
+	case Disabled:
 		enableProfile(h, profile)
 	default:
 		return UnknownProfileError
@@ -22,7 +22,7 @@ func Toggle(dst, profile string) error {
 	return writeHostData(dst, h)
 }
 
-func getProfileStatus(h *hostFile, profile string) string {
+func getProfileStatus(h *hostFile, profile string) ProfileStatus {
 	pData, ok := h.profiles[profile]
 	if !ok {
 		return ""
@@ -33,9 +33,9 @@ func getProfileStatus(h *hostFile, profile string) string {
 			continue
 		}
 		if IsDisabled(pData[0]) {
-			return DISABLED
+			return Disabled
 		}
-		return ENABLED
+		return Enabled
 	}
 
 	return ""

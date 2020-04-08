@@ -9,17 +9,20 @@ import (
 )
 
 // makeListStatusCmd represents the list enabled command
-var makeListStatusCmd = func(cmd string) *cobra.Command {
-	status := ""
-	switch cmd {
-	case "enabled":
-		status = "on"
-	case "disabled":
-		status = "off"
+var makeListStatusCmd = func(status host.ProfileStatus) *cobra.Command {
+	cmd := ""
+	alias := ""
+	switch status {
+	case host.Enabled:
+		cmd = "enabled"
+		alias = "on"
+	case host.Disabled:
+		cmd = "disabled"
+		alias = "off"
 	}
 	return &cobra.Command{
 		Use:     cmd,
-		Aliases: []string{status},
+		Aliases: []string{alias},
 		Short:   fmt.Sprintf("Shows list of %s profiles on your hosts file.", cmd),
 		Long: fmt.Sprintf(`
 Shows a detailed list of %s profiles on your hosts file with name, ip and host name.

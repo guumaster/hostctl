@@ -36,8 +36,8 @@ The "default" profile is all the content that is not handled by hostctl tool.
 func init() {
 	rootCmd.AddCommand(listCmd)
 
-	listCmd.AddCommand(makeListStatusCmd("enabled"))
-	listCmd.AddCommand(makeListStatusCmd("disabled"))
+	listCmd.AddCommand(makeListStatusCmd(host.Enabled))
+	listCmd.AddCommand(makeListStatusCmd(host.Disabled))
 
 	listCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
 	listCmd.PersistentFlags().Bool("raw", false, "Output without table borders")

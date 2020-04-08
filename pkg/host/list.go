@@ -13,11 +13,14 @@ var DefaultColumns = []string{"profile", "status", "ip", "domain"}
 // ProfilesOnlyColumns are the columns used for profile status list
 var ProfilesOnlyColumns = []string{"profile", "status"}
 
-// ENABLED marks a profile active on your hosts file.
-var ENABLED = "on"
+type ProfileStatus string
 
-// DISABLED marks a profile not active on your hosts file.
-var DISABLED = "off"
+const (
+	// Enabled marks a profile active on your hosts file.
+	Enabled ProfileStatus = "on"
+	// Disabled marks a profile not active on your hosts file.
+	Disabled ProfileStatus = "off"
+)
 
 // ListOptions contains available options for listing.
 type ListOptions struct {
@@ -25,7 +28,7 @@ type ListOptions struct {
 	RawTable     bool
 	Columns      []string
 	ProfilesOnly bool
-	StatusFilter string
+	StatusFilter ProfileStatus
 }
 
 // ListProfiles shows a table with profile names status and routing information
@@ -107,21 +110,21 @@ func appendProfile(profile string, table *tablewriter.Table, data hostLines, opt
 		}
 		rs := strings.Split(cleanLine(r), " ")
 
-		status := ENABLED
+		status := Enabled
 		ip, domain := rs[0], rs[1]
 		if IsDisabled(r) {
 			// skip empty comments lines
 			if rs[1] == "" {
 				continue
 			}
-			status = DISABLED
+			status = Disabled
 			ip, domain = rs[1], rs[2]
 		}
 		if opts.StatusFilter != "" && status != opts.StatusFilter {
 			continue
 		}
 		if opts.ProfilesOnly {
-			table.Append([]string{profile, status})
+			table.Append([]string{profile, string(status)})
 			return
 		}
 		var row []string
@@ -130,7 +133,7 @@ func appendProfile(profile string, table *tablewriter.Table, data hostLines, opt
 			case "profile":
 				row = append(row, profile)
 			case "status":
-				row = append(row, status)
+				row = append(row, string(status))
 			case "ip", "ips":
 				row = append(row, ip)
 			case "domain", "domains":
