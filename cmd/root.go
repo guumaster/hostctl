@@ -8,8 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var defaultHostsFile = "/etc/hosts"
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "hostctl",
@@ -31,7 +29,8 @@ you need each time with a simple interface.
 		host, _ := cmd.Flags().GetString("host-file")
 		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		if host != defaultHostsFile && !quiet {
+		defaultHostsFile := getDefaultHostFile()
+		if (host != defaultHostsFile || os.Getenv("HOSTCTL_FILE") != "") && !quiet {
 			fmt.Printf("Using hosts file: %s\n", host)
 		}
 
@@ -45,20 +44,22 @@ func Execute() {
 	}
 }
 
-func init() {
-	defaultHostsFile := "/etc/hosts"
-
-	if runtime.GOOS == "windows" {
-		defaultHostsFile = `C:/Windows/System32/Drivers/etc/hosts`
-	}
-
+func getDefaultHostFile() string {
 	envHostFile := os.Getenv("HOSTCTL_FILE")
 	if envHostFile != "" {
-		defaultHostsFile = envHostFile
+		return envHostFile
 	}
 
+	if runtime.GOOS == "windows" {
+		return `C:/Windows/System32/Drivers/etc/hosts`
+	}
+
+	return "/etc/hosts"
+}
+
+func init() {
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "Choose a profile")
-	rootCmd.PersistentFlags().String("host-file", defaultHostsFile, "Hosts file path")
+	rootCmd.PersistentFlags().String("host-file", getDefaultHostFile(), "Hosts file path")
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
 }
 
