@@ -21,6 +21,7 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+      - '^Scoop update'
       - Merge pull request
       - Merge branch
 
