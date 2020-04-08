@@ -29,16 +29,20 @@ WARNING: the complete hosts file will be overwritten with the backup data.
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dst, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
+		quiet, _ := cmd.Flags().GetBool("quiet")
 
 		err := host.RestoreFile(from, dst)
 		if err != nil {
 			return err
 		}
-		_ = host.ListProfiles(dst, &host.ListOptions{})
 
-		fmt.Printf("Restore completed.")
+		if quiet {
+			return nil
+		}
 
-		return nil
+		fmt.Printf("File '%s' restored.\n\n", from)
+
+		return host.ListProfiles(dst, &host.ListOptions{})
 	},
 }
 

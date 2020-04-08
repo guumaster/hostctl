@@ -16,8 +16,8 @@ var backupCmd = &cobra.Command{
 	Use:   "backup",
 	Short: "Creates a backup copy of your hosts file",
 	Long: `
-Creates a backup copy of your hosts file with the date in .YYYYMMDD 
-as extension. 
+Creates a backup copy of your hosts file with the date in .YYYYMMDD
+as extension.
 `,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
@@ -30,17 +30,19 @@ as extension.
 	RunE: func(cmd *cobra.Command, args []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		dst, _ := cmd.Flags().GetString("path")
+		quiet, _ := cmd.Flags().GetBool("quiet")
 
 		backupFile, err := host.BackupFile(src, dst)
 		if err != nil {
 			return err
 		}
 
-		_ = host.ListProfiles(backupFile, &host.ListOptions{})
-
+		if quiet {
+			return nil
+		}
 		fmt.Printf("Backup completed.")
 
-		return nil
+		return host.ListProfiles(backupFile, &host.ListOptions{})
 	},
 }
 

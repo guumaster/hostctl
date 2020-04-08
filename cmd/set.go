@@ -32,6 +32,7 @@ If the profile already exists it will be overwritten.
 		src, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
 		profile, _ := cmd.Flags().GetString("profile")
+		quiet, _ := cmd.Flags().GetBool("quiet")
 
 		h, _ := cmd.Flags().GetString("host-file")
 
@@ -54,52 +55,9 @@ If the profile already exists it will be overwritten.
 			return err
 		}
 
-		return host.ListProfiles(src, &host.ListOptions{
-			Profile: profile,
-		})
-	},
-}
-
-// setDomainsCmd represents the fromFile command
-var setDomainsCmd = &cobra.Command{
-	Use:   "domains",
-	Short: "Add content in your hosts file.",
-	Long: `
-Set content in your hosts file.
-If the profile already exists it will be added to it.`,
-	PreRunE: func(cmd *cobra.Command, domains []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		if profile == "" {
-			return host.MissingProfileError
+		if quiet {
+			return nil
 		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
-		}
-
-		if len(domains) == 0 {
-			return host.MissingDomainsError
-		}
-		return nil
-	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		src, _ := cmd.Flags().GetString("host-file")
-		ip, _ := cmd.Flags().GetString("ip")
-		profile, _ := cmd.Flags().GetString("profile")
-		h, _ := cmd.Flags().GetString("host-file")
-
-		err := host.AddFromArgs(&host.AddFromArgsOptions{
-			Domains: args,
-			IP:      ip,
-			Dst:     h,
-			Profile: profile,
-			Reset:   true,
-		})
-		if err != nil {
-			return err
-		}
-
 		return host.ListProfiles(src, &host.ListOptions{
 			Profile: profile,
 		})

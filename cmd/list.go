@@ -14,7 +14,7 @@ var listCmd = &cobra.Command{
 Shows a detailed list of profiles on your hosts file with name, ip and host name.
 You can filter by profile name.
 
-The "default"" profile is all the content that is not handled by hostctl tool.
+The "default" profile is all the content that is not handled by hostctl tool.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
@@ -36,6 +36,9 @@ The "default"" profile is all the content that is not handled by hostctl tool.
 func init() {
 	rootCmd.AddCommand(listCmd)
 
-	listCmd.Flags().StringSliceP("column", "c", nil, "Columns to show on lists")
-	listCmd.Flags().Bool("raw", false, "Output without table borders")
+	listCmd.AddCommand(makeListStatusCmd("enabled"))
+	listCmd.AddCommand(makeListStatusCmd("disabled"))
+
+	listCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
+	listCmd.PersistentFlags().Bool("raw", false, "Output without table borders")
 }

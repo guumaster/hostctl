@@ -8,12 +8,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var defaultHostsFile = "/etc/hosts"
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "hostctl",
 	Short: "Manage your hosts file like a pro",
 	Long: `
- 🄷🄾🅂🅃🄲🅃🄻
+    __                    __           __     __
+   / /_   ____    _____  / /_  _____  / /_   / /
+  / __ \ / __ \  / ___/ / __/ / ___/ / __/  / /
+ / / / // /_/ / (__  ) / /_  / /__  / /_   / /
+/_/ /_/ \____/ /____/  \__/  \___/  \__/  /_/
+
 
 hostctl is a CLI tool to manage your hosts file with ease.
 You can have multiple profiles, enable/disable exactly what
@@ -22,8 +29,11 @@ you need each time with a simple interface.
 	SilenceUsage: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		host, _ := cmd.Flags().GetString("host-file")
+		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		fmt.Printf("Using hosts file: %s\n", host)
+		if host != defaultHostsFile && !quiet {
+			fmt.Printf("Using hosts file: %s\n", host)
+		}
 
 		return nil
 	},
@@ -49,6 +59,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "Choose a profile")
 	rootCmd.PersistentFlags().String("host-file", defaultHostsFile, "Hosts file path")
+	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
 }
 
 // isPiped detect if there is any input through STDIN

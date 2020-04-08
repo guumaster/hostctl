@@ -6,19 +6,17 @@ import (
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
-// disableCmd represents the disable command
-var disableCmd = &cobra.Command{
-	Use:   "disable",
-	Short: "Disable a profile from your hosts file.",
+// addDomainsCmd represents the fromFile command
+var addDomainsCmd = &cobra.Command{
+	Use:   "domains",
+	Short: "Add content in your hosts file.",
 	Long: `
-Disable a profile from your hosts file without removing it.
-It will be listed as "off" while it is disabled.
-`,
+Set content in your hosts file.
+If the profile already exists it will be added to it.`,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
-		all, _ := cmd.Flags().GetBool("all")
 
-		if !all && profile == "" {
+		if profile == "" {
 			return host.MissingProfileError
 		}
 
@@ -29,16 +27,22 @@ It will be listed as "off" while it is disabled.
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
+		ip, _ := cmd.Flags().GetString("ip")
 		profile, _ := cmd.Flags().GetString("profile")
 		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		all, _ := cmd.Flags().GetBool("all")
-
-		var err error
-		if all {
-			profile = ""
+		err := host.AddFromArgs(&host.AddFromArgsOptions{
+			Domains: args,
+			IP:      ip,
+			Dst:     src,
+			Profile: profile,
+			Reset:   false,
+		})
+		if err != nil {
+			return err
 		}
-		err = host.Disable(src, profile)
+
+		err = host.Enable(src, profile)
 		if err != nil {
 			return err
 		}
@@ -46,14 +50,9 @@ It will be listed as "off" while it is disabled.
 		if quiet {
 			return nil
 		}
+
 		return host.ListProfiles(src, &host.ListOptions{
 			Profile: profile,
 		})
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(disableCmd)
-
-	disableCmd.Flags().BoolP("all", "", false, "Disable all profiles")
 }

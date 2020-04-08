@@ -10,11 +10,16 @@ import (
 // DefaultColumns is the list of default columns to use when showing table list
 var DefaultColumns = []string{"profile", "status", "ip", "domain"}
 
+// ProfilesOnlyColumns are the columns used for profile status list
+var ProfilesOnlyColumns = []string{"profile", "status"}
+
 // ListOptions contains available options for listing.
 type ListOptions struct {
-	Profile  string
-	RawTable bool
-	Columns  []string
+	Profile      string
+	RawTable     bool
+	Columns      []string
+	ProfilesOnly bool
+	StatusFilter string
 }
 
 // ListProfiles shows a table with profile names status and routing information
@@ -34,12 +39,14 @@ func ListProfiles(src string, opts *ListOptions) error {
 
 	table := tablewriter.NewWriter(os.Stdout)
 
-	cols := opts.Columns
-	if len(cols) == 0 {
-		cols = DefaultColumns
+	if len(opts.Columns) == 0 {
+		opts.Columns = DefaultColumns
+	}
+	if opts.ProfilesOnly {
+		opts.Columns = ProfilesOnlyColumns
 	}
 
-	table.SetHeader(cols)
+	table.SetHeader(opts.Columns)
 
 	if opts.RawTable {
 		table.SetAutoWrapText(false)
@@ -55,8 +62,9 @@ func ListProfiles(src string, opts *ListOptions) error {
 		table.SetNoWhiteSpace(true)
 	}
 
-	if profile == "default" || profile == "" {
-		appendProfile("default", table, cols, h.profiles["default"])
+	// First check if default should be shown
+	if (profile == "default" || profile == "") && !opts.ProfilesOnly {
+		appendProfile("default", table, h.profiles["default"], opts)
 
 		if len(h.profiles) > 1 && !opts.RawTable {
 			table.AddSeparator()
@@ -73,7 +81,7 @@ func ListProfiles(src string, opts *ListOptions) error {
 			continue
 		}
 
-		appendProfile(p, table, cols, data)
+		appendProfile(p, table, data, opts)
 
 		if i < len(h.profiles) && !opts.RawTable {
 			table.AddSeparator()
@@ -83,7 +91,7 @@ func ListProfiles(src string, opts *ListOptions) error {
 	return nil
 }
 
-func appendProfile(profile string, table *tablewriter.Table, cols []string, data hostLines) {
+func appendProfile(profile string, table *tablewriter.Table, data hostLines, opts *ListOptions) {
 	for _, r := range data {
 		if r == "" {
 			continue
@@ -103,8 +111,15 @@ func appendProfile(profile string, table *tablewriter.Table, cols []string, data
 			status = "off"
 			ip, domain = rs[1], rs[2]
 		}
+		if opts.StatusFilter != "" && status != opts.StatusFilter {
+			continue
+		}
+		if opts.ProfilesOnly {
+			table.Append([]string{profile, status})
+			return
+		}
 		var row []string
-		for _, c := range cols {
+		for _, c := range opts.Columns {
 			switch c {
 			case "profile":
 				row = append(row, profile)

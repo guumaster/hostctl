@@ -1,29 +1,23 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
-// removeCmd represents the remove command
-var removeCmd = &cobra.Command{
-	Use:   "remove",
-	Short: "Remove a profile from your hosts file.",
+// removeDomainsCmd represents the remove command
+var removeDomainsCmd = &cobra.Command{
+	Use:   "domains",
+	Short: "Remove domains from your hosts file.",
 	Long: `
-Completely remove a profile content from your hosts file.
+Completely remove domains from your hosts file.
 It cannot be undone unless you have a backup and restore it.
-
-If you want to remove a profile but would like to use it later,
-use 'hosts disable' instead.
 `,
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		profile, _ := cmd.Flags().GetString("profile")
-		all, _ := cmd.Flags().GetBool("all")
 
-		if !all && profile == "" {
+		if profile == "" {
 			return host.MissingProfileError
 		}
 
@@ -37,7 +31,7 @@ use 'hosts disable' instead.
 		dst, _ := cmd.Flags().GetString("host-file")
 		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		err := host.RemoveProfile(dst, profile)
+		err := host.RemoveDomains(dst, profile, args)
 		if err != nil {
 			return err
 		}
@@ -45,16 +39,8 @@ use 'hosts disable' instead.
 		if quiet {
 			return nil
 		}
-
-		fmt.Printf("Profile '%s' removed.\n\n", profile)
-
-		return nil
+		return host.ListProfiles(dst, &host.ListOptions{
+			Profile: profile,
+		})
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(removeCmd)
-	removeCmd.Flags().Bool("all", false, "Remove all profiles")
-
-	removeCmd.AddCommand(removeDomainsCmd)
 }
