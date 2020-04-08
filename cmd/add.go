@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -9,8 +8,8 @@ import (
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
-// addFromFileCmd represents the fromFile command
-var addFromFileCmd = &cobra.Command{
+// addCmd represents the fromFile command
+var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add content to a profile in your hosts file.",
 	Long: `
@@ -33,39 +32,32 @@ If the profile already exists it will be added to it.`,
 		from, _ := cmd.Flags().GetString("from")
 		profile, _ := cmd.Flags().GetString("profile")
 
-		var err error
 		if isPiped() {
-			fmt.Println("IS PIPED")
-			err = host.AddFromReader(os.Stdin, &host.AddFromFileOptions{
+			return host.AddFromReader(os.Stdin, &host.AddFromFileOptions{
 				Dst:     src,
 				Profile: profile,
 				Reset:   false,
 			})
-		} else {
-			fmt.Println("FROM FILE")
-			err = host.AddFromFile(&host.AddFromFileOptions{
-				From:    from,
-				Dst:     src,
-				Profile: profile,
-				Reset:   false,
-			})
-		}
-		if err != nil {
-			return err
 		}
 
-		return host.ListProfiles(src, &host.ListOptions{
+		return host.AddFromFile(&host.AddFromFileOptions{
+			From:    from,
+			Dst:     src,
 			Profile: profile,
+			Reset:   false,
 		})
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, removeCmd)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(addFromFileCmd)
+	rootCmd.AddCommand(addCmd)
+	addCmd.AddCommand(addDomainsCmd)
 
-	addFromFileCmd.Flags().StringP("from", "f", "", "file to read")
-
-	addFromFileCmd.AddCommand(addDomainsCmd)
+	addCmd.Flags().StringP("from", "f", "", "file to read")
+	addCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
 
 	addDomainsCmd.Flags().String("ip", "127.0.0.1", "domains ip")
 }

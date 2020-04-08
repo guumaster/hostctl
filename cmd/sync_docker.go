@@ -32,10 +32,9 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 		profile, _ := cmd.Flags().GetString("profile")
 		domain, _ := cmd.Flags().GetString("domain")
 		network, _ := cmd.Flags().GetString("network")
-		quiet, _ := cmd.Flags().GetBool("quiet")
 
 		ctx := context.Background()
-		err := host.AddFromDocker(ctx, &host.AddFromDockerOptions{
+		return host.AddFromDocker(ctx, &host.AddFromDockerOptions{
 			Dst:     hostFile,
 			Domain:  domain,
 			Profile: profile,
@@ -44,15 +43,8 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 				Network: network,
 			},
 		})
-		if err != nil {
-			return err
-		}
-
-		if quiet {
-			return nil
-		}
-		return host.ListProfiles(hostFile, &host.ListOptions{
-			Profile: profile,
-		})
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, removeCmd)
 	},
 }

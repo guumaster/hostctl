@@ -24,4 +24,5 @@ func init() {
 
 	syncCmd.PersistentFlags().String("network", "", "Filter containers from a specific network")
 	syncCmd.PersistentFlags().StringP("domain", "d", "loc", "domain where your docker containers will be added")
+	syncCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
 }

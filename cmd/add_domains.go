@@ -29,7 +29,6 @@ If the profile already exists it will be added to it.`,
 		src, _ := cmd.Flags().GetString("host-file")
 		ip, _ := cmd.Flags().GetString("ip")
 		profile, _ := cmd.Flags().GetString("profile")
-		quiet, _ := cmd.Flags().GetBool("quiet")
 
 		err := host.AddFromArgs(&host.AddFromArgsOptions{
 			Domains: args,
@@ -42,17 +41,9 @@ If the profile already exists it will be added to it.`,
 			return err
 		}
 
-		err = host.Enable(src, profile)
-		if err != nil {
-			return err
-		}
-
-		if quiet {
-			return nil
-		}
-
-		return host.ListProfiles(src, &host.ListOptions{
-			Profile: profile,
-		})
+		return host.Enable(src, profile)
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, removeDomainsCmd)
 	},
 }

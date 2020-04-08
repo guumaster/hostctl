@@ -61,6 +61,9 @@ func init() {
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "Choose a profile")
 	rootCmd.PersistentFlags().String("host-file", getDefaultHostFile(), "Hosts file path")
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
+
+	rootCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
+	rootCmd.PersistentFlags().Bool("raw", false, "Output without table borders")
 }
 
 // isPiped detect if there is any input through STDIN

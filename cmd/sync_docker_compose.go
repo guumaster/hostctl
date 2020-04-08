@@ -33,30 +33,20 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		profile, _ := cmd.Flags().GetString("profile")
 		domain, _ := cmd.Flags().GetString("domain")
 		network, _ := cmd.Flags().GetString("network")
-		composeFile, _ := cmd.Flags().GetString("compose-file")
-		projectName, _ := cmd.Flags().GetString("project-name")
 		prefix, _ := cmd.Flags().GetBool("prefix")
-		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		if composeFile == "" {
-			cwd, err := os.Getwd()
-			if err != nil {
-				return err
-			}
-
-			composeFile = path.Join(cwd, "docker-compose.yml")
+		compose, err := getComposeInfo(cmd)
+		if err != nil {
+			return err
 		}
 
-		if projectName == "" {
-			projectName = guessProjectName(composeFile)
-		}
-
-		if profile == "" && projectName == "" {
+		if profile == "" && compose.ProjectName == "" {
 			return host.MissingProfileError
 		}
 
 		if profile == "" {
-			profile = projectName
+			profile = compose.ProjectName
+			_ = cmd.Flags().Set("profile", profile)
 		}
 
 		if domain == "" {
@@ -65,35 +55,50 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 
 		ctx := context.Background()
 
-		err := host.AddFromDocker(ctx, &host.AddFromDockerOptions{
+		return host.AddFromDocker(ctx, &host.AddFromDockerOptions{
 			Dst:     hostFile,
 			Domain:  domain,
 			Profile: profile,
 			Watch:   false,
 			Docker: &host.DockerOptions{
-				ComposeFile: composeFile,
-				ProjectName: projectName,
+				ComposeFile: compose.File,
+				ProjectName: compose.ProjectName,
 				Network:     network,
 				KeepPrefix:  prefix,
 			},
 		})
-		if err != nil {
-			return err
-		}
-
-		if quiet {
-			return nil
-		}
-		return host.ListProfiles(hostFile, &host.ListOptions{
-			Profile: profile,
-		})
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, removeCmd)
 	},
 }
 
-func guessProjectName(composeFile string) string {
-	reg := regexp.MustCompile("[^a-z0-9-]+")
-	base := path.Base(path.Dir(composeFile))
-	base = strings.ToLower(base)
-	base = reg.ReplaceAllString(base, "")
-	return base
+type ComposeInfo struct {
+	ProjectName string
+	File        string
+}
+
+func getComposeInfo(cmd *cobra.Command) (*ComposeInfo, error) {
+	name, _ := cmd.Flags().GetString("project-name")
+	f, _ := cmd.Flags().GetString("compose-file")
+
+	if f == "" {
+		cwd, err := os.Getwd()
+		if err != nil {
+			return nil, err
+		}
+
+		f = path.Join(cwd, "docker-compose.yml")
+	}
+
+	if name == "" {
+		reg := regexp.MustCompile("[^a-z0-9-]+")
+		name = path.Base(path.Dir(f))
+		name = strings.ToLower(name)
+		name = reg.ReplaceAllString(name, "")
+	}
+	return &ComposeInfo{
+		ProjectName: name,
+		File:        f,
+	}, nil
 }
