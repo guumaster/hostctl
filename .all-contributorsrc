@@ -53,6 +53,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "smhmd",
+      "name": "simohamed",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/46059092?v=4",
+      "profile": "https://github.com/smhmd",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "projectName": "hostctl",
