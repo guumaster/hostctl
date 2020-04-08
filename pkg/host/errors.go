@@ -7,6 +7,9 @@ import (
 // MissingProfileError when the profile is mandatory
 var MissingProfileError = errors.New("missing profile name")
 
+// UnknownProfileError when the profile is not present
+var UnknownProfileError = errors.New("unknown profile name")
+
 // DefaultProfileError when trying to edit default content
 var DefaultProfileError = errors.New("'default' profile should not be handled by hostctl")
 

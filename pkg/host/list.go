@@ -13,6 +13,12 @@ var DefaultColumns = []string{"profile", "status", "ip", "domain"}
 // ProfilesOnlyColumns are the columns used for profile status list
 var ProfilesOnlyColumns = []string{"profile", "status"}
 
+// ENABLED marks a profile active on your hosts file.
+var ENABLED = "on"
+
+// DISABLED marks a profile not active on your hosts file.
+var DISABLED = "off"
+
 // ListOptions contains available options for listing.
 type ListOptions struct {
 	Profile      string
@@ -101,14 +107,14 @@ func appendProfile(profile string, table *tablewriter.Table, data hostLines, opt
 		}
 		rs := strings.Split(cleanLine(r), " ")
 
-		status := "on"
+		status := ENABLED
 		ip, domain := rs[0], rs[1]
 		if IsDisabled(r) {
 			// skip empty comments lines
 			if rs[1] == "" {
 				continue
 			}
-			status = "off"
+			status = DISABLED
 			ip, domain = rs[1], rs[2]
 		}
 		if opts.StatusFilter != "" && status != opts.StatusFilter {
