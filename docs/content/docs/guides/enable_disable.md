@@ -1,6 +1,6 @@
 ---
-title: Enable & Disable
-weight: 20
+title: Enable/Disable profiles
+weight: 30
 ---
 
 
@@ -13,7 +13,7 @@ Command:
 `hostctl enable -p awesome` 
 
 Output:
-```bash
+```
 +---------+--------+----------------+------------------------------+
 | PROFILE | STATUS |       IP       |            DOMAIN            |
 +---------+--------+----------------+------------------------------+
@@ -38,7 +38,7 @@ Command:
 `hostctl disable -p awesome` 
 
 Output:
-```bash
+```
 +---------+--------+----------------+------------------------------+
 | PROFILE | STATUS |       IP       |            DOMAIN            |
 +---------+--------+----------------+------------------------------+
