@@ -36,13 +36,14 @@ WARNING: the complete hosts file will be overwritten with the backup data.
 			return err
 		}
 
-		if quiet {
-			return nil
+		if !quiet {
+			fmt.Printf("File '%s' restored.\n\n", from)
 		}
 
-		fmt.Printf("File '%s' restored.\n\n", from)
-
-		return host.ListProfiles(dst, &host.ListOptions{})
+		return nil
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, nil)
 	},
 }
 

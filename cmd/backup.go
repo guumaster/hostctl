@@ -32,17 +32,19 @@ as extension.
 		dst, _ := cmd.Flags().GetString("path")
 		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		backupFile, err := host.BackupFile(src, dst)
+		_, err := host.BackupFile(src, dst)
 		if err != nil {
 			return err
 		}
 
-		if quiet {
-			return nil
+		if !quiet {
+			fmt.Println("Backup completed.")
 		}
-		fmt.Printf("Backup completed.")
 
-		return host.ListProfiles(backupFile, &host.ListOptions{})
+		return nil
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, nil)
 	},
 }
 

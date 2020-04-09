@@ -43,6 +43,11 @@ It will be listed as "off" while it is disabled.
 func init() {
 	rootCmd.AddCommand(disableCmd)
 
+	// NOTE: Added here to avoid circular references
+	disableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, enableCmd)
+	}
+
 	disableCmd.Flags().BoolP("all", "", false, "Disable all profiles")
 	disableCmd.Flags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
 }

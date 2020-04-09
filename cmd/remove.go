@@ -42,13 +42,14 @@ use 'hosts disable' instead.
 			return err
 		}
 
-		if quiet {
-			return nil
+		if !quiet {
+			fmt.Printf("Profile '%s' removed.\n\n", profile)
 		}
 
-		fmt.Printf("Profile '%s' removed.\n\n", profile)
-
 		return nil
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, nil)
 	},
 }
 
