@@ -6,51 +6,45 @@ import (
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
-var enableCmd *cobra.Command
-
-func init() {
-	// enableCmd represents the enable command
-	enableCmd = &cobra.Command{
-		Use:   "enable",
-		Short: "Enable a profile on your hosts file.",
-		Long: `
+// enableCmd represents the enable command
+var enableCmd = &cobra.Command{
+	Use:   "enable",
+	Short: "Enable a profile on your hosts file.",
+	Long: `
 Enables an existing profile.
 It will be listed as "on" while it is enabled.
 `,
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			profile, _ := cmd.Flags().GetString("profile")
-			all, _ := cmd.Flags().GetBool("all")
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		profile, _ := cmd.Flags().GetString("profile")
+		all, _ := cmd.Flags().GetBool("all")
 
-			if !all && profile == "" {
-				return host.MissingProfileError
-			}
+		if !all && profile == "" {
+			return host.MissingProfileError
+		}
 
-			if profile == "default" {
-				return host.DefaultProfileError
-			}
-			return nil
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			profile, _ := cmd.Flags().GetString("profile")
-			src, _ := cmd.Flags().GetString("host-file")
-			enableOnly, _ := cmd.Flags().GetBool("only")
+		if profile == "default" {
+			return host.DefaultProfileError
+		}
+		return nil
+	},
+	RunE: func(cmd *cobra.Command, args []string) error {
+		profile, _ := cmd.Flags().GetString("profile")
+		src, _ := cmd.Flags().GetString("host-file")
+		enableOnly, _ := cmd.Flags().GetBool("only")
 
-			all, _ := cmd.Flags().GetBool("all")
-			if all {
-				profile = ""
-			}
+		all, _ := cmd.Flags().GetBool("all")
+		if all {
+			profile = ""
+		}
 
-			if enableOnly && !all {
-				return host.EnableOnly(src, profile)
-			}
-			return host.Enable(src, profile)
+		if enableOnly && !all {
+			return host.EnableOnly(src, profile)
+		}
+		return host.Enable(src, profile)
+	},
+}
 
-		},
-		PostRunE: func(cmd *cobra.Command, args []string) error {
-			return postActionCmd(cmd, args, disableCmd)
-		},
-	}
-
+func init() {
 	rootCmd.AddCommand(enableCmd)
 
 	enableCmd.Flags().BoolP("all", "", false, "Enable all profiles")
