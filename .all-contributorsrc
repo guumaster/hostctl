@@ -5,6 +5,7 @@
   "imageSize": 50,
   "contributorsPerLine": 12,
   "commit": false,
+  "badgeTemplate": "[all-contributors-link]: https://img.shields.io/badge/contributors-<%= contributors.length %>-blue.svg",
   "contributors": [
     {
       "login": "gkze",

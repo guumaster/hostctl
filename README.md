@@ -1,9 +1,8 @@
 [![Tests][tests-badge]][tests-link]
 [![GitHub Release][release-badge]][release-link]
 [![Go Report Card][report-badge]][report-link]
-[![License][license-badge]][license-link]<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![License][license-badge]][license-link]
+[![All Contributors][all-contributors-badge][all-contributors-link]
 
 
 # hostctl
@@ -108,3 +107,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [license-badge]: https://img.shields.io/github/license/guumaster/hostctl
 [license-link]: https://github.com/guumaster/hostctl/LICENSE
 
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[all-contributors-link]: https://img.shields.io/badge/contributors-7-blue.svg
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[all-contributors-link]: #contributors-
