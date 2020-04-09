@@ -108,6 +108,6 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [license-link]: https://github.com/guumaster/hostctl/LICENSE
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[all-contributors-link]: https://img.shields.io/badge/contributors-7-blue.svg
+[all-contributors-badge]: https://img.shields.io/badge/contributors-7-blue.svg
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [all-contributors-link]: #contributors-
