@@ -2,7 +2,7 @@
 [![GitHub Release][release-badge]][release-link]
 [![Go Report Card][report-badge]][report-link]
 [![License][license-badge]][license-link]
-[![All Contributors][all-contributors-badge][all-contributors-link]
+[![All Contributors][all-contributors-badge]][all-contributors-link]
 
 
 # hostctl
