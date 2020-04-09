@@ -1,4 +1,11 @@
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - allcontributors/**
+  pull_request:
+    branches-ignore:
+      - allcontributors/**
+
 name: Test
 jobs:
   test:
