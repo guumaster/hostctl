@@ -203,7 +203,7 @@ func getHostData(dst, profile string) (*hostFile, error) {
 	}
 	_, ok := h.profiles[profile]
 	if profile != "" && !ok {
-		return h, fmt.Errorf("profile '%s' doesn't exists in file", profile)
+		return h, fmt.Errorf("unknown profile '%s'", profile)
 	}
 
 	return h, nil
