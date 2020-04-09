@@ -1,27 +1,22 @@
 ---
-title: Add & Remove
+title: Profiles 101
 weight: 10
 ---
 
 
-## Add 
+## Adding a profile
 
 {{<info>}}
 **Add or Set**: For all this examples it's possible to replace `add` with `set` and 
 it will replace all previous content of the chosen profile with the new one.
 {{</info>}}
 
-### Available Flags
-
-
-## Examples
-
 
 ### Add new profile from a file
 You can store routing as a separate file and add it to the global hosts file when you need.
 For example, if you have this routing file on any of your projects: 
 
-```bash
+```
 # Sample stored in /path/of/some/project/repo/.etchosts
 127.0.0.1 web.my-awesome-project.local 
 127.0.0.1 api.my-awesome-project.local 
@@ -32,7 +27,7 @@ Command:
 `hostctl set -p awesome --from /path/to/some/project/.etchosts `
 
 Output:
-```bash
+```
 +---------+--------+----------------+------------------------------+
 | PROFILE | STATUS |       IP       |            DOMAIN            |
 +---------+--------+----------------+------------------------------+
@@ -61,7 +56,7 @@ You can add that content as a profile with this command:
 
 `hostctl add domains test.loc another.loc  --ip 123.123.123.123 -p test`
 
-```bash
+```
 // Output:
 +---------+--------+-----------------+------------------------------+
 | PROFILE | STATUS |       IP        |            DOMAIN            |
@@ -92,7 +87,7 @@ Commands (both work similarly):
 * `hostctl add -p awesome < /path/to/some/project/.etchosts`
 
 Output:
-```bash
+```
 +---------+--------+----------------+------------------------------+
 | PROFILE | STATUS |       IP       |            DOMAIN            |
 +---------+--------+----------------+------------------------------+
@@ -108,13 +103,13 @@ Output:
 ```
 
 
-## Remove a profile
+## Removing a profile
 
 If you want to completely remove a profile from the hosts file you can run:
 
 `hostctl remove -p awesome` 
 
-```bash
+```
 // Output:
 +---------+--------+----------------+------------------------------+
 | PROFILE | STATUS |       IP       |            DOMAIN            |

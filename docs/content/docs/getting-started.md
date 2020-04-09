@@ -15,7 +15,7 @@ Add a new profile from args:
 
 `hostctl add domains -p awesome my-awesome-ui.project.loc my-awesome-api.project.loc`
 
-```bash 
+``` 
 // Output:
 +---------+--------+-----------+----------------------------+
 | PROFILE | STATUS |    IP     |           DOMAIN           |
@@ -31,7 +31,7 @@ When you don't want to use some profile, just disable it:
 
 `hostctl disable -p awesome`
 
-```bash 
+``` 
 // Output:
 +---------+--------+-----------+----------------------------+
 | PROFILE | STATUS |    IP     |           DOMAIN           |

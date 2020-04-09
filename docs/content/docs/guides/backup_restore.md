@@ -1,10 +1,9 @@
 ---
-title: Backup & Restore
+title: Backup/Restore hosts file
 weight: 80
 ---
 
-
-## Backup your hosts file
+### Backup your hosts file
 
 You can save a copy of your hosts file with this command:
 
@@ -16,7 +15,7 @@ It will create a file `$HOME/hostctl/hosts.20200314` with the full content of yo
 
 
 
-## Restore a hosts file
+### Restore a hosts file
 
 You can restore a previous backup of your hosts file with this command:
 

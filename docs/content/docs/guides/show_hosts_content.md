@@ -1,24 +1,12 @@
 ---
-title: List
-weight: 1
+title: Show hosts content
+weight: 20
 ---
 
 ## List profiles
 
 You can get a list of all profiles using the `list` command. 
 
-
-### Available options
-
-* `-profile,-p` only list the specified profile instead of the complete list.0
-
-* `--raw` show the list without the table borders or separators
-
-* `--column,-c [column_names]` comma separated list of columns to show. Default is: `profile,status,ip,domain`
-
-
-
-## Examples
 
 ### List all profiles
 
@@ -27,7 +15,7 @@ Command:
 `hostctl list`
 
 Output:
-```bash
+```
 +---------+--------+----------------+----------------------------+
 | PROFILE | STATUS |       IP       |           DOMAIN           |
 +---------+--------+----------------+----------------------------+
@@ -50,7 +38,7 @@ Command:
 `list  --raw -c ip,domain`
 
 Output:
-```bash
+```
 IP              DOMAIN                                  
 127.0.0.1       localhost                               
 127.0.1.1       some.existing.local                     

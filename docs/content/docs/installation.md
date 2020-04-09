@@ -12,7 +12,7 @@ Go to the [latest release page](https://github.com/guumaster/hostctl/releases/la
 
 Get the `.deb` package from the [latest release page](https://github.com/guumaster/hostctl/releases/latest) and then run:
 
-```bash
+```
 sudo dpkg -i /path/to/downloaded/hostctl_<version>.deb
 ```
 
@@ -24,14 +24,14 @@ There is an [AUR package](https://aur.archlinux.org/packages/hostctl) for `hostc
 You can install it using your [AUR helper](https://wiki.archlinux.org/index.php/AUR_helpers) of choice.
 
 Example:
-```bash
+```
 yay -Sy hostctl
 ```
 
 
 ### HomeBrew
 
-```bash
+```
 brew install guumaster/tap/hostctl
 ```
 
@@ -40,14 +40,14 @@ brew install guumaster/tap/hostctl
 
 **WARNING**: Still working out a permission issue * [hostctl snap - store-requests](https://forum.snapcraft.io/t/plugs-system-files-for-hostctl-snap/16199/5) 
 
-```bash
+```
 [sudo] snap install hostctl
 ```
 
 
 ### Scoop
 
-```bash
+```
 scoop install hostctl
 ```
 
