@@ -3,7 +3,6 @@ name: github pages
 on:
   push:
     branches:
-      - master
       - docs
 
 jobs:
