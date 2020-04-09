@@ -24,6 +24,7 @@ changelog:
       - '^docs:'
       - '^test:'
       - '^Scoop update'
+      - '^ci:'
       - Merge pull request
       - Merge branch
 

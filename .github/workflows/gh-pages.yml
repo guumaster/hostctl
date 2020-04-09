@@ -20,18 +20,29 @@ jobs:
           git checkout origin/master -- .all-contributorsrc
           cp .all-contributorsrc docs/data/contributors.json
 
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14.x
+
+      - name: Generate CLI docs
+        env:
+          LINKS_PREFIX: "/hostctl"
+        run: |
+          go run . generate-docs --path docs/content/docs/cli-usage
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.68.3'
           extended: true
 
-      - name: Build
+      - name: Build site
         run: |
           cd docs
           hugo --minify --enableGitInfo
 
-      - name: Deploy
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
