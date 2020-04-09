@@ -105,7 +105,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [report-link]: https://goreportcard.com/report/github.com/guumaster/hostctl
 
 [license-badge]: https://img.shields.io/github/license/guumaster/hostctl
-[license-link]: https://github.com/guumaster/hostctl/LICENSE
+[license-link]: https://github.com/guumaster/hostctl/blob/master/LICENSE
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [all-contributors-badge]: https://img.shields.io/badge/contributors-7-blue.svg

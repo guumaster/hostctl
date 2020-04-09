@@ -38,6 +38,7 @@ you need each time with a simple interface.
 	},
 }
 
+// Execute is the main entrypoint for CLI usage
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
