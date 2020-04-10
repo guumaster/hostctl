@@ -29,7 +29,7 @@ jobs:
         env:
           LINKS_PREFIX: "/hostctl"
         run: |
-          go run . generate-docs --path docs/content/docs/cli-usage
+          go run . gen-md-docs --path docs/content/docs/cli-usage
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
