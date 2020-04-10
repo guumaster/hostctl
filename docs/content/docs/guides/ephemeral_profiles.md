@@ -17,6 +17,7 @@ Command:
 `cat .etchosts | hostctl add -p ephemeral  --wait 0`
 
 Output:
+```
 +-----------+--------+------------+------------------------------+
 |  PROFILE  | STATUS |     IP     |            DOMAIN            |
 +-----------+--------+------------+------------------------------+
@@ -24,7 +25,8 @@ Output:
 | awesome   | on     | 127.0.0.1  | api.my-awesome-project.local |
 +-----------+--------+------------+------------------------------+
 
-Waiting for 10s or ctrl+c to remove from profile 'ephemeral'
+Waiting until ctrl+c to remove from profile 'ephemeral'
 
+^C
 Profile 'ephemeral' removed.
-
+```
