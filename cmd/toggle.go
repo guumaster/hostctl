@@ -29,22 +29,17 @@ Alternates between on/off status of an existing profile.
 		profile, _ := cmd.Flags().GetString("profile")
 
 		src, _ := cmd.Flags().GetString("host-file")
-		quiet, _ := cmd.Flags().GetBool("quiet")
-
-		err := host.Toggle(src, profile)
-		if err != nil {
-			return err
-		}
-
-		if quiet {
-			return nil
-		}
-		return host.ListProfiles(src, &host.ListOptions{
-			Profile: profile,
-		})
+		return host.Toggle(src, profile)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(toggleCmd)
+
+	// NOTE: Added here to avoid circular references
+	toggleCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, toggleCmd)
+	}
+
+	toggleCmd.Flags().DurationP("wait", "w", -1, "Toggles a profile for a specific amount of time")
 }

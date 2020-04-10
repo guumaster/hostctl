@@ -65,14 +65,6 @@ func getDefaultHostFile() string {
 func init() {
 	rootCmd.Version = version
 
-	// NOTE: Added here to avoid circular references
-	enableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, disableCmd)
-	}
-	disableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, enableCmd)
-	}
-
 	rootCmd.PersistentFlags().StringP("profile", "p", "", "Choose a profile")
 	rootCmd.PersistentFlags().String("host-file", getDefaultHostFile(), "Hosts file path")
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")

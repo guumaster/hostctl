@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -35,12 +38,12 @@ It cannot be undone unless you have a backup and restore it.
 		if err != nil {
 			return err
 		}
-
-		if quiet {
-			return nil
+		if !quiet {
+			fmt.Printf("Domains '%s' removed.\n\n", strings.Join(args, ", "))
 		}
-		return host.ListProfiles(dst, &host.ListOptions{
-			Profile: profile,
-		})
+		return nil
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, nil)
 	},
 }

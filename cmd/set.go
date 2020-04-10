@@ -29,38 +29,27 @@ If the profile already exists it will be overwritten.
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		src, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
 		profile, _ := cmd.Flags().GetString("profile")
-		quiet, _ := cmd.Flags().GetBool("quiet")
 
 		h, _ := cmd.Flags().GetString("host-file")
 
-		var err error
 		if isPiped() {
-			err = host.AddFromReader(os.Stdin, &host.AddFromFileOptions{
-				Dst:     h,
-				Profile: profile,
-				Reset:   true,
-			})
-		} else {
-			err = host.AddFromFile(&host.AddFromFileOptions{
-				From:    from,
+			return host.AddFromReader(os.Stdin, &host.AddFromFileOptions{
 				Dst:     h,
 				Profile: profile,
 				Reset:   true,
 			})
 		}
-		if err != nil {
-			return err
-		}
-
-		if quiet {
-			return nil
-		}
-		return host.ListProfiles(src, &host.ListOptions{
+		return host.AddFromFile(&host.AddFromFileOptions{
+			From:    from,
+			Dst:     h,
 			Profile: profile,
+			Reset:   true,
 		})
+	},
+	PostRunE: func(cmd *cobra.Command, args []string) error {
+		return postActionCmd(cmd, args, nil)
 	},
 }
 
