@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -18,32 +17,30 @@ Reads from a file and replace the content of your hosts file.
 
 WARNING: the complete hosts file will be overwritten with the backup data.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		if profile != "" {
-			return errors.New("restore can only be done to whole file. remove profile flag")
-		}
-		return nil
-	},
+	Args: cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dst, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
 		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		err := host.RestoreFile(from, dst)
+		h, err := host.NewFile(dst)
+		if err != nil {
+			return err
+		}
+
+		err = h.Restore(from)
 		if err != nil {
 			return err
 		}
 
 		if !quiet {
-			fmt.Printf("File '%s' restored.\n\n", from)
+			fmt.Fprintf(cmd.OutOrStdout(), "File '%s' restored.\n\n", from)
 		}
 
 		return nil
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, nil)
+		return postActionCmd(cmd, args, nil, true)
 	},
 }
 

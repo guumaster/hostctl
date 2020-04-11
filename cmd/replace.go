@@ -10,14 +10,15 @@ import (
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
-// addCmd represents the fromFile command
-var addCmd = &cobra.Command{
-	Use:     "add-to [profile] [flags]",
-	Aliases: []string{"add"},
-	Short:   "Add content to a profile in your hosts file.",
+// replaceCmd represents the setFromFile command
+var replaceCmd = &cobra.Command{
+	Use:     "replace [profile] [domains] [flags]",
+	Aliases: []string{"set"},
+	Short:   "Replace content to a profile in your hosts file.",
 	Long: `
 Reads from a file and set content to a profile in your hosts file.
-If the profile already exists it will be added to it.`,
+If the profile already exists it will be overwritten.
+`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return host.MissingProfileError
@@ -59,7 +60,7 @@ If the profile already exists it will be added to it.`,
 		p.Name = profiles[0]
 		p.Status = host.Enabled
 
-		err = h.AddProfile(*p)
+		err = h.ReplaceProfile(*p)
 		if err != nil {
 			return err
 		}
@@ -67,16 +68,12 @@ If the profile already exists it will be added to it.`,
 		return h.WriteTo(src)
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, removeCmd, true)
+		return postActionCmd(cmd, args, nil, true)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(addCmd)
-	addCmd.AddCommand(addDomainsCmd)
+	rootCmd.AddCommand(replaceCmd)
 
-	addCmd.Flags().StringP("from", "f", "", "file to read")
-	addCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
-
-	addDomainsCmd.Flags().String("ip", "127.0.0.1", "domains ip")
+	replaceCmd.Flags().StringP("from", "f", "", "file to read")
 }

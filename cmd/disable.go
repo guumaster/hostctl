@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -14,29 +16,38 @@ var disableCmd = &cobra.Command{
 Disable a profile from your hosts file without removing it.
 It will be listed as "off" while it is disabled.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
+	Args: func(cmd *cobra.Command, args []string) error {
 		all, _ := cmd.Flags().GetBool("all")
-
-		if !all && profile == "" {
+		if all && len(args) > 0 {
+			return fmt.Errorf("args must be empty with --all flag")
+		}
+		if !all && len(args) == 0 {
 			return host.MissingProfileError
 		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
+		if err := containsDefault(args); err != nil {
+			return err
 		}
 		return nil
 	},
-	RunE: func(cmd *cobra.Command, args []string) error {
+	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
-		profile, _ := cmd.Flags().GetString("profile")
-
 		all, _ := cmd.Flags().GetBool("all")
 
-		if all {
-			profile = ""
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
 		}
-		return host.Disable(src, profile)
+
+		if all {
+			err = h.DisableAll()
+		} else {
+			err = h.Disable(profiles)
+		}
+		if err != nil {
+			return err
+		}
+
+		return h.WriteTo(src)
 	},
 }
 
@@ -45,7 +56,7 @@ func init() {
 
 	// NOTE: Added here to avoid circular references
 	disableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, enableCmd)
+		return postActionCmd(cmd, args, enableCmd, true)
 	}
 
 	disableCmd.Flags().BoolP("all", "", false, "Disable all profiles")

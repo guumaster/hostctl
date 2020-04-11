@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -14,33 +16,41 @@ var enableCmd = &cobra.Command{
 Enables an existing profile.
 It will be listed as "on" while it is enabled.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
+	Args: func(cmd *cobra.Command, args []string) error {
 		all, _ := cmd.Flags().GetBool("all")
-
-		if !all && profile == "" {
+		if all && len(args) > 0 {
+			return fmt.Errorf("args must be empty with --all flag")
+		}
+		if !all && len(args) == 0 {
 			return host.MissingProfileError
 		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
+		if err := containsDefault(args); err != nil {
+			return err
 		}
 		return nil
 	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
+	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		enableOnly, _ := cmd.Flags().GetBool("only")
-
 		all, _ := cmd.Flags().GetBool("all")
-		if all {
-			profile = ""
+
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
 		}
 
-		if enableOnly && !all {
-			return host.EnableOnly(src, profile)
+		if enableOnly {
+			err = h.EnableOnly(profiles)
+		} else if all {
+			err = h.EnableAll()
+		} else {
+			err = h.Enable(profiles)
 		}
-		return host.Enable(src, profile)
+		if err != nil {
+			return err
+		}
+
+		return h.WriteTo(src)
 	},
 }
 
@@ -49,7 +59,7 @@ func init() {
 
 	// NOTE: Added here to avoid circular references
 	enableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, disableCmd)
+		return postActionCmd(cmd, args, disableCmd, true)
 	}
 
 	enableCmd.Flags().BoolP("all", "", false, "Enable all profiles")

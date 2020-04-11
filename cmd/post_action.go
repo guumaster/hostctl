@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
 	"github.com/spf13/cobra"
 )
 
-var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Command) error {
+var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Command, list bool) error {
 	quiet, _ := cmd.Flags().GetBool("quiet")
 	duration, _ := cmd.Flags().GetDuration("wait")
-	profile, _ := cmd.Flags().GetString("profile")
 
-	if !quiet {
+	if !quiet && list {
 		err := listCmd.RunE(cmd, args)
 		if err != nil {
 			return err
@@ -32,10 +32,11 @@ var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Comma
 	}
 
 	if !quiet {
+		p := strings.Join(args, ", ")
 		if duration == 0 {
-			fmt.Printf("\nWaiting until ctrl+c to %s from profile '%s'\n\n", action, profile)
+			fmt.Fprintf(cmd.OutOrStdout(), "\nWaiting until ctrl+c to %s from profile '%s'\n\n", action, p)
 		} else if duration > 0 {
-			fmt.Printf("\nWaiting for %s or ctrl+c to %s from profile '%s'\n\n", duration, action, profile)
+			fmt.Fprintf(cmd.OutOrStdout(), "\nWaiting for %s or ctrl+c to %s from profile '%s'\n\n", duration, action, p)
 		}
 	}
 
@@ -44,7 +45,7 @@ var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Comma
 		<-doneCh
 
 		// Add new line to separate from "^C" output
-		fmt.Println()
+		fmt.Fprintln(cmd.OutOrStdout())
 
 		err := postCmd.RunE(cmd, args)
 		if err != nil {

@@ -18,18 +18,23 @@ You can filter by profile name.
 
 The "default" profile is all the content that is not handled by hostctl tool.
 `,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
+	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		raw, _ := cmd.Flags().GetBool("raw")
 		cols, _ := cmd.Flags().GetStringSlice("column")
 
-		return host.ListProfiles(src, &host.ListOptions{
-			Profile:  profile,
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
+		}
+
+		h.List(&host.ListOptions{
+			Writer:   cmd.OutOrStdout(),
+			Profiles: profiles,
 			RawTable: raw,
 			Columns:  cols,
 		})
+		return nil
 	},
 }
 
@@ -65,13 +70,19 @@ Shows a detailed list of %s profiles on your hosts file with name, ip and host n
 			raw, _ := cmd.Flags().GetBool("raw")
 			cols, _ := cmd.Flags().GetStringSlice("column")
 
-			err := host.ListProfiles(src, &host.ListOptions{
+			h, err := host.NewFile(src)
+			if err != nil {
+				return err
+			}
+
+			h.List(&host.ListOptions{
+				Writer:       cmd.OutOrStdout(),
 				RawTable:     raw,
 				Columns:      cols,
 				StatusFilter: status,
 			})
 
-			return err
+			return nil
 		},
 	}
 }

@@ -1,0 +1,55 @@
+package host
+
+import (
+	"net"
+
+	"github.com/spf13/afero"
+)
+
+var banner = `
+##################################################################
+# Content under this line is handled by hostctl. DO NOT EDIT.
+##################################################################`
+
+type File struct {
+	fs        afero.Fs
+	src       afero.File
+	data      *Content
+	hasBanner bool
+}
+
+type Content struct {
+	DefaultProfile DefaultProfile
+	ProfileNames   []string
+	Profiles       map[string]Profile
+}
+
+type Profile struct {
+	Name   string
+	Status ProfileStatus
+	Routes map[string]*Route
+}
+
+type DefaultProfile []*tableRow
+
+type tableRow struct {
+	Comment string
+	Profile string
+	Status  string
+	IP      string
+	Host    string
+}
+
+type Route struct {
+	IP        net.IP
+	HostNames []string
+}
+
+type ProfileStatus string
+
+const (
+	// Enabled marks a profile active on your hosts file.
+	Enabled ProfileStatus = "on"
+	// Disabled marks a profile not active on your hosts file.
+	Disabled ProfileStatus = "off"
+)
