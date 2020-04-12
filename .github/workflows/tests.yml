@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Test
-        run: go test ./...
+        run: go test ./... -cover -coverprofile=coverage.out
 
       - name: Analyze with SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
