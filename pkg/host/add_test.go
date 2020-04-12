@@ -9,7 +9,7 @@ import (
 
 func TestFile_AddProfile(t *testing.T) {
 	mem := createBasicFS(t)
-	f, err := mem.Open("/etc/hosts")
+	f, err := mem.Open("/tmp/etc/hosts")
 	assert.NoError(t, err)
 
 	t.Run("Add new", func(t *testing.T) {

@@ -10,7 +10,7 @@ func TestHostFile(t *testing.T) {
 	t.Run("New", func(t *testing.T) {
 		appFS := createBasicFS(t)
 
-		f, _ := appFS.Open("/etc/hosts")
+		f, _ := appFS.Open("/tmp/etc/hosts")
 		data, err := Parse(f)
 		assert.NoError(t, err)
 		assert.Equal(t, data.ProfileNames, []string{"profile1", "profile2"})

@@ -3,7 +3,7 @@
 [![Go Report Card][report-badge]][report-link]
 [![License][license-badge]][license-link]
 [![All Contributors][all-contributors-badge]][all-contributors-link]
-
+[![Coverage][coverage-badge]][coverage-link]
 
 # hostctl
 
@@ -112,6 +112,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [license-badge]: https://img.shields.io/github/license/guumaster/hostctl
 [license-link]: https://github.com/guumaster/hostctl/blob/master/LICENSE
+
+[coverage-badge]: https://sonarcloud.io/api/project_badges/measure?project=guumaster_hostctl&metric=coverage
+[coverage-link]: https://sonarcloud.io/dashboard?id=guumaster_hostctl
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [all-contributors-badge]: https://img.shields.io/badge/contributors-7-blue.svg

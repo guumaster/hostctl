@@ -1,7 +1,6 @@
 package host
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -14,7 +13,7 @@ func TestManager(t *testing.T) {
 	t.Run("Get Status", func(t *testing.T) {
 		mem := createBasicFS(t)
 
-		m, err := NewWithFs("/etc/hosts", mem)
+		m, err := NewWithFs("/tmp/etc/hosts", mem)
 		assert.NoError(t, err)
 
 		t.Run("GetEnabled", func(t *testing.T) {
@@ -39,10 +38,10 @@ func TestManager(t *testing.T) {
 	t.Run("WriteToFile", func(t *testing.T) {
 		mem := createBasicFS(t)
 
-		f, err := NewWithFs("/etc/hosts", mem)
+		f, err := NewWithFs("/tmp/etc/hosts", mem)
 		assert.NoError(t, err)
 
-		h, _ := mem.OpenFile("/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 		err = f.writeToFile(h)
 		assert.NoError(t, err)
 		f.Close()
@@ -56,13 +55,16 @@ func TestManager(t *testing.T) {
 
 	t.Run("writeBanner", func(t *testing.T) {
 		mem := createBasicFS(t)
-		h, _ := mem.OpenFile("/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 
-		f, err := NewWithFs("/etc/hosts", mem)
+		f, err := NewWithFs("/tmp/etc/hosts", mem)
 		assert.NoError(t, err)
 
 		f.writeBanner(h)
-		content, _ := ioutil.ReadFile(h.Name())
+		h.Close()
+
+		content, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
 
 		assert.Contains(t, string(content), banner)
 	})

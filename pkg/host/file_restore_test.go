@@ -10,7 +10,7 @@ import (
 func TestFile_Restore(t *testing.T) {
 	mem := createBasicFS(t)
 
-	h, err := NewWithFs("/etc/hosts", mem)
+	h, err := NewWithFs("/tmp/etc/hosts", mem)
 	assert.NoError(t, err)
 
 	_ = mem.Mkdir("/tmp", 755)

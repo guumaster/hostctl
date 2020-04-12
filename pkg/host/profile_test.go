@@ -21,7 +21,7 @@ func TestProfile(t *testing.T) {
 	t.Run("Render", func(t *testing.T) {
 		mem := createBasicFS(t)
 
-		h, err := NewWithFs("/etc/hosts", mem)
+		h, err := NewWithFs("/tmp/etc/hosts", mem)
 		assert.NoError(t, err)
 
 		b, err := mem.Create("memory")
