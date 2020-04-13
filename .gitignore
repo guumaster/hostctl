@@ -6,4 +6,5 @@ hostctl.exe
 .etchosts
 docs/public
 coverage.out
+golangci-report.xml
 docs/resources

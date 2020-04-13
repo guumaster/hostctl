@@ -32,7 +32,7 @@ func NewWithFs(src string, fs afero.Fs) (*File, error) {
 }
 
 func (f *File) read() error {
-	f.src.Seek(0, io.SeekStart)
+	_, _ = f.src.Seek(0, io.SeekStart)
 	data, err := Parse(f.src)
 	f.data = data
 	return err
@@ -122,10 +122,10 @@ func (f *File) WriteTo(src string) error {
 // Flush overwrite file with hosts info
 func (f *File) Flush() error {
 	h, err := f.fs.OpenFile(f.src.Name(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
-	defer h.Close()
 	if err != nil {
 		return err
 	}
+	defer h.Close()
 
 	return f.writeToFile(h)
 }
@@ -165,7 +165,7 @@ func (f *File) writeBanner(w io.StringWriter) {
 	if f.hasBanner {
 		return
 	}
-	w.WriteString(fmt.Sprintf("%s\n", banner))
+	_, _ = w.WriteString(fmt.Sprintf("%s\n", banner))
 	f.hasBanner = true
 }
 

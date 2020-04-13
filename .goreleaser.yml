@@ -23,6 +23,7 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+      - '^tests:'
       - '^Scoop update'
       - '^ci:'
       - Merge pull request
@@ -54,7 +55,7 @@ nfpms:
     vendor: Guumaster
     homepage: https://github.com/guumaster/hostctl
     maintainer: guumaster <guuweb@gmail.com>
-    description: manage your hosts file like a pro
+    description: A Dev tool to manage your hosts file like a pro
 
 brews:
   - name: hostctl
@@ -62,7 +63,7 @@ brews:
       owner: guumaster
       name: homebrew-tap
     homepage:  https://github.com/guumaster/hostctl
-    description: manage your hosts file like a pro
+    description: A Dev tool to manage your hosts file like a pro
     commit_author:
       name: goreleaserbot
       email: guuweb@gmail.com
@@ -73,14 +74,14 @@ scoop:
     owner: guumaster
     name: hostctl
   homepage:  https://github.com/guumaster/hostctl
-  description: manage your hosts file like a pro
+  description: A Dev tool to manage your hosts file like a pro
   license: MIT
 
 snapcrafts:
   - id: hostctl
     name: hostctl
-    summary: manage your hosts file like a pro
-    description: manage your hosts file like a pro.
+    summary: A Dev tool to manage your hosts file like a pro
+    description: A Dev tool to manage your hosts file like a pro.
     grade: stable
     confinement: strict
     license: MIT

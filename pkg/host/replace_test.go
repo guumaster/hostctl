@@ -29,6 +29,7 @@ func TestFile_ReplaceProfile(t *testing.T) {
 		replaced, err := m.GetProfile("profile1")
 		assert.NoError(t, err)
 		hosts, err := replaced.GetHostNames("4.4.4.4")
+		assert.NoError(t, err)
 		assert.Equal(t, hosts, []string{"replaced.loc"})
 	})
 
@@ -49,6 +50,7 @@ func TestFile_ReplaceProfile(t *testing.T) {
 		added, err := m.GetProfile("awesome")
 		assert.NoError(t, err)
 		hosts, err := added.GetHostNames("4.4.4.4")
+		assert.NoError(t, err)
 		assert.Equal(t, hosts, []string{"replaced.loc"})
 	})
 

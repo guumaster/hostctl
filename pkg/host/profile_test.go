@@ -27,6 +27,7 @@ func TestProfile(t *testing.T) {
 		assert.NoError(t, err)
 
 		b, err := mem.Create("memory")
+		assert.NoError(t, err)
 
 		p := h.data.Profiles["profile1"]
 		err = p.Render(b)

@@ -2,6 +2,7 @@ package host
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/spf13/afero"
@@ -35,6 +36,97 @@ func TestManager(t *testing.T) {
 		})
 	})
 
+	t.Run("AddRoutes", func(t *testing.T) {
+		mem := createBasicFS(t)
+
+		f, err := NewWithFs("/tmp/etc/hosts", mem)
+		assert.NoError(t, err)
+
+		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
+		p, err := NewProfileFromReader(r)
+		assert.NoError(t, err)
+
+		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+
+		hosts, err := p.GetHostNames("3.3.3.4")
+		assert.NoError(t, err)
+
+		err = f.AddRoutes("profile2", "3.3.3.4", hosts)
+		assert.NoError(t, err)
+
+		err = f.Flush()
+		assert.NoError(t, err)
+		f.Close()
+
+		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
+
+		assert.Contains(t, string(c), defaultProfile)
+		assert.Contains(t, string(c), banner)
+		assert.Contains(t, string(c), testEnabledProfile)
+		var added = `
+# profile.off profile2
+# 127.0.0.1 first.loc
+# 127.0.0.1 second.loc
+# 3.3.3.4 some.profile.loc
+# end
+`
+		assert.Contains(t, string(c), added)
+	})
+
+	t.Run("RemoveRoutes", func(t *testing.T) {
+		mem := createBasicFS(t)
+
+		f, err := NewWithFs("/tmp/etc/hosts", mem)
+		assert.NoError(t, err)
+
+		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+
+		removed, err := f.RemoveRoutes("profile2", []string{"second.loc"})
+		assert.NoError(t, err)
+		assert.Equal(t, false, removed)
+
+		err = f.Flush()
+		assert.NoError(t, err)
+		f.Close()
+
+		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
+		assert.Contains(t, string(c), defaultProfile)
+		assert.Contains(t, string(c), banner)
+		assert.Contains(t, string(c), testEnabledProfile)
+		var added = `
+# profile.off profile2
+# 127.0.0.1 first.loc
+# end
+`
+		assert.Contains(t, string(c), added)
+	})
+
+	t.Run("RemoveRoutes", func(t *testing.T) {
+		mem := createBasicFS(t)
+
+		f, err := NewWithFs("/tmp/etc/hosts", mem)
+		assert.NoError(t, err)
+
+		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+
+		removed, err := f.RemoveRoutes("profile2", []string{"first.loc", "second.loc"})
+		assert.NoError(t, err)
+		assert.Equal(t, true, removed)
+
+		err = f.Flush()
+		assert.NoError(t, err)
+		f.Close()
+
+		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
+		assert.Contains(t, string(c), defaultProfile)
+		assert.Contains(t, string(c), banner)
+		assert.Contains(t, string(c), testEnabledProfile)
+		assert.NotContains(t, string(c), testDisabledProfile)
+	})
+
 	t.Run("WriteToFile", func(t *testing.T) {
 		mem := createBasicFS(t)
 
@@ -47,6 +139,7 @@ func TestManager(t *testing.T) {
 		f.Close()
 
 		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
 		assert.Contains(t, string(c), defaultProfile)
 		assert.Contains(t, string(c), banner)
 		assert.Contains(t, string(c), testEnabledProfile)

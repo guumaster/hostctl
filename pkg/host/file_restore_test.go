@@ -13,7 +13,7 @@ func TestFile_Restore(t *testing.T) {
 	h, err := NewWithFs("/tmp/etc/hosts", mem)
 	assert.NoError(t, err)
 
-	_ = mem.Mkdir("/tmp", 755)
+	_ = mem.Mkdir("/tmp", 0755)
 	backup, err := mem.Create("/tmp/TestFile_Restore")
 	assert.NoError(t, err)
 
