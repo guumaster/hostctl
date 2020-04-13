@@ -92,16 +92,26 @@ func Test_ReplaceStdin(t *testing.T) {
 `
 	assert.Contains(t, actual, expected)
 }
+
 func Test_ReplaceFile(t *testing.T) {
 	// This test only fails with others, works fine executed alone. Too weird race condition somewhere.
 	t.SkipNow()
 	cmd := rootCmd
 
-	newProfile := makeTempProfile(t, "replace_profile1", []string{
+	file, err := ioutil.TempFile("/tmp", "replace_profile1_")
+	if err != nil {
+		t.Fatal(err)
+	}
+	lines := []string{
 		"5.5.5.5 replaced.loc",
 		"5.5.5.6 replaced2.loc",
-	})
-	defer os.Remove(newProfile.Name())
+	}
+	for _, l := range lines {
+		_, _ = file.WriteString(l + "\n")
+	}
+	defer file.Close()
+
+	defer os.Remove(file.Name())
 
 	tmp := makeTempHostsFile(t, "replaceFileCmd")
 	defer os.Remove(tmp.Name())
@@ -109,9 +119,9 @@ func Test_ReplaceFile(t *testing.T) {
 	b := bytes.NewBufferString("")
 
 	cmd.SetOut(b)
-	cmd.SetArgs([]string{"replace", "awesome", "--from", newProfile.Name(), "--host-file", tmp.Name()})
+	cmd.SetArgs([]string{"replace", "awesome", "--from", file.Name(), "--host-file", tmp.Name()})
 
-	err := cmd.Execute()
+	err = cmd.Execute()
 	assert.NoError(t, err)
 
 	out, err := ioutil.ReadAll(b)

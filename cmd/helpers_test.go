@@ -40,18 +40,3 @@ func makeTempHostsFile(t *testing.T, pattern string) *os.File {
 
 	return file
 }
-
-func makeTempProfile(t *testing.T, name string, lines []string) *os.File {
-	t.Helper()
-
-	file, err := ioutil.TempFile("/tmp", name+"_")
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, l := range lines {
-		_, _ = file.WriteString(l + "\n")
-	}
-	defer file.Close()
-
-	return file
-}

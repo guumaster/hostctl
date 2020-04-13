@@ -42,9 +42,11 @@ jobs:
         uses: actions/checkout@v2
       - run: git fetch --prune --unshallow
 
-      - uses: actions/checkout@v2
+      - name: Install golangci-lint
+        run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
+
       - name: Run golangci-lint
-        uses: actions-contrib/golangci-lint@v1
+        run: $(go env GOPATH)/bin/golangci-lint run ./...  --out-format checkstyle > golangci.xml
 
       - name: Test
         run: |
