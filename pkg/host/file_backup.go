@@ -9,7 +9,7 @@ import (
 
 // BackupFile creates a copy of your hosts file to a new location with the date as extension
 func (f *File) Backup(dst string) (string, error) {
-	f.src.Seek(0, io.SeekStart)
+	_, _ = f.src.Seek(0, io.SeekStart)
 	bkpFilename := fmt.Sprintf("%s.%s", f.src.Name(), time.Now().UTC().Format("20060102"))
 	bkpFilename = path.Join(dst, path.Base(bkpFilename))
 

@@ -35,7 +35,7 @@ func makeTempHostsFile(t *testing.T, pattern string) *os.File {
 	if err != nil {
 		t.Fatal(err)
 	}
-	file.WriteString(defaultProfile + testEnabledProfile + testDisabledProfile)
+	_, _ = file.WriteString(defaultProfile + testEnabledProfile + testDisabledProfile)
 	defer file.Close()
 
 	return file
@@ -49,7 +49,7 @@ func makeTempProfile(t *testing.T, name string, lines []string) *os.File {
 		t.Fatal(err)
 	}
 	for _, l := range lines {
-		file.WriteString(l + "\n")
+		_, _ = file.WriteString(l + "\n")
 	}
 	defer file.Close()
 

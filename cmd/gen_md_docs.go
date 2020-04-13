@@ -46,6 +46,9 @@ Creates full markdown documentation and store it on the given path.
 		}
 
 		err = filepath.Walk(output, func(src string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
 			if src == output {
 				return nil
 			}

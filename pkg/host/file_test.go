@@ -59,6 +59,8 @@ func TestManager(t *testing.T) {
 		f.Close()
 
 		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
+
 		assert.Contains(t, string(c), defaultProfile)
 		assert.Contains(t, string(c), banner)
 		assert.Contains(t, string(c), testEnabledProfile)
@@ -89,6 +91,7 @@ func TestManager(t *testing.T) {
 		f.Close()
 
 		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
 		assert.Contains(t, string(c), defaultProfile)
 		assert.Contains(t, string(c), banner)
 		assert.Contains(t, string(c), testEnabledProfile)
@@ -117,6 +120,7 @@ func TestManager(t *testing.T) {
 		f.Close()
 
 		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
 		assert.Contains(t, string(c), defaultProfile)
 		assert.Contains(t, string(c), banner)
 		assert.Contains(t, string(c), testEnabledProfile)
@@ -135,6 +139,7 @@ func TestManager(t *testing.T) {
 		f.Close()
 
 		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
 		assert.Contains(t, string(c), defaultProfile)
 		assert.Contains(t, string(c), banner)
 		assert.Contains(t, string(c), testEnabledProfile)

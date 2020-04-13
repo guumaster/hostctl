@@ -17,7 +17,9 @@ func TestFile_Backup(t *testing.T) {
 	assert.NoError(t, err)
 
 	want, err := afero.ReadFile(mem, "/tmp/etc/hosts")
+	assert.NoError(t, err)
 	got, err := afero.ReadFile(mem, fname)
+	assert.NoError(t, err)
 
 	assert.Equal(t, want, got)
 }
