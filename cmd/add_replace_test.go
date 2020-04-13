@@ -20,7 +20,7 @@ func Test_Add(t *testing.T) {
 		b := bytes.NewBufferString("")
 
 		cmd.SetOut(b)
-		cmd.SetArgs([]string{"add-to", "awesome", "--from", tmp.Name(), "--host-file", tmp.Name()})
+		cmd.SetArgs([]string{"add", "awesome", "--from", tmp.Name(), "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
 		assert.NoError(t, err)
@@ -47,7 +47,7 @@ func Test_Add(t *testing.T) {
 		in := strings.NewReader(`3.3.3.3 stdin.loc`)
 		cmd.SetOut(b)
 		cmd.SetIn(in)
-		cmd.SetArgs([]string{"add-to", "awesome", "--host-file", tmp.Name()})
+		cmd.SetArgs([]string{"add", "awesome", "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
 		assert.NoError(t, err)
