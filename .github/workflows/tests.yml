@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         go-version: [1.14.x]
-        platform: [macos-latest, windows-latest, ubuntu-latest]
+        platform: [macos-latest] # , windows-latest // TODO: Review Tests on windows
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Install Go
@@ -25,3 +25,30 @@ jobs:
 
       - name: Test
         run: go test ./...
+
+  coverage:
+    strategy:
+      matrix:
+        go-version: [1.14.x]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - run: git fetch --prune --unshallow
+
+      - name: Test
+        run: |
+          go test ./... -cover -coverprofile=coverage.out
+          go tool cover -func=coverage.out
+
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

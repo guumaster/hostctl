@@ -11,39 +11,43 @@ import (
 
 // removeDomainsCmd represents the remove command
 var removeDomainsCmd = &cobra.Command{
-	Use:   "domains",
-	Short: "Remove domains from your hosts file.",
+	Use:     "domains",
+	Aliases: []string{"domain"},
+	Short:   "Remove domains from your hosts file.",
 	Long: `
 Completely remove domains from your hosts file.
 It cannot be undone unless you have a backup and restore it.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		if profile == "" {
-			return host.MissingProfileError
-		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
-		}
-		return nil
-	},
+	Args: commonCheckProfileOnly,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-		dst, _ := cmd.Flags().GetString("host-file")
+		src, _ := cmd.Flags().GetString("host-file")
 		quiet, _ := cmd.Flags().GetBool("quiet")
 
-		err := host.RemoveDomains(dst, profile, args)
+		name := args[0]
+		domains := args[1:]
+
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
+		}
+
+		removed, err := h.RemoveRoutes(name, domains)
+		if err != nil {
+			return err
+		}
+
+		err = h.Flush()
 		if err != nil {
 			return err
 		}
 		if !quiet {
-			fmt.Printf("Domains '%s' removed.\n\n", strings.Join(args, ", "))
+			if removed {
+				fmt.Fprintf(cmd.OutOrStdout(), "Profile '%s' removed.\n\n", name)
+			} else {
+				fmt.Fprintf(cmd.OutOrStdout(), "Domains '%s' removed.\n\n", strings.Join(args[1:], ", "))
+			}
 		}
 		return nil
 	},
-	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, nil)
-	},
+	PostRunE: postRunListOnly,
 }

@@ -15,36 +15,39 @@ var syncDockerCmd = &cobra.Command{
 	Long: `
 Reads from Docker the list of containers and add names and IPs to a profile in your hosts file.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		if profile == "" {
-			return host.MissingProfileError
-		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
-		}
-		return nil
-	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		hostFile, _ := cmd.Flags().GetString("host-file")
-		profile, _ := cmd.Flags().GetString("profile")
+	Args: commonCheckArgs,
+	RunE: func(cmd *cobra.Command, profiles []string) error {
+		src, _ := cmd.Flags().GetString("host-file")
 		domain, _ := cmd.Flags().GetString("domain")
 		network, _ := cmd.Flags().GetString("network")
 
 		ctx := context.Background()
-		return host.AddFromDocker(ctx, &host.AddFromDockerOptions{
-			Dst:     hostFile,
+
+		p, err := host.NewProfileFromDocker(ctx, &host.DockerOptions{
 			Domain:  domain,
-			Profile: profile,
-			Watch:   false,
-			Docker: &host.DockerOptions{
-				Network: network,
-			},
+			Network: network,
+			Cli:     nil,
 		})
+		if err != nil {
+			return err
+		}
+
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
+		}
+
+		p.Name = profiles[0]
+		p.Status = host.Enabled
+
+		err = h.AddProfile(*p)
+		if err != nil {
+			return err
+		}
+
+		return h.Flush()
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, removeCmd)
+		return postActionCmd(cmd, args, removeCmd, false)
 	},
 }
