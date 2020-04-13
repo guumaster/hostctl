@@ -4,16 +4,6 @@ import (
 	"io"
 )
 
-/*
-
-import (
-	"os"
-	"strings"
-
-	"github.com/guumaster/tablewriter"
-)
-*/
-
 // DefaultColumns is the list of default columns to use when showing table list
 var DefaultColumns = []string{"profile", "status", "ip", "domain"}
 
