@@ -6,7 +6,7 @@ on:
     branches-ignore:
       - allcontributors/**
 
-name: Test
+name: Lint
 jobs:
   lint:
     runs-on: ubuntu-latest
