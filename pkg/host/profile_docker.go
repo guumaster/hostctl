@@ -23,13 +23,14 @@ type DockerOptions struct {
 
 func NewProfileFromDocker(ctx context.Context, opts *DockerOptions) (*Profile, error) {
 	cli := opts.Cli
+	var err error
 	if opts.Cli == nil {
-		cli, err := client.NewEnvClient()
+		cli, err = client.NewEnvClient()
 		if err != nil {
 			return nil, err
 		}
-		defer cli.Close()
 	}
+	defer cli.Close()
 
 	f := filters.NewArgs()
 	f.Add("status", "running")

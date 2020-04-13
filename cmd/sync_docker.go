@@ -48,6 +48,6 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 		return h.Flush()
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, removeCmd, false)
+		return postActionCmd(cmd, args, removeCmd, true)
 	},
 }

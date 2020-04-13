@@ -10,6 +10,9 @@ func (f *File) MergeProfiles(content *Content) {
 			continue
 		}
 		baseP := f.data.Profiles[newName]
+		if baseP.Routes == nil {
+			baseP.Routes = map[string]*Route{}
+		}
 		for _, r := range newP.Routes {
 			ip := r.IP.String()
 			if _, ok := baseP.Routes[ip]; ok {
