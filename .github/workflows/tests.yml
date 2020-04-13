@@ -43,7 +43,9 @@ jobs:
       - run: git fetch --prune --unshallow
 
       - name: Test
-        run: go test ./... -cover -coverprofile=coverage.out
+        run: |
+          go test ./... -cover -coverprofile=coverage.out
+          go tool cover -func=coverage.out
 
       - name: Analyze with SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
