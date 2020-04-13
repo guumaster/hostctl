@@ -3,7 +3,7 @@
 [![Go Report Card][report-badge]][report-link]
 [![License][license-badge]][license-link]
 [![All Contributors][all-contributors-badge]][all-contributors-link]
-
+[![Coverage][coverage-badge]][coverage-link]
 
 # hostctl
 
@@ -14,7 +14,8 @@ This tool gives you more control over the use of your `hosts` file. You can have
 
 ## Why?
 
-It is a tedious task to handle the `hosts` file by editing manually. With this tool you can automate some aspects to do it cleaner and quick. 
+It is a tedious task to handle the `hosts` file by editing manually.
+With this tool you can automate some aspects to do it cleaner and quick. 
 
 
 ## Features
@@ -22,14 +23,19 @@ It is a tedious task to handle the `hosts` file by editing manually. With this t
   * Manage groups of host names by profile.
   * Enable/disable complete profiles.
   * Add/remove groups of host names.
-  * Add profiles directly from a `.etchosts` file that you can add to your git repo or any VCS.
+  * Add profiles directly from a text file that you can add to your git repo or any VCS.
   * Sync a profile with Docker or Docker Compose containers.
   
 
 ## Documentation
 
-Read the [Getting started guide](http://guumaster.github.io/hostctl/getting-started) 
-or check full documentation [here](http://guumaster.github.io/hostctl).
+You can read about how to use this tool here:
+
+* [Getting started guide](http://guumaster.github.io/hostctl/docs/getting-started/) 
+* [Usage Guides](http://guumaster.github.io/hostctl/docs/guides/)
+* [CLI commands, options and flags](http://guumaster.github.io/hostctl/docs/cli-usage/)
+
+Or you can start directly on the [Docs homepage](http://guumaster.github.io/hostctl/).
 
 
 ## Sample Usage
@@ -38,9 +44,9 @@ or check full documentation [here](http://guumaster.github.io/hostctl).
 
 ## Installation
 
-Go to [release page](https://github.com/guumaster/hostctl/releases) and download the binary you need.
+Go to [release page](https://github.com/guumaster/hostctl/releases) and download the binary you prefer.
 
-Or read how to install on your system [here](http://guumaster.github.io/hostctl/installation/)
+Or read about other installation methods on different systems [here](http://guumaster.github.io/hostctl/docs/installation/)
 
 
 ## Linux/Mac/Windows and permissions
@@ -106,6 +112,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [license-badge]: https://img.shields.io/github/license/guumaster/hostctl
 [license-link]: https://github.com/guumaster/hostctl/blob/master/LICENSE
+
+[coverage-badge]: https://sonarcloud.io/api/project_badges/measure?project=guumaster_hostctl&metric=coverage
+[coverage-link]: https://sonarcloud.io/dashboard?id=guumaster_hostctl
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [all-contributors-badge]: https://img.shields.io/badge/contributors-7-blue.svg

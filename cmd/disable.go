@@ -14,29 +14,26 @@ var disableCmd = &cobra.Command{
 Disable a profile from your hosts file without removing it.
 It will be listed as "off" while it is disabled.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-		all, _ := cmd.Flags().GetBool("all")
-
-		if !all && profile == "" {
-			return host.MissingProfileError
-		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
-		}
-		return nil
-	},
-	RunE: func(cmd *cobra.Command, args []string) error {
+	Args: commonCheckArgsWithAll,
+	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
-		profile, _ := cmd.Flags().GetString("profile")
-
 		all, _ := cmd.Flags().GetBool("all")
+
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
+		}
 
 		if all {
-			profile = ""
+			err = h.DisableAll()
+		} else {
+			err = h.Disable(profiles)
 		}
-		return host.Disable(src, profile)
+		if err != nil {
+			return err
+		}
+
+		return h.Flush()
 	},
 }
 
@@ -45,7 +42,7 @@ func init() {
 
 	// NOTE: Added here to avoid circular references
 	disableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, enableCmd)
+		return postActionCmd(cmd, args, enableCmd, true)
 	}
 
 	disableCmd.Flags().BoolP("all", "", false, "Disable all profiles")

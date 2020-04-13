@@ -14,33 +14,29 @@ var enableCmd = &cobra.Command{
 Enables an existing profile.
 It will be listed as "on" while it is enabled.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-		all, _ := cmd.Flags().GetBool("all")
-
-		if !all && profile == "" {
-			return host.MissingProfileError
-		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
-		}
-		return nil
-	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
+	Args: commonCheckArgsWithAll,
+	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		enableOnly, _ := cmd.Flags().GetBool("only")
-
 		all, _ := cmd.Flags().GetBool("all")
-		if all {
-			profile = ""
+
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
 		}
 
-		if enableOnly && !all {
-			return host.EnableOnly(src, profile)
+		if enableOnly {
+			err = h.EnableOnly(profiles)
+		} else if all {
+			err = h.EnableAll()
+		} else {
+			err = h.Enable(profiles)
 		}
-		return host.Enable(src, profile)
+		if err != nil {
+			return err
+		}
+
+		return h.Flush()
 	},
 }
 
@@ -49,7 +45,7 @@ func init() {
 
 	// NOTE: Added here to avoid circular references
 	enableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, disableCmd)
+		return postActionCmd(cmd, args, disableCmd, true)
 	}
 
 	enableCmd.Flags().BoolP("all", "", false, "Enable all profiles")

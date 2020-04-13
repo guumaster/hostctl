@@ -1,42 +1,22 @@
 package host
 
 // Toggle alternates between enable and disable status of a profile.
-
-func Toggle(dst, profile string) error {
-	h, err := getHostData(dst, profile)
-	if err != nil {
-		return err
-	}
-
-	status := getProfileStatus(h, profile)
-
-	switch status {
-	case Enabled:
-		disableProfile(h, profile)
-	case Disabled:
-		enableProfile(h, profile)
-	default:
-		return UnknownProfileError
-	}
-
-	return writeHostData(dst, h)
-}
-
-func getProfileStatus(h *hostFile, profile string) ProfileStatus {
-	pData, ok := h.profiles[profile]
-	if !ok {
-		return ""
-	}
-
-	for _, l := range pData {
-		if !IsHostLine(l) {
+func (f *File) Toggle(profiles []string) error {
+	for _, p := range profiles {
+		if p == "default" {
 			continue
 		}
-		if IsDisabled(pData[0]) {
-			return Disabled
+		profile, ok := f.data.Profiles[p]
+		if !ok {
+			return UnknownProfileError
 		}
-		return Enabled
-	}
+		if profile.Status == Enabled {
+			profile.Status = Disabled
+		} else {
+			profile.Status = Enabled
 
-	return ""
+		}
+		f.data.Profiles[p] = profile
+	}
+	return nil
 }

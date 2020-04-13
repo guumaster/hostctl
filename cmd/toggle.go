@@ -13,23 +13,21 @@ var toggleCmd = &cobra.Command{
 	Long: `
 Alternates between on/off status of an existing profile.
 `,
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
-		if profile == "" {
-			return host.MissingProfileError
-		}
-
-		if profile == "default" {
-			return host.DefaultProfileError
-		}
-		return nil
-	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		profile, _ := cmd.Flags().GetString("profile")
-
+	Args: commonCheckProfileOnly,
+	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
-		return host.Toggle(src, profile)
+
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
+		}
+
+		err = h.Toggle(profiles)
+		if err != nil {
+			return err
+		}
+
+		return h.Flush()
 	},
 }
 
@@ -38,7 +36,7 @@ func init() {
 
 	// NOTE: Added here to avoid circular references
 	toggleCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, toggleCmd)
+		return postActionCmd(cmd, args, toggleCmd, true)
 	}
 
 	toggleCmd.Flags().DurationP("wait", "w", -1, "Toggles a profile for a specific amount of time")

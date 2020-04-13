@@ -1,49 +1,45 @@
 package host
 
-// Enable marks a profile as enable by uncommenting all hosts lines
+// Enable marks profiles as enable by uncommenting all hosts lines
 // making the routing work again.
-func Enable(dst, profile string) error {
-	h, err := getHostData(dst, profile)
-	if err != nil {
-		return err
-	}
-
-	if profile == "" {
-		for p := range h.profiles {
-			if p != "default" {
-				enableProfile(h, p)
-			}
+func (f *File) Enable(profiles []string) error {
+	for _, p := range profiles {
+		if p == "default" {
+			continue
 		}
-	} else {
-		enableProfile(h, profile)
+		profile, ok := f.data.Profiles[p]
+		if !ok {
+			return UnknownProfileError
+		}
+		profile.Status = Enabled
+		f.data.Profiles[p] = profile
 	}
-
-	return writeHostData(dst, h)
+	return nil
 }
 
-// EnableOnly marks a profile as enable and disable all other profiles
-func EnableOnly(dst, profile string) error {
-	h, err := getHostData(dst, profile)
-	if err != nil {
-		return err
-	}
-
-	for p := range h.profiles {
-		if p == profile {
-			enableProfile(h, p)
-		} else if p != "default" {
-			disableProfile(h, p)
-		}
-	}
-
-	return writeHostData(dst, h)
+// EnableAll marks all profiles as enable by uncommenting all hosts lines
+// making the routing work again.
+func (f *File) EnableAll() error {
+	return f.Enable(f.data.ProfileNames)
 }
 
-func enableProfile(h *hostFile, profile string) {
-	for i, r := range h.profiles[profile] {
-		if IsDisabled(r) {
-			h.profiles[profile][i] = EnableLine(r)
+// EnableOnly marks profiles as enable and disable all other profiles
+func (f *File) EnableOnly(profiles []string) error {
+	for _, name := range f.data.ProfileNames {
+		if name == "default" {
+			continue
 		}
-	}
+		profile, ok := f.data.Profiles[name]
+		if !ok {
+			return UnknownProfileError
+		}
 
+		if contains(profiles, name) {
+			profile.Status = Enabled
+		} else {
+			profile.Status = Disabled
+		}
+		f.data.Profiles[name] = profile
+	}
+	return nil
 }

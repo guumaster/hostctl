@@ -5,4 +5,5 @@ hostctl
 hostctl.exe
 .etchosts
 docs/public
+coverage.out
 docs/resources

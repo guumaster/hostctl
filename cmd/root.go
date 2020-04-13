@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -35,7 +34,7 @@ you need each time with a simple interface.
 
 		defaultHostsFile := getDefaultHostFile()
 		if (host != defaultHostsFile || os.Getenv("HOSTCTL_FILE") != "") && !quiet {
-			fmt.Printf("Using hosts file: %s\n", host)
+			fmt.Fprintf(cmd.OutOrStdout(), "Using hosts file: %s\n", host)
 		}
 
 		return nil
@@ -49,36 +48,11 @@ func Execute() {
 	}
 }
 
-func getDefaultHostFile() string {
-	envHostFile := os.Getenv("HOSTCTL_FILE")
-	if envHostFile != "" {
-		return envHostFile
-	}
-
-	if runtime.GOOS == "windows" {
-		return `C:/Windows/System32/Drivers/etc/hosts`
-	}
-
-	return "/etc/hosts"
-}
-
 func init() {
 	rootCmd.Version = version
 
-	rootCmd.PersistentFlags().StringP("profile", "p", "", "Choose a profile")
 	rootCmd.PersistentFlags().String("host-file", getDefaultHostFile(), "Hosts file path")
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
-
-	rootCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
 	rootCmd.PersistentFlags().Bool("raw", false, "Output without table borders")
-}
-
-// isPiped detect if there is any input through STDIN
-func isPiped() bool {
-	info, err := os.Stdin.Stat()
-	if err != nil {
-		panic(err)
-	}
-	notPipe := info.Mode()&os.ModeNamedPipe == 0
-	return !notPipe || info.Size() > 0
+	rootCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
 }

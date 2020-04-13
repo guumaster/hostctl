@@ -28,9 +28,17 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		}
 		return nil
 	},
-	RunE: func(cmd *cobra.Command, args []string) error {
-		hostFile, _ := cmd.Flags().GetString("host-file")
-		profile, _ := cmd.Flags().GetString("profile")
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) > 1 {
+			return fmt.Errorf("specify only one profile")
+		}
+		if err := containsDefault(args); err != nil {
+			return err
+		}
+		return nil
+	},
+	RunE: func(cmd *cobra.Command, profiles []string) error {
+		src, _ := cmd.Flags().GetString("host-file")
 		domain, _ := cmd.Flags().GetString("domain")
 		network, _ := cmd.Flags().GetString("network")
 		prefix, _ := cmd.Flags().GetBool("prefix")
@@ -39,6 +47,8 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		if err != nil {
 			return err
 		}
+
+		profile := profiles[0]
 
 		if profile == "" && compose.ProjectName == "" {
 			return host.MissingProfileError
@@ -55,21 +65,35 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 
 		ctx := context.Background()
 
-		return host.AddFromDocker(ctx, &host.AddFromDockerOptions{
-			Dst:     hostFile,
-			Domain:  domain,
-			Profile: profile,
-			Watch:   false,
-			Docker: &host.DockerOptions{
-				ComposeFile: compose.File,
-				ProjectName: compose.ProjectName,
-				Network:     network,
-				KeepPrefix:  prefix,
-			},
+		p, err := host.NewProfileFromDocker(ctx, &host.DockerOptions{
+			Domain:      domain,
+			Network:     network,
+			ComposeFile: compose.File,
+			ProjectName: compose.ProjectName,
+			KeepPrefix:  prefix,
+			Cli:         nil,
 		})
+		if err != nil {
+			return err
+		}
+
+		h, err := host.NewFile(src)
+		if err != nil {
+			return err
+		}
+
+		p.Name = profile
+		p.Status = host.Enabled
+
+		err = h.AddProfile(*p)
+		if err != nil {
+			return err
+		}
+
+		return h.Flush()
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, removeCmd)
+		return postActionCmd(cmd, args, removeCmd, false)
 	},
 }
 
