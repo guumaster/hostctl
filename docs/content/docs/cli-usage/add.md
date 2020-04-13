@@ -14,7 +14,7 @@ Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be added to it.
 
 ```
-hostctl add [flags]
+hostctl add [profiles] [flags]
 ```
 
 ### Options
@@ -30,7 +30,6 @@ hostctl add [flags]
 ```
   -c, --column strings     Columns to show on lists
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
 ```

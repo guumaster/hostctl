@@ -14,7 +14,7 @@ Set content in your hosts file.
 If the profile already exists it will be added to it.
 
 ```
-hostctl add domains [flags]
+hostctl add domains [profile] [domains] [flags]
 ```
 
 ### Options
@@ -29,7 +29,6 @@ hostctl add domains [flags]
 ```
   -c, --column strings     Columns to show on lists
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
   -w, --wait duration      Enables a profile for a specific amount of time (default -1ns)

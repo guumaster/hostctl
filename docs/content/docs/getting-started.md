@@ -13,7 +13,7 @@ Read the [Installation guide](installation.md) to get `hostctl` on your system.
 
 Add a new profile from args:
 
-`hostctl add domains -p awesome my-awesome-ui.project.loc my-awesome-api.project.loc`
+`hostctl add domains awesome my-awesome-ui.project.loc my-awesome-api.project.loc`
 
 ``` 
 // Output:
@@ -29,7 +29,7 @@ Add a new profile from args:
 
 When you don't want to use some profile, just disable it:
 
-`hostctl disable -p awesome`
+`hostctl disable awesome`
 
 ``` 
 // Output:
@@ -43,7 +43,7 @@ When you don't want to use some profile, just disable it:
 
 You can enable it later with: 
 
-`hostctl enable -p awesome`
+`hostctl enable awesome`
 
 
 That's it!

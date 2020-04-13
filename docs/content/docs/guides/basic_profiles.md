@@ -24,7 +24,7 @@ For example, if you have this routing file on any of your projects:
 
 Command:
 
-`hostctl set -p awesome --from /path/to/some/project/.etchosts `
+`hostctl set awesome --from /path/to/some/project/.etchosts `
 
 Output:
 ```
@@ -54,7 +54,7 @@ You can add a new profile or add new domain to a specific profile directly from 
 
 You can add that content as a profile with this command:
 
-`hostctl add domains test.loc another.loc  --ip 123.123.123.123 -p test`
+`hostctl add domains test one.loc another.loc --ip 123.123.123.123`
 
 ```
 // Output:
@@ -67,7 +67,7 @@ You can add that content as a profile with this command:
 +---------+--------+-----------------+------------------------------+
 | another | on     | 192.168.1.51    | jupyter.toolkit-lite.local   |
 +---------+--------+-----------------+------------------------------+
-| test    | on     | 123.123.123.123 | test.loc                     |
+| test    | on     | 123.123.123.123 | one.loc                      |
 | test    | on     | 123.123.123.123 | another.loc                  |
 +---------+--------+-----------------+------------------------------+
 ```
@@ -83,8 +83,8 @@ If you installed from the Snap Store this is the only way to add content from fi
 
 Commands (both work similarly):
 
-* `cat /path/to/some/project/.etchosts | hostctl set -p awesome`
-* `hostctl add -p awesome < /path/to/some/project/.etchosts`
+* `cat /path/to/some/project/.etchosts | hostctl add awesome`
+* `hostctl add awesome < /path/to/some/project/.etchosts`
 
 Output:
 ```
@@ -107,7 +107,7 @@ Output:
 
 If you want to completely remove a profile from the hosts file you can run:
 
-`hostctl remove -p awesome` 
+`hostctl remove awesome` 
 
 ```
 // Output:

@@ -15,7 +15,7 @@ It will be listed as "on" while it is enabled.
 
 
 ```
-hostctl enable [flags]
+hostctl enable [profiles] [flags]
 ```
 
 ### Options
@@ -32,7 +32,6 @@ hostctl enable [flags]
 ```
   -c, --column strings     Columns to show on lists
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
 ```

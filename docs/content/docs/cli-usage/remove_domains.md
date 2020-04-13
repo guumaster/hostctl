@@ -15,7 +15,7 @@ It cannot be undone unless you have a backup and restore it.
 
 
 ```
-hostctl remove domains [flags]
+hostctl remove domains [profile] [domains] [flags]
 ```
 
 ### Options
@@ -29,7 +29,6 @@ hostctl remove domains [flags]
 ```
   -c, --column strings     Columns to show on lists
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
 ```

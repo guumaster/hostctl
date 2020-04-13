@@ -14,7 +14,7 @@ After that, the action will be undone automatically.
 ## Add temporal and wait for ctrl-c
 
 Command:
-`cat .etchosts | hostctl add -p ephemeral  --wait 0`
+`cat .etchosts | hostctl add ephemeral  --wait 0`
 
 Output:
 ```

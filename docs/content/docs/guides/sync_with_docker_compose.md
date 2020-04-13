@@ -40,8 +40,6 @@ Output:
 
 * `--network networkID|networkName` filter only containers of an specific docker network.
 
-* `--profile,-p name` profile where docker information will be set. Default to Docker Compose project name.
-
 * `--compose-file /path/to/docker-compose.yml` set the path of docker-compose.yml file to use. Defaults to `$PWD/docker-compose.yml`
 
 * `--prefix` keep the prefix used by Docker Compose based on the folder name. Defaults to `false`.

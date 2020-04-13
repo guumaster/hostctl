@@ -10,7 +10,7 @@ You can enable any profile, the routing will react to it state.
 
 Command:
 
-`hostctl enable -p awesome` 
+`hostctl enable awesome` 
 
 Output:
 ```
@@ -35,7 +35,7 @@ Disabling a profile does not remove the content from the hosts file, this way yo
 
 Command:
 
-`hostctl disable -p awesome` 
+`hostctl disable awesome` 
 
 Output:
 ```

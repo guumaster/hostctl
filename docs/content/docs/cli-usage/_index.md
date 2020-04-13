@@ -31,7 +31,6 @@ you need each time with a simple interface.
   -c, --column strings     Columns to show on lists
   -h, --help               help for hostctl
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
 ```
@@ -44,8 +43,8 @@ you need each time with a simple interface.
 * [hostctl enable](/docs/cli-usage/enable)	 - Enable a profile on your hosts file.
 * [hostctl list](/docs/cli-usage/list)	 - Shows a detailed list of profiles on your hosts file.
 * [hostctl remove](/docs/cli-usage/remove)	 - Remove a profile from your hosts file.
+* [hostctl replace](/docs/cli-usage/replace)	 - Replace content to a profile in your hosts file.
 * [hostctl restore](/docs/cli-usage/restore)	 - Restore hosts file content from a backup file.
-* [hostctl set](/docs/cli-usage/set)	 - Set content to a profile in your hosts file.
 * [hostctl status](/docs/cli-usage/status)	 - Shows a list of profile names and statuses on your hosts file.
 * [hostctl sync](/docs/cli-usage/sync)	 - Sync some system IPs with a profile.
 * [hostctl toggle](/docs/cli-usage/toggle)	 - Change status of a profile on your hosts file.
