@@ -17,7 +17,7 @@ Once you have some containers up and running, you can create names for all of th
 
 Command:
 
-`hostctl sync docker -p awesome`
+`hostctl sync docker awesome`
 
 Output:
 ```
@@ -38,6 +38,4 @@ If you start your docker containers without `--name` it will have a random conta
 * `--domain,-d some.domain` domain name used for all containers.
 
 * `--network networkID|networkName` filter only containers of an specific docker network.
-
-* `--profile,-p name` profile where docker information will be set.
 

@@ -31,7 +31,6 @@ hostctl restore [flags]
 ```
   -c, --column strings     Columns to show on lists
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
 ```

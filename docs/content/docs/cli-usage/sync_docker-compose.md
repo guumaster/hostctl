@@ -14,7 +14,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 
 
 ```
-hostctl sync docker-compose [flags]
+hostctl sync docker-compose [profile] [flags]
 ```
 
 ### Options
@@ -33,7 +33,6 @@ hostctl sync docker-compose [flags]
   -d, --domain string      domain where your docker containers will be added (default "loc")
       --host-file string   Hosts file path (default "/etc/hosts")
       --network string     Filter containers from a specific network
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
   -w, --wait duration      Enables a profile for a specific amount of time (default -1ns)

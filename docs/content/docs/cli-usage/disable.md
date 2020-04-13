@@ -15,7 +15,7 @@ It will be listed as "off" while it is disabled.
 
 
 ```
-hostctl disable [flags]
+hostctl disable [profiles] [flags]
 ```
 
 ### Options
@@ -31,7 +31,6 @@ hostctl disable [flags]
 ```
   -c, --column strings     Columns to show on lists
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
 ```

@@ -14,7 +14,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 
 
 ```
-hostctl sync docker [flags]
+hostctl sync docker [profile] [flags]
 ```
 
 ### Options
@@ -30,7 +30,6 @@ hostctl sync docker [flags]
   -d, --domain string      domain where your docker containers will be added (default "loc")
       --host-file string   Hosts file path (default "/etc/hosts")
       --network string     Filter containers from a specific network
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
   -w, --wait duration      Enables a profile for a specific amount of time (default -1ns)

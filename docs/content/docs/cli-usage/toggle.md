@@ -20,7 +20,8 @@ hostctl toggle [flags]
 ### Options
 
 ```
-  -h, --help   help for toggle
+  -h, --help            help for toggle
+  -w, --wait duration   Toggles a profile for a specific amount of time (default -1ns)
 ```
 
 ### Options inherited from parent commands
@@ -28,7 +29,6 @@ hostctl toggle [flags]
 ```
   -c, --column strings     Columns to show on lists
       --host-file string   Hosts file path (default "/etc/hosts")
-  -p, --profile string     Choose a profile
   -q, --quiet              Run command without output
       --raw                Output without table borders
 ```
