@@ -44,7 +44,7 @@ jobs:
 
       - name: Test
         run: |
-          go test ./... -cover -coverprofile=coverage.out
+          go test -cover -coverprofile=coverage.out $(go list ./... | grep -v "*docker*" | grep -e "hostctl/")
           go tool cover -func=coverage.out
 
       - name: Analyze with SonarCloud
