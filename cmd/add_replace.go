@@ -11,9 +11,8 @@ import (
 
 // addCmd represents the fromFile command
 var addCmd = &cobra.Command{
-	Use:     "add-to [profile] [flags]",
-	Aliases: []string{"add"},
-	Short:   "Add content to a profile in your hosts file.",
+	Use:   "add [profiles] [flags]",
+	Short: "Add content to a profile in your hosts file.",
 	Long: `
 Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be added to it.`,
@@ -26,9 +25,8 @@ If the profile already exists it will be added to it.`,
 
 // replaceCmd represents the setFromFile command
 var replaceCmd = &cobra.Command{
-	Use:     "replace [profile] [domains] [flags]",
-	Aliases: []string{"set"},
-	Short:   "Replace content to a profile in your hosts file.",
+	Use:   "replace [profile] [flags]",
+	Short: "Replace content to a profile in your hosts file.",
 	Long: `
 Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be overwritten.

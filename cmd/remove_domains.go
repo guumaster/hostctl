@@ -11,8 +11,8 @@ import (
 
 // removeDomainsCmd represents the remove command
 var removeDomainsCmd = &cobra.Command{
-	Use:     "domains",
-	Aliases: []string{"domain"},
+	Use:     "domains [profile] [domains] [flags]",
+	Aliases: []string{"domain [profile] [domains] [flags]"},
 	Short:   "Remove domains from your hosts file.",
 	Long: `
 Completely remove domains from your hosts file.
