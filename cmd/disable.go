@@ -8,7 +8,7 @@ import (
 
 // disableCmd represents the disable command
 var disableCmd = &cobra.Command{
-	Use:   "disable",
+	Use:   "disable [profiles] [flags]",
 	Short: "Disable a profile from your hosts file.",
 	Long: `
 Disable a profile from your hosts file without removing it.

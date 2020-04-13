@@ -8,7 +8,7 @@ import (
 
 // enableCmd represents the enable command
 var enableCmd = &cobra.Command{
-	Use:   "enable",
+	Use:   "enable [profiles] [flags]",
 	Short: "Enable a profile on your hosts file.",
 	Long: `
 Enables an existing profile.

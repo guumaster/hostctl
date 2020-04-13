@@ -10,7 +10,7 @@ import (
 
 // restoreCmd represents the restore command
 var restoreCmd = &cobra.Command{
-	Use:   "restore",
+	Use:   "restore [flags]",
 	Short: "Restore hosts file content from a backup file.",
 	Long: `
 Reads from a file and replace the content of your hosts file.

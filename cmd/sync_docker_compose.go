@@ -15,7 +15,7 @@ import (
 
 // syncDockerComposeCmd represents the sync docker command
 var syncDockerComposeCmd = &cobra.Command{
-	Use:   "docker-compose",
+	Use:   "docker-compose [profile] [flags]",
 	Short: "Sync your docker-compose containers IPs with a profile.",
 	Long: `
 Reads from a docker-compose.yml file  the list of containers and add names and IPs to a profile in your hosts file.
@@ -56,7 +56,8 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 
 		if profile == "" {
 			profile = compose.ProjectName
-			_ = cmd.Flags().Set("profile", profile)
+			profiles = append(profiles, profile)
+			cmd.SetArgs(profiles)
 		}
 
 		if domain == "" {

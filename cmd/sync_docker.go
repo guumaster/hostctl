@@ -10,7 +10,7 @@ import (
 
 // syncDockerCmd represents the sync docker command
 var syncDockerCmd = &cobra.Command{
-	Use:   "docker",
+	Use:   "docker [profile] [flags]",
 	Short: "Sync your Docker containers IPs with a profile.",
 	Long: `
 Reads from Docker the list of containers and add names and IPs to a profile in your hosts file.

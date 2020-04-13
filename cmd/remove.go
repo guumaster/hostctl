@@ -11,8 +11,8 @@ import (
 
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
-	Use:     "remove",
-	Aliases: []string{"rm"},
+	Use:     "remove [profiles] [flags]",
+	Aliases: []string{"rm [profiles] [flags]"},
 	Short:   "Remove a profile from your hosts file.",
 	Long: `
 Completely remove a profile content from your hosts file.

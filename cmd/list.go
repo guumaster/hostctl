@@ -10,7 +10,7 @@ import (
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
-	Use:   "list",
+	Use:   "list [profiles] [flags]",
 	Short: "Shows a detailed list of profiles on your hosts file.",
 	Long: `
 Shows a detailed list of profiles on your hosts file with name, ip and host name.

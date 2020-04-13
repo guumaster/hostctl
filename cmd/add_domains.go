@@ -11,8 +11,8 @@ import (
 
 // addDomainsCmd represents the fromFile command
 var addDomainsCmd = &cobra.Command{
-	Use:     "domains [domains] [flag]",
-	Aliases: []string{"domain"},
+	Use:     "domains [profile] [domains] [flags]",
+	Aliases: []string{"domain [profile] [domains] [flags]"},
 	Short:   "Add content in your hosts file.",
 	Long: `
 Set content in your hosts file.

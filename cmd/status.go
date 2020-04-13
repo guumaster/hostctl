@@ -8,7 +8,7 @@ import (
 
 // statusCmd represents the list command
 var statusCmd = &cobra.Command{
-	Use:   "status",
+	Use:   "status [profiles] [flags]",
 	Short: "Shows a list of profile names and statuses on your hosts file.",
 	Long: `
 Shows a list of unique profile names on your hosts file with its status.

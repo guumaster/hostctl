@@ -12,7 +12,7 @@ import (
 
 // backupCmd represents the backup command
 var backupCmd = &cobra.Command{
-	Use:   "backup",
+	Use:   "backup [flags]",
 	Short: "Creates a backup copy of your hosts file",
 	Long: `
 Creates a backup copy of your hosts file with the date in .YYYYMMDD
