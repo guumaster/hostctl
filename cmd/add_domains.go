@@ -48,7 +48,7 @@ If the profile already exists it will be added to it.`,
 			return err
 		}
 		if !quiet {
-			fmt.Printf("Domains '%s' added.\n\n", strings.Join(args[1:], ", "))
+			fmt.Fprintf(cmd.OutOrStdout(), "Domains '%s' added.\n\n", strings.Join(args[1:], ", "))
 		}
 		return nil
 	},

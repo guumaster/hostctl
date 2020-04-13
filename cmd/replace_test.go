@@ -66,12 +66,12 @@ func Test_ReplaceFile(t *testing.T) {
 
 	actual := "\n" + string(out)
 	expected := `
-+----------+--------+---------+---------------+
-| PROFILE  | STATUS |   IP    |    DOMAIN     |
-+----------+--------+---------+---------------+
-| profile2 | on     | 5.5.5.5 | replaced.loc  |
-| profile2 | on     | 5.5.5.6 | replaced2.loc |
-+----------+--------+---------+---------------+
++---------+--------+---------+---------------+
+| PROFILE | STATUS |   IP    |    DOMAIN     |
++---------+--------+---------+---------------+
+| awesome | on     | 5.5.5.5 | replaced.loc  |
+| awesome | on     | 5.5.5.6 | replaced2.loc |
++---------+--------+---------+---------------+
 `
 	assert.Contains(t, actual, expected)
 }

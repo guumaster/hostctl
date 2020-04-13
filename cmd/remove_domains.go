@@ -50,9 +50,9 @@ It cannot be undone unless you have a backup and restore it.
 		}
 		if !quiet {
 			if removed {
-				fmt.Printf("Profile '%s' removed.\n\n", name)
+				fmt.Fprintf(cmd.OutOrStdout(), "Profile '%s' removed.\n\n", name)
 			} else {
-				fmt.Printf("Domains '%s' removed.\n\n", strings.Join(args[1:], ", "))
+				fmt.Fprintf(cmd.OutOrStdout(), "Domains '%s' removed.\n\n", strings.Join(args[1:], ", "))
 			}
 		}
 		return nil

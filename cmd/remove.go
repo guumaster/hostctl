@@ -62,7 +62,7 @@ use 'hosts disable' instead.
 		}
 
 		if !quiet {
-			fmt.Printf("Profile(s) '%s' removed.\n\n", strings.Join(profiles, ", "))
+			fmt.Fprintf(cmd.OutOrStdout(), "Profile(s) '%s' removed.\n\n", strings.Join(profiles, ", "))
 		}
 
 		return nil
