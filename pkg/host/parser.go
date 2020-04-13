@@ -50,33 +50,7 @@ func Parse(r io.Reader) (*Content, error) {
 			data.Profiles[currProfile] = *p
 
 		default:
-			if len(b) == 0 {
-				if currProfile == "" {
-					row := &tableRow{Comment: ""}
-					data.DefaultProfile = append(data.DefaultProfile, row)
-				}
-				continue
-			}
-
-			line, ok := parseLine(string(b))
-			var row *tableRow
-			if !ok {
-				row = &tableRow{
-					Comment: string(b),
-				}
-			} else {
-				status := Enabled
-				if off, _ := regexp.Match("^#", b); off {
-					status = Disabled
-				}
-				row = &tableRow{
-					Profile: "default",
-					Status:  string(status),
-					IP:      line.IP.String(),
-					Host:    line.HostNames[0],
-				}
-			}
-
+			row := parseToDefault(b, currProfile)
 			data.DefaultProfile = append(data.DefaultProfile, row)
 
 		}
@@ -86,6 +60,35 @@ func Parse(r io.Reader) (*Content, error) {
 		}
 	}
 	return data, nil
+}
+
+func parseToDefault(b []byte, currProfile string) *tableRow {
+	var row *tableRow
+	if len(b) == 0 {
+		if currProfile == "" {
+			row = &tableRow{Comment: ""}
+		}
+		return row
+	}
+
+	line, ok := parseLine(string(b))
+	if !ok {
+		row = &tableRow{
+			Comment: string(b),
+		}
+	} else {
+		status := Enabled
+		if off, _ := regexp.Match("^#", b); off {
+			status = Disabled
+		}
+		row = &tableRow{
+			Profile: "default",
+			Status:  string(status),
+			IP:      line.IP.String(),
+			Host:    line.HostNames[0],
+		}
+	}
+	return row
 }
 
 func parseProfileHeader(b []byte) (*Profile, error) {

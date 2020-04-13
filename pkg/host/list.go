@@ -2,6 +2,8 @@ package host
 
 import (
 	"io"
+
+	"github.com/guumaster/tablewriter"
 )
 
 // DefaultColumns is the list of default columns to use when showing table list
@@ -52,13 +54,19 @@ func (f *File) ProfileStatus(opts *ListOptions) {
 
 // List shows a table with profile names status and routing information
 func (f *File) List(opts *ListOptions) {
-
 	if len(opts.Columns) == 0 {
 		opts.Columns = DefaultColumns
 	}
 
 	table := createTableWriter(opts)
 
+	addDefault(f, table, opts)
+	addProfiles(f, table, opts)
+
+	table.Render()
+}
+
+func addDefault(f *File, table *tablewriter.Table, opts *ListOptions) {
 	// First check if default should be shown
 	if includeProfile("default", opts.Profiles) {
 		for _, line := range f.data.DefaultProfile {
@@ -74,7 +82,9 @@ func (f *File) List(opts *ListOptions) {
 			table.AddSeparator()
 		}
 	}
+}
 
+func addProfiles(f *File, table *tablewriter.Table, opts *ListOptions) {
 	for _, name := range f.data.ProfileNames {
 		currProfile := f.data.Profiles[name]
 		if !includeProfile(name, opts.Profiles) {
@@ -103,5 +113,4 @@ func (f *File) List(opts *ListOptions) {
 			table.AddSeparator()
 		}
 	}
-	table.Render()
 }
