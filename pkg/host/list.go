@@ -60,57 +60,62 @@ func (f *File) List(opts *ListOptions) {
 
 	table := createTableWriter(opts)
 
-	addDefault(f, table, opts)
-	addProfiles(f, table, opts)
+	added := addDefault(f, table, opts)
+	if added && len(f.data.Profiles) > 0 && !opts.RawTable {
+		table.AddSeparator()
+	}
+	for _, name := range f.data.ProfileNames {
+		added := addProfiles(f.data.Profiles[name], table, opts)
+		if added && !opts.RawTable {
+			table.AddSeparator()
+		}
+	}
 
 	table.Render()
 }
 
-func addDefault(f *File, table *tablewriter.Table, opts *ListOptions) {
+func addDefault(f *File, table *tablewriter.Table, opts *ListOptions) bool {
 	// First check if default should be shown
-	if includeProfile("default", opts.Profiles) {
-		for _, line := range f.data.DefaultProfile {
-			if line.Comment == "" && line.Profile != "" {
-				row := getRow(line, opts.Columns)
-				if len(row) > 0 {
-					table.Append(row)
-				}
+	if !includeProfile("default", opts.Profiles) {
+		return false
+	}
+
+	i := 0
+	for _, line := range f.data.DefaultProfile {
+		i++
+		if line.Comment == "" && line.Profile != "" {
+			row := getRow(line, opts.Columns)
+			if len(row) > 0 {
+				table.Append(row)
 			}
 		}
-
-		if len(f.data.Profiles) > 0 && !opts.RawTable {
-			table.AddSeparator()
-		}
 	}
+	return i > 0
 }
 
-func addProfiles(f *File, table *tablewriter.Table, opts *ListOptions) {
-	for _, name := range f.data.ProfileNames {
-		currProfile := f.data.Profiles[name]
-		if !includeProfile(name, opts.Profiles) {
-			continue
-		}
+func addProfiles(p Profile, table *tablewriter.Table, opts *ListOptions) bool {
+	if !includeProfile(p.Name, opts.Profiles) {
+		return false
+	}
 
-		if opts.StatusFilter != "" && currProfile.Status != opts.StatusFilter {
-			continue
-		}
+	if opts.StatusFilter != "" && p.Status != opts.StatusFilter {
+		return false
+	}
 
-		for _, route := range currProfile.Routes {
-			for _, h := range route.HostNames {
-				line := &tableRow{
-					Profile: currProfile.Name,
-					Status:  currProfile.GetStatus(),
-					IP:      route.IP.String(),
-					Host:    h,
-				}
-				row := getRow(line, opts.Columns)
-				if len(row) > 0 {
-					table.Append(row)
-				}
+	for _, route := range p.Routes {
+		for _, h := range route.HostNames {
+			line := &tableRow{
+				Profile: p.Name,
+				Status:  p.GetStatus(),
+				IP:      route.IP.String(),
+				Host:    h,
+			}
+			row := getRow(line, opts.Columns)
+			if len(row) > 0 {
+				table.Append(row)
 			}
 		}
-		if !opts.RawTable {
-			table.AddSeparator()
-		}
 	}
+
+	return true
 }
