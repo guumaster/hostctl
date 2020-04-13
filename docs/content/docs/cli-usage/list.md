@@ -37,7 +37,7 @@ hostctl list [profiles] [flags]
 
 ##### SEE ALSO
 
-* [hostctl](/docs/cli-usage/hostctl)	 - Manage your hosts file like a pro
+* [hostctl](/docs/cli-usage/hostctl)	 - A Dev tool to manage your hosts file like a pro
 * [hostctl list disabled](/docs/cli-usage/list_disabled)	 - Shows list of disabled profiles on your hosts file.
 * [hostctl list enabled](/docs/cli-usage/list_enabled)	 - Shows list of enabled profiles on your hosts file.
 
