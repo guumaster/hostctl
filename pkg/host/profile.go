@@ -13,6 +13,7 @@ func (p *Profile) String() string {
 func (p *Profile) GetStatus() string {
 	return string(p.Status)
 }
+
 func (p *Profile) AddRoute(ip, hostname string) {
 	if p.Routes[ip] == nil {
 		p.Routes[ip] = &Route{
@@ -49,7 +50,7 @@ func (p *Profile) RemoveRoutes(hostnames []string) {
 func (p *Profile) GetHostNames(ip string) ([]string, error) {
 	key := net.ParseIP(ip)
 	if key == nil {
-		return nil, fmt.Errorf("invalid ip '%s'", key)
+		return nil, fmt.Errorf("invalid ip '%s'", ip)
 	}
 	hosts, ok := p.Routes[key.String()]
 	if !ok {
@@ -57,6 +58,14 @@ func (p *Profile) GetHostNames(ip string) ([]string, error) {
 	}
 
 	return hosts.HostNames, nil
+}
+
+func (p *Profile) GetAllHostNames() ([]string, error) {
+	list := []string{}
+	for _, r := range p.Routes {
+		list = append(list, r.HostNames...)
+	}
+	return list, nil
 }
 
 func (p *Profile) Render(w io.StringWriter) error {

@@ -2,6 +2,7 @@ package host
 
 import (
 	"net"
+	"sync"
 
 	"github.com/spf13/afero"
 )
@@ -16,6 +17,7 @@ type File struct {
 	src       afero.File
 	data      *Content
 	hasBanner bool
+	mutex     sync.Mutex
 }
 
 type Content struct {

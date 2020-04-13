@@ -44,7 +44,7 @@ It cannot be undone unless you have a backup and restore it.
 			return err
 		}
 
-		err = h.WriteTo(src)
+		err = h.Flush()
 		if err != nil {
 			return err
 		}

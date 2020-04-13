@@ -56,7 +56,7 @@ use 'hosts disable' instead.
 			return err
 		}
 
-		err = h.WriteTo(src)
+		err = h.Flush()
 		if err != nil {
 			return err
 		}

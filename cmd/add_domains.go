@@ -43,7 +43,7 @@ If the profile already exists it will be added to it.`,
 			return err
 		}
 
-		err = h.WriteTo(src)
+		err = h.Flush()
 		if err != nil {
 			return err
 		}

@@ -50,7 +50,7 @@ It will be listed as "on" while it is enabled.
 			return err
 		}
 
-		return h.WriteTo(src)
+		return h.Flush()
 	},
 }
 

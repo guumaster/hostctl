@@ -35,7 +35,7 @@ Alternates between on/off status of an existing profile.
 			return err
 		}
 
-		return h.WriteTo(src)
+		return h.Flush()
 	},
 }
 

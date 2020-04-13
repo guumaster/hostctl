@@ -65,7 +65,7 @@ If the profile already exists it will be overwritten.
 			return err
 		}
 
-		return h.WriteTo(src)
+		return h.Flush()
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
 		return postActionCmd(cmd, args, nil, true)

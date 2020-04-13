@@ -11,7 +11,7 @@ import (
 func isPiped() bool {
 	info, err := os.Stdin.Stat()
 	if err != nil {
-		panic(err)
+		return false
 	}
 	notPipe := info.Mode()&os.ModeNamedPipe == 0
 	return !notPipe || info.Size() > 0

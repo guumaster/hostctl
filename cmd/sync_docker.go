@@ -56,7 +56,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 			return err
 		}
 
-		return h.WriteTo(src)
+		return h.Flush()
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
 		return postActionCmd(cmd, args, removeCmd, false)

@@ -47,7 +47,7 @@ It will be listed as "off" while it is disabled.
 			return err
 		}
 
-		return h.WriteTo(src)
+		return h.Flush()
 	},
 }
 

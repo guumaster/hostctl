@@ -51,4 +51,19 @@ func TestFile_ReplaceProfile(t *testing.T) {
 		hosts, err := added.GetHostNames("4.4.4.4")
 		assert.Equal(t, hosts, []string{"replaced.loc"})
 	})
+
+	t.Run("Replace unknown", func(t *testing.T) {
+		m, err := NewWithFs(f.Name(), mem)
+		assert.NoError(t, err)
+
+		r := strings.NewReader(`4.4.4.4 replaced.loc`)
+
+		p, err := NewProfileFromReader(r)
+		assert.NoError(t, err)
+		p.Name = "default"
+		p.Status = Enabled
+
+		err = m.ReplaceProfile(*p)
+		assert.EqualError(t, err, DefaultProfileError.Error())
+	})
 }

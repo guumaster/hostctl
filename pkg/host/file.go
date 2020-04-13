@@ -119,8 +119,21 @@ func (f *File) WriteTo(src string) error {
 	return f.writeToFile(h)
 }
 
+// Flush overwrite file with hosts info
+func (f *File) Flush() error {
+	h, err := f.fs.OpenFile(f.src.Name(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	defer h.Close()
+	if err != nil {
+		return err
+	}
+
+	return f.writeToFile(h)
+}
+
 // writeToFile overwrite file with hosts info
 func (f *File) writeToFile(dst afero.File) error {
+	f.mutex.Lock()
+	defer f.mutex.Unlock()
 	if f.data == nil {
 		return fmt.Errorf("no content to write")
 	}

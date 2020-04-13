@@ -90,7 +90,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			return err
 		}
 
-		return h.WriteTo(src)
+		return h.Flush()
 	},
 	PostRunE: func(cmd *cobra.Command, args []string) error {
 		return postActionCmd(cmd, args, removeCmd, false)
