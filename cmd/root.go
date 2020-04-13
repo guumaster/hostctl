@@ -14,7 +14,7 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "hostctl",
-	Short: "Manage your hosts file like a pro",
+	Short: "A Dev tool to manage your hosts file like a pro",
 	Long: `
     __                    __           __     __
    / /_   ____    _____  / /_  _____  / /_   / /
