@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"io"
 	"os"
 
@@ -18,17 +17,7 @@ var addCmd = &cobra.Command{
 	Long: `
 Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be added to it.`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			return host.MissingProfileError
-		} else if len(args) > 1 {
-			return fmt.Errorf("specify only one profile")
-		}
-		if err := containsDefault(args); err != nil {
-			return err
-		}
-		return nil
-	},
+	Args: commonCheckArgs,
 	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")

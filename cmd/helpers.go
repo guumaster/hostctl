@@ -1,11 +1,54 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"runtime"
 
+	"github.com/spf13/cobra"
+
 	"github.com/guumaster/hostctl/pkg/host"
 )
+
+func postRunListOnly(cmd *cobra.Command, args []string) error {
+	return postActionCmd(cmd, args, nil, true)
+}
+
+func commonCheckProfileOnly(cmd *cobra.Command, args []string) error {
+	if len(args) == 0 {
+		return host.MissingProfileError
+	}
+	if err := containsDefault(args); err != nil {
+		return err
+	}
+	return nil
+}
+
+func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
+	all, _ := cmd.Flags().GetBool("all")
+	if all && len(args) > 0 {
+		return fmt.Errorf("args must be empty with --all flag")
+	}
+	if !all && len(args) == 0 {
+		return host.MissingProfileError
+	}
+	if err := containsDefault(args); err != nil {
+		return err
+	}
+	return nil
+}
+
+func commonCheckArgs(cmd *cobra.Command, args []string) error {
+	if len(args) == 0 {
+		return host.MissingProfileError
+	} else if len(args) > 1 {
+		return fmt.Errorf("specify only one profile")
+	}
+	if err := containsDefault(args); err != nil {
+		return err
+	}
+	return nil
+}
 
 // isPiped detect if there is any input through STDIN
 func isPiped() bool {

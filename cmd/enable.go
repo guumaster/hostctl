@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
@@ -16,19 +14,7 @@ var enableCmd = &cobra.Command{
 Enables an existing profile.
 It will be listed as "on" while it is enabled.
 `,
-	Args: func(cmd *cobra.Command, args []string) error {
-		all, _ := cmd.Flags().GetBool("all")
-		if all && len(args) > 0 {
-			return fmt.Errorf("args must be empty with --all flag")
-		}
-		if !all && len(args) == 0 {
-			return host.MissingProfileError
-		}
-		if err := containsDefault(args); err != nil {
-			return err
-		}
-		return nil
-	},
+	Args: commonCheckArgsWithAll,
 	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		enableOnly, _ := cmd.Flags().GetBool("only")

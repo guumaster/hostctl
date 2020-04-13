@@ -40,9 +40,7 @@ as extension.
 
 		return nil
 	},
-	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, nil, true)
-	},
+	PostRunE: postRunListOnly,
 }
 
 func init() {

@@ -21,19 +21,7 @@ It cannot be undone unless you have a backup and restore it.
 If you want to remove a profile but would like to use it later,
 use 'hosts disable' instead.
 `,
-	Args: func(cmd *cobra.Command, args []string) error {
-		all, _ := cmd.Flags().GetBool("all")
-		if all && len(args) > 0 {
-			return fmt.Errorf("args must be empty with --all flag")
-		}
-		if !all && len(args) == 0 {
-			return host.MissingProfileError
-		}
-		if err := containsDefault(args); err != nil {
-			return err
-		}
-		return nil
-	},
+	Args: commonCheckArgsWithAll,
 	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		quiet, _ := cmd.Flags().GetBool("quiet")
@@ -66,9 +54,6 @@ use 'hosts disable' instead.
 		}
 
 		return nil
-	},
-	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, nil, false)
 	},
 }
 

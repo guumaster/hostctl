@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/spf13/cobra"
 
@@ -16,17 +15,7 @@ var syncDockerCmd = &cobra.Command{
 	Long: `
 Reads from Docker the list of containers and add names and IPs to a profile in your hosts file.
 `,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			return host.MissingProfileError
-		} else if len(args) > 1 {
-			return fmt.Errorf("specify only one profile")
-		}
-		if err := containsDefault(args); err != nil {
-			return err
-		}
-		return nil
-	},
+	Args: commonCheckArgs,
 	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		domain, _ := cmd.Flags().GetString("domain")

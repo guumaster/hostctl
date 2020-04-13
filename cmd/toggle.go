@@ -13,15 +13,7 @@ var toggleCmd = &cobra.Command{
 	Long: `
 Alternates between on/off status of an existing profile.
 `,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			return host.MissingProfileError
-		}
-		if err := containsDefault(args); err != nil {
-			return err
-		}
-		return nil
-	},
+	Args: commonCheckProfileOnly,
 	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 

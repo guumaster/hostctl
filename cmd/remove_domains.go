@@ -18,15 +18,7 @@ var removeDomainsCmd = &cobra.Command{
 Completely remove domains from your hosts file.
 It cannot be undone unless you have a backup and restore it.
 `,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			return host.MissingProfileError
-		}
-		if err := containsDefault(args); err != nil {
-			return err
-		}
-		return nil
-	},
+	Args: commonCheckProfileOnly,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		quiet, _ := cmd.Flags().GetBool("quiet")
@@ -57,7 +49,5 @@ It cannot be undone unless you have a backup and restore it.
 		}
 		return nil
 	},
-	PostRunE: func(cmd *cobra.Command, args []string) error {
-		return postActionCmd(cmd, args, nil, true)
-	},
+	PostRunE: postRunListOnly,
 }
