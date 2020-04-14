@@ -16,3 +16,11 @@ jobs:
           commit_username: guumaster
           commit_email: ${{ secrets.AUR_PUBLISH_EMAIL }}
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+
+      - name: Publish AUR bin package
+        uses: guumaster/aur-publish-docker-action@master
+        with:
+          package_name: hostctl-bin
+          commit_username: guumaster
+          commit_email: ${{ secrets.AUR_PUBLISH_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
