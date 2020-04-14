@@ -55,7 +55,7 @@ nfpms:
     vendor: Guumaster
     homepage: https://github.com/guumaster/hostctl
     maintainer: guumaster <guuweb@gmail.com>
-    description: A Dev tool to manage your hosts file like a pro
+    description: Your dev tool to manage /etc/hosts like a pro
 
 brews:
   - name: hostctl
@@ -63,7 +63,7 @@ brews:
       owner: guumaster
       name: homebrew-tap
     homepage:  https://github.com/guumaster/hostctl
-    description: A Dev tool to manage your hosts file like a pro
+    description: Your dev tool to manage /etc/hosts like a pro
     commit_author:
       name: goreleaserbot
       email: guuweb@gmail.com
@@ -74,14 +74,14 @@ scoop:
     owner: guumaster
     name: hostctl
   homepage:  https://github.com/guumaster/hostctl
-  description: A Dev tool to manage your hosts file like a pro
+  description: Your dev tool to manage /etc/hosts like a pro
   license: MIT
 
 snapcrafts:
   - id: hostctl
     name: hostctl
-    summary: A Dev tool to manage your hosts file like a pro
-    description: A Dev tool to manage your hosts file like a pro.
+    summary: Your dev tool to manage /etc/hosts like a pro
+    description: Your dev tool to manage /etc/hosts like a pro.
     grade: stable
     confinement: strict
     license: MIT
