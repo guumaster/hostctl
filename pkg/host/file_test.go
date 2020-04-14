@@ -43,7 +43,7 @@ func TestManager(t *testing.T) {
 		assert.NoError(t, err)
 
 		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 
 		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)

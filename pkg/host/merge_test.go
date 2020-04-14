@@ -22,7 +22,7 @@ func TestFile_MergeProfiles(t *testing.T) {
 	c := &Content{
 		DefaultProfile: nil,
 		ProfileNames:   []string{"profile2", "profile3"},
-		Profiles: map[string]Profile{
+		Profiles: map[string]*Profile{
 			"profile2": {
 				Name:   "profile2",
 				Status: Enabled,
@@ -46,13 +46,14 @@ func TestFile_MergeProfiles(t *testing.T) {
 
 	p3, err := m.GetProfile("profile3")
 	assert.NoError(t, err)
-	assert.Equal(t, c.Profiles["profile3"], *p3)
+	assert.Equal(t, c.Profiles["profile3"], p3)
 
 	p2, err := m.GetProfile("profile2")
 	assert.NoError(t, err)
 
 	modP2 := c.Profiles["profile2"]
+	modP2.IPList = []string{"127.0.0.1", "2.2.2.2"}
 	modP2.Routes[localhost.String()] = &Route{IP: localhost, HostNames: []string{"first.loc", "second.loc"}}
 	modP2.Status = Disabled
-	assert.Equal(t, modP2, *p2)
+	assert.Equal(t, modP2, p2)
 }

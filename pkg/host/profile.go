@@ -14,8 +14,18 @@ func (p *Profile) GetStatus() string {
 	return string(p.Status)
 }
 
+func (p *Profile) appendIP(n string) {
+	for _, c := range p.IPList {
+		if c == n {
+			return
+		}
+	}
+	p.IPList = append(p.IPList, n)
+}
+
 func (p *Profile) AddRoute(ip, hostname string) {
 	if p.Routes[ip] == nil {
+		p.appendIP(ip)
 		p.Routes[ip] = &Route{
 			IP:        net.ParseIP(ip),
 			HostNames: []string{hostname},
@@ -27,6 +37,7 @@ func (p *Profile) AddRoute(ip, hostname string) {
 
 func (p *Profile) AddRoutes(ip string, hostnames []string) {
 	if p.Routes[ip] == nil {
+		p.appendIP(ip)
 		p.Routes[ip] = &Route{
 			IP:        net.ParseIP(ip),
 			HostNames: hostnames,
@@ -74,8 +85,9 @@ func (p *Profile) Render(w io.StringWriter) error {
 		return err
 	}
 
-	for ip, routes := range p.Routes {
-		for _, host := range routes.HostNames {
+	for _, ip := range p.IPList {
+		route := p.Routes[ip]
+		for _, host := range route.HostNames {
 			prefix := ""
 			if p.Status == Disabled {
 				prefix = "# "

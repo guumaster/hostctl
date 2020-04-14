@@ -20,7 +20,7 @@ func Test_Add(t *testing.T) {
 		b := bytes.NewBufferString("")
 
 		cmd.SetOut(b)
-		cmd.SetArgs([]string{"add", "awesome", "--from", tmp.Name(), "--host-file", tmp.Name()})
+		cmd.SetArgs([]string{"add", "awesome", "--uniq", "--from", tmp.Name(), "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
 		assert.NoError(t, err)
@@ -94,34 +94,22 @@ func Test_ReplaceStdin(t *testing.T) {
 }
 
 func Test_ReplaceFile(t *testing.T) {
-	// This test only fails with others, works fine executed alone. Too weird race condition somewhere.
-	t.SkipNow()
 	cmd := rootCmd
 
-	file, err := ioutil.TempFile("/tmp", "replace_profile1_")
-	if err != nil {
-		t.Fatal(err)
-	}
-	lines := []string{
-		"5.5.5.5 replaced.loc",
-		"5.5.5.6 replaced2.loc",
-	}
-	for _, l := range lines {
-		_, _ = file.WriteString(l + "\n")
-	}
-	defer file.Close()
-
-	defer os.Remove(file.Name())
-
+	in := strings.NewReader(`
+5.5.5.5 replaced.loc
+5.5.5.6 replaced2.loc
+`)
 	tmp := makeTempHostsFile(t, "replaceFileCmd")
 	defer os.Remove(tmp.Name())
 
 	b := bytes.NewBufferString("")
 
+	cmd.SetIn(in)
 	cmd.SetOut(b)
-	cmd.SetArgs([]string{"replace", "awesome", "--from", file.Name(), "--host-file", tmp.Name()})
+	cmd.SetArgs([]string{"replace", "awesome", "--host-file", tmp.Name()})
 
-	err = cmd.Execute()
+	err := cmd.Execute()
 	assert.NoError(t, err)
 
 	out, err := ioutil.ReadAll(b)

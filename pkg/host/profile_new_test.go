@@ -1,6 +1,7 @@
 package host
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,13 +10,15 @@ import (
 func TestNewProfile(t *testing.T) {
 
 	t.Run("NewProfileFromReader", func(t *testing.T) {
-		mem := createBasicFS(t)
-		f, err := mem.Open("/tmp/etc/hosts")
+		r := strings.NewReader(`
+3.3.3.4 some.profile.loc
+3.3.3.4 first.loc
+`)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
-
-		p, err := NewProfileFromReader(f)
+		hosts, err := p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
-		assert.Equal(t, []string{"localhost", "first.loc", "second.loc"}, p.Routes[localhost.String()].HostNames)
+		assert.Equal(t, []string{"some.profile.loc", "first.loc"}, hosts)
 	})
 
 }

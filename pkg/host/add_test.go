@@ -17,7 +17,7 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 		r := strings.NewReader(`127.0.0.1 added.loc`)
 
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "awesome"
 		p.Status = Enabled
@@ -38,7 +38,7 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 		r := strings.NewReader(`127.0.0.1 added.loc`)
 
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "profile1"
 

@@ -18,7 +18,7 @@ func TestFile_ReplaceProfile(t *testing.T) {
 
 		r := strings.NewReader(`4.4.4.4 replaced.loc`)
 
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "profile1"
 		p.Status = Enabled
@@ -39,7 +39,7 @@ func TestFile_ReplaceProfile(t *testing.T) {
 
 		r := strings.NewReader(`4.4.4.4 replaced.loc`)
 
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "awesome"
 		p.Status = Enabled
@@ -60,7 +60,7 @@ func TestFile_ReplaceProfile(t *testing.T) {
 
 		r := strings.NewReader(`4.4.4.4 replaced.loc`)
 
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "default"
 		p.Status = Enabled

@@ -23,12 +23,13 @@ type File struct {
 type Content struct {
 	DefaultProfile DefaultProfile
 	ProfileNames   []string
-	Profiles       map[string]Profile
+	Profiles       map[string]*Profile
 }
 
 type Profile struct {
 	Name   string
 	Status ProfileStatus
+	IPList []string
 	Routes map[string]*Route
 }
 

@@ -29,13 +29,14 @@ func NewProfileFromDocker(ctx context.Context, opts *DockerOptions) (*Profile, e
 		if err != nil {
 			return nil, err
 		}
+		opts.Cli = cli
 	}
 	defer cli.Close()
 
 	f := filters.NewArgs()
 	f.Add("status", "running")
 
-	networkID, err := getNetworkID(ctx, cli, opts)
+	networkID, err := getNetworkID(ctx, opts)
 	if err != nil {
 		return nil, err
 	}

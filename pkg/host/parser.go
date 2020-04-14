@@ -21,7 +21,7 @@ var (
 func Parse(r io.Reader) (*Content, error) {
 	data := &Content{
 		ProfileNames: []string{},
-		Profiles:     map[string]Profile{},
+		Profiles:     map[string]*Profile{},
 	}
 
 	currProfile := ""
@@ -36,7 +36,7 @@ func Parse(r io.Reader) (*Content, error) {
 
 			currProfile = p.Name
 			data.ProfileNames = append(data.ProfileNames, currProfile)
-			data.Profiles[currProfile] = Profile{
+			data.Profiles[currProfile] = &Profile{
 				Name:   currProfile,
 				Status: p.Status,
 			}
@@ -46,8 +46,7 @@ func Parse(r io.Reader) (*Content, error) {
 
 		case currProfile != "":
 			profile := data.Profiles[currProfile]
-			p := appendLine(&profile, string(b))
-			data.Profiles[currProfile] = *p
+			data.Profiles[currProfile] = appendLine(profile, string(b))
 
 		default:
 			row := parseToDefault(b, currProfile)
@@ -116,6 +115,7 @@ func appendLine(p *Profile, line string) *Profile {
 		return p
 	}
 	ip := route.IP.String()
+	p.appendIP(ip)
 	if p.Routes == nil {
 		p.Routes = map[string]*Route{}
 		p.Routes[ip] = route
@@ -123,10 +123,20 @@ func appendLine(p *Profile, line string) *Profile {
 		p.Routes[ip] = route
 	} else {
 		p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, route.HostNames...)
-		// NOTE: Removed to speed up big profiles
-		// p.Routes[ip].HostNames = uniqueStrings(p.Routes[ip].HostNames)
 	}
 	return p
+}
+
+func uniqueStrings(xs []string) []string {
+	keys := make(map[string]bool)
+	var list []string
+	for _, entry := range xs {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }
 
 // parseLine checks if a line is a host line or a comment line.
