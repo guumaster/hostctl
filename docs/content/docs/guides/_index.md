@@ -23,3 +23,4 @@ Here you can read about how to use `hostctl` to get most of every feature.
 
 * [Ephemeral profiles](./ephemeral_profiles)
 * [Backup/Restore hosts file](./backup_restore)
+* [CLI autocompletion](./auto_completion)
