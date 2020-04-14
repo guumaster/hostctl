@@ -15,7 +15,7 @@ source <(hostctl completion bash)
 
 ### Zsh
 
-Add this line on your `$HOME/.bashrc`
+Add this line on your `$HOME/.zshrc`
 
 ```
 source <(hostctl completion zsh)
