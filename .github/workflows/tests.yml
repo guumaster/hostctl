@@ -25,10 +25,10 @@ jobs:
 
       - name: Test
         run: |
-          go test -cover -coverprofile=coverage.out $(go list ./... | grep -v "*docker*" | grep -e "hostctl/")
-          go tool cover -func=coverage.out
+          go test -cover -coverprofile=${{ matrix.platform }}_coverage.out $(go list ./... | grep -v "*docker*" | grep -e "hostctl/")
+          go tool cover -func=${{ matrix.platform }}_coverage.out
 
-      - name: Upload math result for job 1
+      - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.platform }}_coverage
