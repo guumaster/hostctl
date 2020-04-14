@@ -5,7 +5,7 @@ weight: 90
 
 ## hostctl
 
-A Dev tool to manage your hosts file like a pro
+Your dev tool to manage /etc/hosts like a pro
 
 ### Synopsis
 

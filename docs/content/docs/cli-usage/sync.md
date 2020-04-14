@@ -33,7 +33,7 @@ Reads IPs and names from some local system and sync it with a profile in your ho
 
 ##### SEE ALSO
 
-* [hostctl](/docs/cli-usage/hostctl)	 - A Dev tool to manage your hosts file like a pro
+* [hostctl](/docs/cli-usage/hostctl)	 - Your dev tool to manage /etc/hosts like a pro
 * [hostctl sync docker](/docs/cli-usage/sync_docker)	 - Sync your Docker containers IPs with a profile.
 * [hostctl sync docker-compose](/docs/cli-usage/sync_docker-compose)	 - Sync your docker-compose containers IPs with a profile.
 

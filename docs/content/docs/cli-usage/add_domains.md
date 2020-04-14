@@ -31,6 +31,7 @@ hostctl add domains [profile] [domains] [flags]
       --host-file string   Hosts file path (default "/etc/hosts")
   -q, --quiet              Run command without output
       --raw                Output without table borders
+  -u, --uniq               only keep uniq domains per IP
   -w, --wait duration      Enables a profile for a specific amount of time (default -1ns)
 ```
 
