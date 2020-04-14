@@ -107,18 +107,6 @@ func parseProfileHeader(b []byte) (*Profile, error) {
 	}, nil
 }
 
-func uniqueStrings(xs []string) []string {
-	keys := make(map[string]bool)
-	var list []string
-	for _, entry := range xs {
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-			list = append(list, entry)
-		}
-	}
-	return list
-}
-
 func appendLine(p *Profile, line string) *Profile {
 	if line == "" {
 		return p
@@ -135,7 +123,8 @@ func appendLine(p *Profile, line string) *Profile {
 		p.Routes[ip] = route
 	} else {
 		p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, route.HostNames...)
-		p.Routes[ip].HostNames = uniqueStrings(p.Routes[ip].HostNames)
+		// NOTE: Removed to speed up big profiles
+		// p.Routes[ip].HostNames = uniqueStrings(p.Routes[ip].HostNames)
 	}
 	return p
 }
