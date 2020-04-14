@@ -7,7 +7,7 @@
 
 # hostctl
 
-> Manage your /etc/hosts like a pro!
+> A Dev tool to manage your /etc/hosts file like a pro!
 
 This tool gives you more control over the use of your `hosts` file. You can have multiple profiles and enable/disable as you need.
 
