@@ -50,7 +50,7 @@ jobs:
       - name: Download coverage report
         uses: actions/download-artifact@v1
         with:
-          name: ubuntu-latest_homework
+          name: ubuntu-latest_coverage
 
       - name: Analyze with SonarCloud
         uses: sonarsource/sonarcloud-github-action@master
