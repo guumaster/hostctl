@@ -93,7 +93,7 @@ func addDefault(f *File, table *tablewriter.Table, opts *ListOptions) bool {
 	return i > 0
 }
 
-func addProfiles(p Profile, table *tablewriter.Table, opts *ListOptions) bool {
+func addProfiles(p *Profile, table *tablewriter.Table, opts *ListOptions) bool {
 	if !includeProfile(p.Name, opts.Profiles) {
 		return false
 	}
@@ -102,7 +102,8 @@ func addProfiles(p Profile, table *tablewriter.Table, opts *ListOptions) bool {
 		return false
 	}
 
-	for _, route := range p.Routes {
+	for _, ip := range p.IPList {
+		route := p.Routes[ip]
 		for _, h := range route.HostNames {
 			line := &tableRow{
 				Profile: p.Name,

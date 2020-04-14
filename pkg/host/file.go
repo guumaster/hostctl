@@ -65,7 +65,7 @@ func (f *File) GetProfile(name string) (*Profile, error) {
 	if !ok {
 		return nil, UnknownProfileError
 	}
-	return &profile, nil
+	return profile, nil
 }
 
 func (f *File) GetProfileNames() []string {

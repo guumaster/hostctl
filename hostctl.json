@@ -1,15 +1,15 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.4",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/guumaster/hostctl/releases/download/v1.0.2/hostctl_1.0.2_windows_64-bit.zip",
+            "url": "https://github.com/guumaster/hostctl/releases/download/v1.0.4/hostctl_1.0.4_windows_64-bit.zip",
             "bin": [
                 "hostctl.exe"
             ],
-            "hash": "b2c7c421eebb8a03ee26bbcc91e1abd96ed22203f09bbdbf1ba9ec941870b9d5"
+            "hash": "f38bbcb4a3dde2dc5be8bef98eb30928cd6e84ba4c4e283d9c958fbf1d3ef627"
         }
     },
     "homepage": "https://github.com/guumaster/hostctl",
     "license": "MIT",
-    "description": "manage your hosts file like a pro"
+    "description": "A Dev tool to manage your hosts file like a pro"
 }

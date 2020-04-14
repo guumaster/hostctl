@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/client"
 	"gopkg.in/yaml.v2"
 )
 
@@ -47,11 +46,12 @@ func parseComposeFile(file, projectName string) ([]string, error) {
 	return containers, nil
 }
 
-func getNetworkID(ctx context.Context, cli *client.Client, opts *DockerOptions) (string, error) {
+func getNetworkID(ctx context.Context, opts *DockerOptions) (string, error) {
 	if opts == nil || opts.Network == "" {
 		return "", nil
 	}
 
+	cli := opts.Cli
 	var networkID string
 	nets, err := cli.NetworkList(ctx, types.NetworkListOptions{})
 	if err != nil {

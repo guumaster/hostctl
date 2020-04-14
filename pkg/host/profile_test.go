@@ -41,7 +41,7 @@ func TestProfile(t *testing.T) {
 
 	t.Run("AddRoute", func(t *testing.T) {
 		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 
 		p.AddRoute("1.1.1.1", "added.loc")
@@ -53,7 +53,7 @@ func TestProfile(t *testing.T) {
 
 	t.Run("AddRoutes", func(t *testing.T) {
 		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 
 		p.AddRoutes("1.1.1.1", []string{"added.loc", "another.loc"})
@@ -65,7 +65,7 @@ func TestProfile(t *testing.T) {
 
 	t.Run("RemoveRoutes", func(t *testing.T) {
 		r := strings.NewReader("3.3.3.4 some.profile.loc\n5.5.5.5 another.profile.loc")
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 
 		p.RemoveRoutes([]string{"another.profile.loc"})
@@ -77,7 +77,7 @@ func TestProfile(t *testing.T) {
 
 	t.Run("GetHostnames", func(t *testing.T) {
 		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := NewProfileFromReader(r)
+		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 
 		names, err := p.GetHostNames("3.3.3.4")

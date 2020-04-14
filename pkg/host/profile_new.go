@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-func NewProfileFromReader(r io.Reader) (*Profile, error) {
+func NewProfileFromReader(r io.Reader, uniq bool) (*Profile, error) {
 	p := &Profile{}
 	s := bufio.NewScanner(r)
 	for s.Scan() {
@@ -13,6 +13,11 @@ func NewProfileFromReader(r io.Reader) (*Profile, error) {
 
 		if err := s.Err(); err != nil {
 			return nil, err
+		}
+	}
+	if uniq {
+		for _, r := range p.Routes {
+			r.HostNames = uniqueStrings(r.HostNames)
 		}
 	}
 	return p, nil

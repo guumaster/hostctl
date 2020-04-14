@@ -18,6 +18,7 @@ func (f *File) MergeProfiles(content *Content) {
 			if _, ok := baseP.Routes[ip]; ok {
 				baseP.Routes[ip].HostNames = append(baseP.Routes[ip].HostNames, r.HostNames...)
 			} else {
+				baseP.appendIP(ip)
 				baseP.Routes[ip] = r
 			}
 		}

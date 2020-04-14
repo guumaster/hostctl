@@ -21,7 +21,7 @@ var (
 func Parse(r io.Reader) (*Content, error) {
 	data := &Content{
 		ProfileNames: []string{},
-		Profiles:     map[string]Profile{},
+		Profiles:     map[string]*Profile{},
 	}
 
 	currProfile := ""
@@ -36,7 +36,7 @@ func Parse(r io.Reader) (*Content, error) {
 
 			currProfile = p.Name
 			data.ProfileNames = append(data.ProfileNames, currProfile)
-			data.Profiles[currProfile] = Profile{
+			data.Profiles[currProfile] = &Profile{
 				Name:   currProfile,
 				Status: p.Status,
 			}
@@ -46,8 +46,7 @@ func Parse(r io.Reader) (*Content, error) {
 
 		case currProfile != "":
 			profile := data.Profiles[currProfile]
-			p := appendLine(&profile, string(b))
-			data.Profiles[currProfile] = *p
+			data.Profiles[currProfile] = appendLine(profile, string(b))
 
 		default:
 			row := parseToDefault(b, currProfile)
@@ -107,6 +106,27 @@ func parseProfileHeader(b []byte) (*Profile, error) {
 	}, nil
 }
 
+func appendLine(p *Profile, line string) *Profile {
+	if line == "" {
+		return p
+	}
+	route, ok := parseLine(line)
+	if !ok {
+		return p
+	}
+	ip := route.IP.String()
+	p.appendIP(ip)
+	if p.Routes == nil {
+		p.Routes = map[string]*Route{}
+		p.Routes[ip] = route
+	} else if p.Routes[ip] == nil {
+		p.Routes[ip] = route
+	} else {
+		p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, route.HostNames...)
+	}
+	return p
+}
+
 func uniqueStrings(xs []string) []string {
 	keys := make(map[string]bool)
 	var list []string
@@ -117,27 +137,6 @@ func uniqueStrings(xs []string) []string {
 		}
 	}
 	return list
-}
-
-func appendLine(p *Profile, line string) *Profile {
-	if line == "" {
-		return p
-	}
-	route, ok := parseLine(line)
-	if !ok {
-		return p
-	}
-	ip := route.IP.String()
-	if p.Routes == nil {
-		p.Routes = map[string]*Route{}
-		p.Routes[ip] = route
-	} else if p.Routes[ip] == nil {
-		p.Routes[ip] = route
-	} else {
-		p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, route.HostNames...)
-		p.Routes[ip].HostNames = uniqueStrings(p.Routes[ip].HostNames)
-	}
-	return p
 }
 
 // parseLine checks if a line is a host line or a comment line.
