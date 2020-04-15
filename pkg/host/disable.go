@@ -22,3 +22,24 @@ func (f *File) Disable(profiles []string) error {
 func (f *File) DisableAll() error {
 	return f.Disable(f.data.ProfileNames)
 }
+
+// DisableOnly marks profiles as enable and disable all other profiles
+func (f *File) DisableOnly(profiles []string) error {
+	for _, name := range f.data.ProfileNames {
+		if name == "default" {
+			continue
+		}
+		profile, ok := f.data.Profiles[name]
+		if !ok {
+			return UnknownProfileError
+		}
+
+		if contains(profiles, name) {
+			profile.Status = Disabled
+		} else {
+			profile.Status = Enabled
+		}
+		f.data.Profiles[name] = profile
+	}
+	return nil
+}

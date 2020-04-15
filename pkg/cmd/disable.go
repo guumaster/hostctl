@@ -17,6 +17,7 @@ It will be listed as "off" while it is disabled.
 	Args: commonCheckArgsWithAll,
 	RunE: func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
+		disableOnly, _ := cmd.Flags().GetBool("only")
 		all, _ := cmd.Flags().GetBool("all")
 
 		h, err := host.NewFile(src)
@@ -24,7 +25,9 @@ It will be listed as "off" while it is disabled.
 			return err
 		}
 
-		if all {
+		if disableOnly {
+			err = h.DisableOnly(profiles)
+		} else if all {
 			err = h.DisableAll()
 		} else {
 			err = h.Disable(profiles)
@@ -46,5 +49,6 @@ func init() {
 	}
 
 	disableCmd.Flags().BoolP("all", "", false, "Disable all profiles")
+	disableCmd.Flags().Bool("only", false, "Enable all other profiles")
 	disableCmd.Flags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
 }
