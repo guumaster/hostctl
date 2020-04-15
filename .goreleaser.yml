@@ -1,6 +1,11 @@
 # This is an example goreleaser.yaml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
 project_name: hostctl
+
+before:
+  hooks:
+    - go mod tidy
+
 builds:
   - id: hostctl
     binary: hostctl
@@ -15,7 +20,20 @@ builds:
     goarch:
       - amd64
     ldflags:
-      - -s -w -X github.com/guumaster/hostctl/pkg/cmd/cmd.version={{.Version}}
+      - -s -w -X github.com/guumaster/hostctl/pkg/cmd.version={{.Version}}
+
+  - id: hostctl-snap
+    binary: hostctl-snap
+    main: cmd/hostctl/main.go
+    env:
+      - GO111MODULE=on
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w -X github.com/guumaster/hostctl/pkg/cmd.version={{.Version}}-snap -X github.com/guumaster/hostctl/pkg/cmd.snapBuild=yes
 
 changelog:
   sort: desc
@@ -33,18 +51,18 @@ archives:
   - format_overrides:
       - goos: windows
         format: zip
+    builds:
+      - hostctl
     replacements:
       amd64: 64-bit
       darwin: macOS
-
-before:
-  hooks:
-    - go mod tidy
 
 release:
   github:
     owner: guumaster
     name: hostctl
+  ids:
+    - hostctl
 
 nfpms:
   - id: hostctl
@@ -59,6 +77,8 @@ nfpms:
 
 brews:
   - name: hostctl
+    ids:
+      - hostctl
     github:
       owner: guumaster
       name: homebrew-tap
@@ -78,8 +98,10 @@ scoop:
   license: MIT
 
 snapcrafts:
-  - id: hostctl
+  - id: hostctl-snap
     name: hostctl
+    builds:
+      - hostctl-snap
     summary: Your dev tool to manage /etc/hosts like a pro
     description: Your dev tool to manage /etc/hosts like a pro.
     grade: stable

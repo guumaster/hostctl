@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	version = "dev"
+	version   = "dev"
+	snapBuild string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -30,6 +31,10 @@ you need each time with a simple interface.
 `,
 	SilenceUsage: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		err := checkSnapRestrictions(cmd, args)
+		if err != nil {
+			return err
+		}
 		host, _ := cmd.Flags().GetString("host-file")
 		quiet, _ := cmd.Flags().GetBool("quiet")
 
@@ -59,6 +64,11 @@ func init() {
 }
 
 func getDefaultHostFile() string {
+	// Snap confinement doesn't allow to read other than
+	if runtime.GOOS == "linux" && snapBuild == "yes" {
+		return "/etc/hosts"
+	}
+
 	envHostFile := os.Getenv("HOSTCTL_FILE")
 	if envHostFile != "" {
 		return envHostFile
@@ -69,4 +79,19 @@ func getDefaultHostFile() string {
 	}
 
 	return "/etc/hosts"
+}
+
+func checkSnapRestrictions(cmd *cobra.Command, _ []string) error {
+	from, _ := cmd.Flags().GetString("from")
+	src, _ := cmd.Flags().GetString("host-file")
+
+	defaultSrc := getDefaultHostFile()
+
+	if snapBuild != "yes" {
+		return nil
+	}
+	if from != "" || src != defaultSrc {
+		return fmt.Errorf("can't use --from or --host-file. Snap confinement restristrions doesn't allow to read other than /etc/hosts file")
+	}
+	return nil
 }

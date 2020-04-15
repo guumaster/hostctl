@@ -101,5 +101,4 @@ func makeAddReplace(action string) func(cmd *cobra.Command, profiles []string) e
 
 		return h.Flush()
 	}
-
 }
