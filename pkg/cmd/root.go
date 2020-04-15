@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -16,11 +17,11 @@ var rootCmd = &cobra.Command{
 	Use:   "hostctl",
 	Short: "Your dev tool to manage /etc/hosts like a pro",
 	Long: `
-    __                    __           __     __
-   / /_   ____    _____  / /_  _____  / /_   / /
-  / __ \ / __ \  / ___/ / __/ / ___/ / __/  / /
- / / / // /_/ / (__  ) / /_  / /__  / /_   / /
-/_/ /_/ \____/ /____/  \__/  \___/  \__/  /_/
+		    __                    __           __     __
+		   / /_   ____    _____  / /_  _____  / /_   / /
+		  / __ \ / __ \  / ___/ / __/ / ___/ / __/  / /
+		 / / / // /_/ / (__  ) / /_  / /__  / /_   / /
+		/_/ /_/ \____/ /____/  \__/  \___/  \__/  /_/
 
 
 hostctl is a CLI tool to manage your hosts file with ease.
@@ -55,4 +56,17 @@ func init() {
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
 	rootCmd.PersistentFlags().Bool("raw", false, "Output without table borders")
 	rootCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
+}
+
+func getDefaultHostFile() string {
+	envHostFile := os.Getenv("HOSTCTL_FILE")
+	if envHostFile != "" {
+		return envHostFile
+	}
+
+	if runtime.GOOS == "windows" {
+		return `C:/Windows/System32/Drivers/etc/hosts`
+	}
+
+	return "/etc/hosts"
 }

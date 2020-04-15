@@ -39,6 +39,31 @@ func Test_AddDomains(t *testing.T) {
 		assert.Contains(t, actual, expected)
 	})
 
+	t.Run("Add domains new profile", func(t *testing.T) {
+		tmp := makeTempHostsFile(t, "addDomainCmd")
+		defer os.Remove(tmp.Name())
+		b := bytes.NewBufferString("")
+
+		cmd.SetOut(b)
+		cmd.SetArgs([]string{"add", "domains", "newprofile", "arg.domain.loc", "--host-file", tmp.Name()})
+
+		err := cmd.Execute()
+		assert.NoError(t, err)
+
+		out, err := ioutil.ReadAll(b)
+		assert.NoError(t, err)
+
+		actual := "\n" + string(out)
+		expected := `
++------------+--------+-----------+----------------+
+|  PROFILE   | STATUS |    IP     |     DOMAIN     |
++------------+--------+-----------+----------------+
+| newprofile | on     | 127.0.0.1 | arg.domain.loc |
++------------+--------+-----------+----------------+
+`
+		assert.Contains(t, actual, expected)
+	})
+
 	t.Run("Add domains with IP", func(t *testing.T) {
 		tmp := makeTempHostsFile(t, "addDomainCmd")
 		defer os.Remove(tmp.Name())
