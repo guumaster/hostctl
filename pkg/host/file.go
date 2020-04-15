@@ -1,6 +1,7 @@
 package host
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -84,7 +85,18 @@ func (f *File) GetDisabled() []string {
 
 func (f *File) AddRoutes(name, ip string, hostnames []string) error {
 	profile, err := f.GetProfile(name)
-	if err != nil {
+	if err != nil && !errors.Is(err, UnknownProfileError) {
+		return err
+	}
+
+	if profile == nil {
+		p := Profile{
+			Name:   name,
+			Status: Enabled,
+			Routes: map[string]*Route{},
+		}
+		p.AddRoutes(ip, hostnames)
+		err := f.AddProfile(p)
 		return err
 	}
 

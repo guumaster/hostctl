@@ -1,7 +1,7 @@
 .idea
 .vscode
 dist
-hostctl
+./hostctl
 hostctl.exe
 .etchosts
 docs/public

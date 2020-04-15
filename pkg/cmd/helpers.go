@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"runtime"
 
 	"github.com/spf13/cobra"
 
@@ -67,17 +66,4 @@ func containsDefault(args []string) error {
 		}
 	}
 	return nil
-}
-
-func getDefaultHostFile() string {
-	envHostFile := os.Getenv("HOSTCTL_FILE")
-	if envHostFile != "" {
-		return envHostFile
-	}
-
-	if runtime.GOOS == "windows" {
-		return `C:/Windows/System32/Drivers/etc/hosts`
-	}
-
-	return "/etc/hosts"
 }

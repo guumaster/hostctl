@@ -2,9 +2,11 @@ on:
   push:
     branches-ignore:
       - allcontributors/**
+      - docs
+      - gh-pages
   pull_request:
-    branches-ignore:
-      - allcontributors/**
+    branches:
+      - '*'
 
 name: Lint
 jobs:
