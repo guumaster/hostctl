@@ -77,8 +77,6 @@ nfpms:
 
 brews:
   - name: hostctl
-    ids:
-      - hostctl
     github:
       owner: guumaster
       name: homebrew-tap
