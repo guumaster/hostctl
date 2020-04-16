@@ -36,7 +36,7 @@ type Profile struct {
 	Routes map[string]*Route
 }
 
-//  DefaultProfile contains data for the default profile
+// DefaultProfile contains data for the default profile
 type DefaultProfile []*tableRow
 
 type tableRow struct {
@@ -53,6 +53,7 @@ type Route struct {
 	HostNames []string
 }
 
+// ProfileStatus represents the status of a Profile
 type ProfileStatus string
 
 const (

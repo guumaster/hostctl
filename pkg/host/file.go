@@ -208,6 +208,7 @@ func (f *File) writeBanner(w io.StringWriter) {
 	f.hasBanner = true
 }
 
+// Close closes the underlying file
 func (f *File) Close() {
 	f.src.Close()
 }

@@ -6,10 +6,12 @@ import (
 	"net"
 )
 
+// String returns a string representation of the profile
 func (p *Profile) String() string {
 	return fmt.Sprintf("[%s]%s", p.Status, p.Name)
 }
 
+// GetStatus returns a string value of ProfileStatus
 func (p *Profile) GetStatus() string {
 	return string(p.Status)
 }
@@ -24,6 +26,7 @@ func (p *Profile) appendIP(n string) {
 	p.IPList = append(p.IPList, n)
 }
 
+// AddRoute adds a single route to the profile
 func (p *Profile) AddRoute(ip, hostname string) {
 	if p.Routes[ip] == nil {
 		p.appendIP(ip)
@@ -36,6 +39,7 @@ func (p *Profile) AddRoute(ip, hostname string) {
 	}
 }
 
+// AddRoute adds multiple routes to the profile
 func (p *Profile) AddRoutes(ip string, hostnames []string) {
 	if p.Routes[ip] == nil {
 		p.appendIP(ip)
@@ -48,6 +52,7 @@ func (p *Profile) AddRoutes(ip string, hostnames []string) {
 	}
 }
 
+// RemoveRoutes removes multiple hostnames of a profile
 func (p *Profile) RemoveRoutes(hostnames []string) {
 	for _, h := range hostnames {
 		for ip, r := range p.Routes {
@@ -59,6 +64,7 @@ func (p *Profile) RemoveRoutes(hostnames []string) {
 	}
 }
 
+// GetHostNames returns a list of all hostnames of the given ip.
 func (p *Profile) GetHostNames(ip string) ([]string, error) {
 	key := net.ParseIP(ip)
 	if key == nil {
@@ -73,6 +79,7 @@ func (p *Profile) GetHostNames(ip string) ([]string, error) {
 	return hosts.HostNames, nil
 }
 
+// GetHostNames returns all hostnames of the profile.
 func (p *Profile) GetAllHostNames() ([]string, error) {
 	list := []string{}
 
@@ -83,6 +90,7 @@ func (p *Profile) GetAllHostNames() ([]string, error) {
 	return list, nil
 }
 
+// Render writes the profile content to the given StringWriter
 func (p *Profile) Render(w io.StringWriter) error {
 	_, err := w.WriteString(fmt.Sprintf("\n# profile.%s %s\n", p.Status, p.Name))
 	if err != nil {
@@ -111,6 +119,8 @@ func (p *Profile) Render(w io.StringWriter) error {
 
 	return nil
 }
+
+// Render writes the default profile content to the given StringWriter
 func (d DefaultProfile) Render(w io.StringWriter) error {
 	for _, row := range d {
 		line := ""
