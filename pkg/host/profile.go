@@ -39,7 +39,7 @@ func (p *Profile) AddRoute(ip, hostname string) {
 	}
 }
 
-// AddRoute adds multiple routes to the profile
+// AddRoutes adds multiple routes to the profile
 func (p *Profile) AddRoutes(ip string, hostnames []string) {
 	if p.Routes[ip] == nil {
 		p.appendIP(ip)
@@ -79,7 +79,7 @@ func (p *Profile) GetHostNames(ip string) ([]string, error) {
 	return hosts.HostNames, nil
 }
 
-// GetHostNames returns all hostnames of the profile.
+// GetAllHostNames returns all hostnames of the profile.
 func (p *Profile) GetAllHostNames() ([]string, error) {
 	list := []string{}
 
