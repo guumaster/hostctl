@@ -13,6 +13,11 @@ import (
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
+type composeInfo struct {
+	ProjectName string
+	File        string
+}
+
 // syncDockerComposeCmd represents the sync docker command
 var syncDockerComposeCmd = &cobra.Command{
 	Use:   "docker-compose [profile] [flags]",
@@ -98,12 +103,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 	},
 }
 
-type ComposeInfo struct {
-	ProjectName string
-	File        string
-}
-
-func getComposeInfo(cmd *cobra.Command) (*ComposeInfo, error) {
+func getComposeInfo(cmd *cobra.Command) (*composeInfo, error) {
 	name, _ := cmd.Flags().GetString("project-name")
 	f, _ := cmd.Flags().GetString("compose-file")
 
@@ -123,7 +123,7 @@ func getComposeInfo(cmd *cobra.Command) (*ComposeInfo, error) {
 		name = reg.ReplaceAllString(name, "")
 	}
 
-	return &ComposeInfo{
+	return &composeInfo{
 		ProjectName: name,
 		File:        f,
 	}, nil

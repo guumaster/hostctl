@@ -1,5 +1,6 @@
 package host
 
+// AddProfile adds a profile to the list
 func (f *File) AddProfile(profile Profile) error {
 	if profile.Name == Default {
 		return ErrDefaultProfileError

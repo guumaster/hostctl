@@ -23,6 +23,7 @@ var (
 	// ErrMissingSourceError when trying to read from a file
 	ErrMissingSourceError = errors.New("missing source file")
 
+	// ErrSnapConfinement when trying to read files on snap installation
 	ErrSnapConfinement = errors.New("can't use --from or --host-file. " +
 		"Snap confinement restrictions doesn't allow to read other than /etc/hosts file")
 )

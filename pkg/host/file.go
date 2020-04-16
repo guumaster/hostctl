@@ -9,10 +9,12 @@ import (
 	"github.com/spf13/afero"
 )
 
+// NewFile creates a new File from the given src on default OS filesystem
 func NewFile(src string) (*File, error) {
 	return NewWithFs(src, afero.NewOsFs())
 }
 
+// NewWithFs creates a new File with src and an existing filesystem
 func NewWithFs(src string, fs afero.Fs) (*File, error) {
 	if fs == nil {
 		fs = afero.NewOsFs()
@@ -25,7 +27,10 @@ func NewWithFs(src string, fs afero.Fs) (*File, error) {
 
 	f := &File{src: s, fs: fs}
 
-	err = f.read()
+	_, _ = f.src.Seek(0, io.SeekStart)
+	data, err := Parse(f.src)
+	f.data = data
+
 	if err != nil {
 		return nil, err
 	}
@@ -33,14 +38,7 @@ func NewWithFs(src string, fs afero.Fs) (*File, error) {
 	return f, nil
 }
 
-func (f *File) read() error {
-	_, _ = f.src.Seek(0, io.SeekStart)
-	data, err := Parse(f.src)
-	f.data = data
-
-	return err
-}
-
+// GetStatus returns a map with the status of the given profiles
 func (f *File) GetStatus(profiles []string) map[string]ProfileStatus {
 	st := map[string]ProfileStatus{}
 
@@ -56,6 +54,7 @@ func (f *File) GetStatus(profiles []string) map[string]ProfileStatus {
 	return st
 }
 
+// GetEnabled returns a list of profiles that are Enabled
 func (f *File) GetEnabled() []string {
 	enabled := []string{}
 
@@ -68,19 +67,7 @@ func (f *File) GetEnabled() []string {
 	return enabled
 }
 
-func (f *File) GetProfile(name string) (*Profile, error) {
-	profile, ok := f.data.Profiles[name]
-	if !ok {
-		return nil, ErrUnknownProfile
-	}
-
-	return profile, nil
-}
-
-func (f *File) GetProfileNames() []string {
-	return f.data.ProfileNames
-}
-
+// GetDisabled returns a list of profiles that are Enabled
 func (f *File) GetDisabled() []string {
 	disabled := []string{}
 
@@ -93,6 +80,22 @@ func (f *File) GetDisabled() []string {
 	return disabled
 }
 
+// GetProfile return a Profile from the list
+func (f *File) GetProfile(name string) (*Profile, error) {
+	profile, ok := f.data.Profiles[name]
+	if !ok {
+		return nil, ErrUnknownProfile
+	}
+
+	return profile, nil
+}
+
+// GetProfileNames return a list of all profile names
+func (f *File) GetProfileNames() []string {
+	return f.data.ProfileNames
+}
+
+// AddRoutes add route information to a given profile
 func (f *File) AddRoutes(name, ip string, hostnames []string) error {
 	profile, err := f.GetProfile(name)
 	if err != nil && !errors.Is(err, ErrUnknownProfile) {
@@ -116,6 +119,8 @@ func (f *File) AddRoutes(name, ip string, hostnames []string) error {
 	return nil
 }
 
+// RemoveRoutes removes route information from a given profile.
+// also removes the profile if gets empty.
 func (f *File) RemoveRoutes(name string, routes []string) (bool, error) {
 	p, err := f.GetProfile(name)
 	if err != nil {

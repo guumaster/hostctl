@@ -1,5 +1,6 @@
 package host
 
+// MergeProfiles joins new content with existing content
 func (f *File) MergeProfiles(content *Content) {
 	for _, newName := range content.ProfileNames {
 		newP := content.Profiles[newName]

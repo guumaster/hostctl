@@ -5,6 +5,7 @@ import (
 	"io"
 )
 
+// NewProfileFromReader creates a new profile reading lines from a reader
 func NewProfileFromReader(r io.Reader, uniq bool) (*Profile, error) {
 	p := &Profile{}
 	s := bufio.NewScanner(r)
