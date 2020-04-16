@@ -37,7 +37,6 @@ If the profile already exists it will be overwritten.
 }
 
 func init() {
-
 	addCmd.Flags().StringP("from", "f", "", "file to read")
 	addCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
 	addCmd.PersistentFlags().BoolP("uniq", "u", false, "only keep uniq domains per IP")
@@ -50,7 +49,6 @@ func init() {
 
 	addDomainsCmd.Flags().String("ip", "127.0.0.1", "domains ip")
 	addCmd.AddCommand(addDomainsCmd)
-
 }
 
 func makeAddReplace(action string) func(cmd *cobra.Command, profiles []string) error {
@@ -70,8 +68,11 @@ func makeAddReplace(action string) func(cmd *cobra.Command, profiles []string) e
 
 		in := cmd.InOrStdin()
 
-		var r io.Reader
-		var err error
+		var (
+			r   io.Reader
+			err error
+		)
+
 		if isPiped() || in != os.Stdin {
 			r = in
 		} else {

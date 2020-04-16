@@ -6,7 +6,7 @@ import (
 
 func (f *File) ReplaceProfile(p Profile) error {
 	err := f.RemoveProfile(p.Name)
-	if err != nil && !errors.Is(err, UnknownProfileError) {
+	if err != nil && !errors.Is(err, ErrUnknownProfile) {
 		return err
 	}
 

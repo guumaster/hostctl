@@ -27,7 +27,7 @@ func Test_RemoveDomains(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 +----------+--------+-----------+------------+
 | PROFILE  | STATUS |    IP     |   DOMAIN   |
 +----------+--------+-----------+------------+
@@ -52,8 +52,7 @@ func Test_RemoveDomains(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		// TODO: Improve list management to avoid printing empty lists
-		expected := `
+		const expected = `
 +---------+--------+----+--------+
 | PROFILE | STATUS | IP | DOMAIN |
 +---------+--------+----+--------+
@@ -61,5 +60,4 @@ func Test_RemoveDomains(t *testing.T) {
 `
 		assert.Contains(t, actual, expected)
 	})
-
 }

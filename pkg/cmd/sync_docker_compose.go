@@ -24,7 +24,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		profile, _ := cmd.Flags().GetString("profile")
 
 		if profile == "default" {
-			return host.DefaultProfileError
+			return host.ErrDefaultProfileError
 		}
 		return nil
 	},
@@ -51,7 +51,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		profile := profiles[0]
 
 		if profile == "" && compose.ProjectName == "" {
-			return host.MissingProfileError
+			return host.ErrMissingProfile
 		}
 
 		if profile == "" {
@@ -122,6 +122,7 @@ func getComposeInfo(cmd *cobra.Command) (*ComposeInfo, error) {
 		name = strings.ToLower(name)
 		name = reg.ReplaceAllString(name, "")
 	}
+
 	return &ComposeInfo{
 		ProjectName: name,
 		File:        f,

@@ -30,29 +30,35 @@ func parseComposeFile(file, projectName string) ([]string, error) {
 	}
 
 	data := &composeData{}
+
 	err = yaml.Unmarshal(bytes, &data)
 	if err != nil {
 		return nil, err
 	}
 
 	var containers []string
+
 	for serv, data := range data.Services {
 		name := data.ContainerName
 		if data.ContainerName == "" {
 			name = fmt.Sprintf("%s_%s", projectName, serv)
 		}
+
 		containers = append(containers, name)
 	}
+
 	return containers, nil
 }
 
 func getNetworkID(ctx context.Context, opts *DockerOptions) (string, error) {
+	var networkID string
+
 	if opts == nil || opts.Network == "" {
 		return "", nil
 	}
 
 	cli := opts.Cli
-	var networkID string
+
 	nets, err := cli.NetworkList(ctx, types.NetworkListOptions{})
 	if err != nil {
 		return "", err
@@ -64,8 +70,10 @@ func getNetworkID(ctx context.Context, opts *DockerOptions) (string, error) {
 			break
 		}
 	}
+
 	if networkID == "" {
 		return "", fmt.Errorf("unknown network name or ID: '%s'", opts.Network)
 	}
+
 	return networkID, nil
 }

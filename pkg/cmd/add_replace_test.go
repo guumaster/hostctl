@@ -29,7 +29,7 @@ func Test_Add(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 +---------+--------+-----------+------------+
 | PROFILE | STATUS |    IP     |   DOMAIN   |
 +---------+--------+-----------+------------+
@@ -56,11 +56,10 @@ func Test_Add(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 `
 		assert.Contains(t, actual, expected)
 	})
-
 }
 
 func Test_ReplaceStdin(t *testing.T) {
@@ -70,10 +69,11 @@ func Test_ReplaceStdin(t *testing.T) {
 	defer os.Remove(tmp.Name())
 
 	b := bytes.NewBufferString("")
+	cmd.SetOut(b)
 
 	in := strings.NewReader(`3.3.3.3 stdin.replaced.loc`)
-	cmd.SetOut(b)
 	cmd.SetIn(in)
+
 	cmd.SetArgs([]string{"replace", "profile1", "--host-file", tmp.Name()})
 
 	err := cmd.Execute()
@@ -83,14 +83,13 @@ func Test_ReplaceStdin(t *testing.T) {
 	assert.NoError(t, err)
 
 	actual := "\n" + string(out)
-	expected := `
+	assert.Contains(t, actual, `
 +----------+--------+---------+--------------------+
 | PROFILE  | STATUS |   IP    |       DOMAIN       |
 +----------+--------+---------+--------------------+
 | profile1 | on     | 3.3.3.3 | stdin.replaced.loc |
 +----------+--------+---------+--------------------+
-`
-	assert.Contains(t, actual, expected)
+`)
 }
 
 func Test_ReplaceFile(t *testing.T) {
@@ -100,6 +99,7 @@ func Test_ReplaceFile(t *testing.T) {
 5.5.5.5 replaced.loc
 5.5.5.6 replaced2.loc
 `)
+
 	tmp := makeTempHostsFile(t, "replaceFileCmd")
 	defer os.Remove(tmp.Name())
 
@@ -116,13 +116,12 @@ func Test_ReplaceFile(t *testing.T) {
 	assert.NoError(t, err)
 
 	actual := "\n" + string(out)
-	expected := `
+	assert.Contains(t, actual, `
 +---------+--------+---------+---------------+
 | PROFILE | STATUS |   IP    |    DOMAIN     |
 +---------+--------+---------+---------------+
 | awesome | on     | 5.5.5.5 | replaced.loc  |
 | awesome | on     | 5.5.5.6 | replaced2.loc |
 +---------+--------+---------+---------------+
-`
-	assert.Contains(t, actual, expected)
+`)
 }

@@ -39,6 +39,6 @@ func TestFile_Enable(t *testing.T) {
 
 	t.Run("Enable error", func(t *testing.T) {
 		err = m.Enable([]string{"unknown"})
-		assert.EqualError(t, err, UnknownProfileError.Error())
+		assert.EqualError(t, err, ErrUnknownProfile.Error())
 	})
 }

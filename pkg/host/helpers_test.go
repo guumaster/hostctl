@@ -25,8 +25,10 @@ var testDisabledProfile = `
 
 func createBasicFS(t *testing.T) afero.Fs {
 	t.Helper()
+
 	appFS := afero.NewMemMapFs()
 	_ = appFS.MkdirAll("/tmp/etc", 0755)
+
 	f, _ := appFS.Create("/tmp/etc/hosts")
 	defer f.Close()
 

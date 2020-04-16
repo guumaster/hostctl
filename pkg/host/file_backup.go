@@ -20,5 +20,6 @@ func (f *File) Backup(dst string) (string, error) {
 	defer b.Close()
 
 	_, err = io.Copy(b, f.src)
+
 	return bkpFilename, err
 }

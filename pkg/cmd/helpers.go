@@ -15,11 +15,13 @@ func postRunListOnly(cmd *cobra.Command, args []string) error {
 
 func commonCheckProfileOnly(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return host.MissingProfileError
+		return host.ErrMissingProfile
 	}
+
 	if err := containsDefault(args); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -28,24 +30,29 @@ func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
 	if all && len(args) > 0 {
 		return fmt.Errorf("args must be empty with --all flag")
 	}
+
 	if !all && len(args) == 0 {
-		return host.MissingProfileError
+		return host.ErrMissingProfile
 	}
+
 	if err := containsDefault(args); err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func commonCheckArgs(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return host.MissingProfileError
+		return host.ErrMissingProfile
 	} else if len(args) > 1 {
 		return fmt.Errorf("specify only one profile")
 	}
+
 	if err := containsDefault(args); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -55,15 +62,18 @@ func isPiped() bool {
 	if err != nil {
 		return false
 	}
+
 	notPipe := info.Mode()&os.ModeNamedPipe == 0
+
 	return !notPipe || info.Size() > 0
 }
 
 func containsDefault(args []string) error {
 	for _, p := range args {
 		if p == "default" {
-			return host.DefaultProfileError
+			return host.ErrDefaultProfileError
 		}
 	}
+
 	return nil
 }

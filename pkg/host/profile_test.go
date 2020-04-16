@@ -9,7 +9,6 @@ import (
 )
 
 func TestProfile(t *testing.T) {
-
 	t.Run("String", func(t *testing.T) {
 		p := Profile{
 			Name:   "awesome",

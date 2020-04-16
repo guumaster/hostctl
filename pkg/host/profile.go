@@ -20,6 +20,7 @@ func (p *Profile) appendIP(n string) {
 			return
 		}
 	}
+
 	p.IPList = append(p.IPList, n)
 }
 
@@ -63,6 +64,7 @@ func (p *Profile) GetHostNames(ip string) ([]string, error) {
 	if key == nil {
 		return nil, fmt.Errorf("invalid ip '%s'", ip)
 	}
+
 	hosts, ok := p.Routes[key.String()]
 	if !ok {
 		return nil, fmt.Errorf("ip '%s' not present in profile '%s' ", key, p.Name)
@@ -73,9 +75,11 @@ func (p *Profile) GetHostNames(ip string) ([]string, error) {
 
 func (p *Profile) GetAllHostNames() ([]string, error) {
 	list := []string{}
+
 	for _, r := range p.Routes {
 		list = append(list, r.HostNames...)
 	}
+
 	return list, nil
 }
 
@@ -92,21 +96,23 @@ func (p *Profile) Render(w io.StringWriter) error {
 			if p.Status == Disabled {
 				prefix = "# "
 			}
+
 			_, err = w.WriteString(fmt.Sprintf("%s%s %s\n", prefix, ip, host))
 			if err != nil {
 				return err
 			}
 		}
 	}
+
 	_, err = w.WriteString("# end\n")
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 func (d DefaultProfile) Render(w io.StringWriter) error {
 	for _, row := range d {
-
 		line := ""
 		if row.Comment != "" {
 			line = row.Comment
@@ -115,12 +121,15 @@ func (d DefaultProfile) Render(w io.StringWriter) error {
 			if row.Status == string(Disabled) {
 				prefix = "# "
 			}
+
 			line = fmt.Sprintf("%s%s %s", prefix, row.IP, row.Host)
 		}
+
 		_, err := w.WriteString(line + "\n")
 		if err != nil {
 			return err
 		}
 	}
+
 	return nil
 }

@@ -8,6 +8,7 @@ import (
 func NewProfileFromReader(r io.Reader, uniq bool) (*Profile, error) {
 	p := &Profile{}
 	s := bufio.NewScanner(r)
+
 	for s.Scan() {
 		appendLine(p, string(s.Bytes()))
 
@@ -15,10 +16,12 @@ func NewProfileFromReader(r io.Reader, uniq bool) (*Profile, error) {
 			return nil, err
 		}
 	}
+
 	if uniq {
 		for _, r := range p.Routes {
 			r.HostNames = uniqueStrings(r.HostNames)
 		}
 	}
+
 	return p, nil
 }

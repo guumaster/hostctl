@@ -105,6 +105,7 @@ weight: %d
 `
 	name := filepath.Base(filename)
 	weight := 100
+
 	if name == "hostctl.md" {
 		name = "CLI Usage"
 		weight = 90
@@ -113,6 +114,7 @@ weight: %d
 		name = strings.Replace(name, "hostctl_", "", 1)
 		name = strings.Replace(name, "_", " ", -1)
 	}
+
 	return fmt.Sprintf(fmTemplate, name, weight)
 }
 
@@ -131,5 +133,6 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	genMdDocsCmd.Flags().String("path", cwd, "Path to save the docs files")
 }

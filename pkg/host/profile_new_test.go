@@ -8,7 +8,6 @@ import (
 )
 
 func TestNewProfile(t *testing.T) {
-
 	t.Run("NewProfileFromReader", func(t *testing.T) {
 		r := strings.NewReader(`
 3.3.3.4 some.profile.loc
@@ -20,5 +19,4 @@ func TestNewProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, []string{"some.profile.loc", "first.loc"}, hosts)
 	})
-
 }

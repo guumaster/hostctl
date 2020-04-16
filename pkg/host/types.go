@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/afero"
 )
 
-var banner = `
+const banner = `
 ##################################################################
 # Content under this line is handled by hostctl. DO NOT EDIT.
 ##################################################################`
@@ -55,4 +55,7 @@ const (
 	Enabled ProfileStatus = "on"
 	// Disabled marks a profile not active on your hosts file.
 	Disabled ProfileStatus = "off"
+
+	// Default is the name of the default profile
+	Default = "default"
 )

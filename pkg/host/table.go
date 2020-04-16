@@ -28,14 +28,17 @@ func createTableWriter(opts *ListOptions) *tablewriter.Table {
 		table.SetTablePadding("\t") // pad with tabs
 		table.SetNoWhiteSpace(true)
 	}
+
 	return table
 }
 
 func getRow(line *tableRow, columns []string) []string {
+	row := []string{}
+
 	if line.Comment != "" {
-		return []string{}
+		return row
 	}
-	var row []string
+
 	for _, c := range columns {
 		switch c {
 		case "profile":
@@ -48,5 +51,6 @@ func getRow(line *tableRow, columns []string) []string {
 			row = append(row, line.Host)
 		}
 	}
+
 	return row
 }

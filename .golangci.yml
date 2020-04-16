@@ -1,0 +1,13 @@
+linters:
+  disable:
+    - goimports
+    - gochecknoglobals
+    - gochecknoinits
+    - prealloc
+  enable-all: true
+
+# all available settings of specific linters
+linters-settings:
+  funlen:
+    lines: 120
+    statements: 80

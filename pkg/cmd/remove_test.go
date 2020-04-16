@@ -62,7 +62,7 @@ func Test_Remove(t *testing.T) {
 		cmd.SetArgs([]string{"remove", "unknown", "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
-		assert.EqualError(t, err, host.UnknownProfileError.Error())
+		assert.EqualError(t, err, host.ErrUnknownProfile.Error())
 	})
 
 	t.Run("Remove all", func(t *testing.T) {

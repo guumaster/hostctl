@@ -30,7 +30,7 @@ func Test_Toggle(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 +----------+--------+-----------+------------+
 | PROFILE  | STATUS |    IP     |   DOMAIN   |
 +----------+--------+-----------+------------+
@@ -48,6 +48,6 @@ func Test_Toggle(t *testing.T) {
 		cmd.SetArgs([]string{"toggle", "unknown", "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
-		assert.EqualError(t, err, host.UnknownProfileError.Error())
+		assert.EqualError(t, err, host.ErrUnknownProfile.Error())
 	})
 }

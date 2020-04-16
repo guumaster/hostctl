@@ -4,6 +4,7 @@
 [![License][license-badge]][license-link]
 [![All Contributors][all-contributors-badge]][all-contributors-link]
 [![Coverage][coverage-badge]][coverage-link]
+[![Mentioned in Awesome Go][awesome-go-badge]][awesome-go-link]
 
 # hostctl
 
@@ -116,6 +117,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [coverage-badge]: https://sonarcloud.io/api/project_badges/measure?project=guumaster_hostctl&metric=coverage
 [coverage-link]: https://sonarcloud.io/dashboard?id=guumaster_hostctl
+
+[awesome-go-badge]: https://awesome.re/mentioned-badge.svg
+[awesome-go-link]: https://github.com/avelino/awesome-go
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [all-contributors-badge]: https://img.shields.io/badge/contributors-7-blue.svg

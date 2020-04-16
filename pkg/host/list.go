@@ -15,8 +15,8 @@ var ProfilesOnlyColumns = []string{"profile", "status"}
 // ListOptions contains available options for listing.
 type ListOptions struct {
 	Profiles     []string
-	RawTable     bool
 	Columns      []string
+	RawTable     bool
 	ProfilesOnly bool
 	StatusFilter ProfileStatus
 	Writer       io.Writer
@@ -26,11 +26,13 @@ func includeProfile(needle string, stack []string) bool {
 	if len(stack) == 0 {
 		return true
 	}
+
 	for _, s := range stack {
 		if s == needle {
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -42,6 +44,7 @@ func (f *File) ProfileStatus(opts *ListOptions) {
 
 	for _, name := range f.data.ProfileNames {
 		currProfile := f.data.Profiles[name]
+
 		if !includeProfile(name, opts.Profiles) {
 			continue
 		}
@@ -64,6 +67,7 @@ func (f *File) List(opts *ListOptions) {
 	if added && len(f.data.Profiles) > 0 && !opts.RawTable {
 		table.AddSeparator()
 	}
+
 	for _, name := range f.data.ProfileNames {
 		added := addProfiles(f.data.Profiles[name], table, opts)
 		if added && !opts.RawTable {
@@ -76,13 +80,11 @@ func (f *File) List(opts *ListOptions) {
 
 func addDefault(f *File, table *tablewriter.Table, opts *ListOptions) bool {
 	// First check if default should be shown
-	if !includeProfile("default", opts.Profiles) {
+	if !includeProfile(Default, opts.Profiles) {
 		return false
 	}
 
-	i := 0
 	for _, line := range f.data.DefaultProfile {
-		i++
 		if line.Comment == "" && line.Profile != "" {
 			row := getRow(line, opts.Columns)
 			if len(row) > 0 {
@@ -90,7 +92,8 @@ func addDefault(f *File, table *tablewriter.Table, opts *ListOptions) bool {
 			}
 		}
 	}
-	return i > 0
+
+	return len(f.data.DefaultProfile) > 0
 }
 
 func addProfiles(p *Profile, table *tablewriter.Table, opts *ListOptions) bool {
@@ -111,6 +114,7 @@ func addProfiles(p *Profile, table *tablewriter.Table, opts *ListOptions) bool {
 				IP:      route.IP.String(),
 				Host:    h,
 			}
+
 			row := getRow(line, opts.Columns)
 			if len(row) > 0 {
 				table.Append(row)

@@ -20,5 +20,6 @@ func (f *File) Restore(from string) error {
 	defer dstFile.Close()
 
 	_, err = io.Copy(dstFile, fromFile)
+
 	return err
 }

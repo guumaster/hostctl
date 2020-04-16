@@ -22,14 +22,14 @@ func TestFile_RemoveProfile(t *testing.T) {
 		assert.Equal(t, []string{}, m.GetDisabled())
 
 		_, err = m.GetProfile("profile2")
-		assert.EqualError(t, err, UnknownProfileError.Error())
+		assert.EqualError(t, err, ErrUnknownProfile.Error())
 	})
 
 	t.Run("Remove unknown", func(t *testing.T) {
 		m, err := NewWithFs(f.Name(), mem)
 		assert.NoError(t, err)
 		err = m.RemoveProfile("unknown")
-		assert.EqualError(t, err, UnknownProfileError.Error())
+		assert.EqualError(t, err, ErrUnknownProfile.Error())
 	})
 
 	t.Run("Remove profiles", func(t *testing.T) {
@@ -40,5 +40,4 @@ func TestFile_RemoveProfile(t *testing.T) {
 
 		assert.Equal(t, []string{}, m.GetEnabled())
 	})
-
 }

@@ -51,22 +51,24 @@ func Parse(r io.Reader) (*Content, error) {
 		default:
 			row := parseToDefault(b, currProfile)
 			data.DefaultProfile = append(data.DefaultProfile, row)
-
 		}
 
 		if err := s.Err(); err != nil {
 			return nil, err
 		}
 	}
+
 	return data, nil
 }
 
 func parseToDefault(b []byte, currProfile string) *tableRow {
 	var row *tableRow
+
 	if len(b) == 0 {
 		if currProfile == "" {
 			row = &tableRow{Comment: ""}
 		}
+
 		return row
 	}
 
@@ -81,12 +83,13 @@ func parseToDefault(b []byte, currProfile string) *tableRow {
 			status = Disabled
 		}
 		row = &tableRow{
-			Profile: "default",
+			Profile: Default,
 			Status:  string(status),
 			IP:      line.IP.String(),
 			Host:    line.HostNames[0],
 		}
 	}
+
 	return row
 }
 
@@ -100,6 +103,7 @@ func parseProfileHeader(b []byte) (*Profile, error) {
 	if string(rs[1]) == string(Disabled) {
 		status = Disabled
 	}
+
 	return &Profile{
 		Name:   strings.TrimSpace(string(rs[2])),
 		Status: status,
@@ -110,42 +114,53 @@ func appendLine(p *Profile, line string) *Profile {
 	if line == "" {
 		return p
 	}
+
 	route, ok := parseLine(line)
 	if !ok {
 		return p
 	}
+
 	ip := route.IP.String()
 	p.appendIP(ip)
-	if p.Routes == nil {
+
+	switch {
+	case p.Routes == nil:
 		p.Routes = map[string]*Route{}
 		p.Routes[ip] = route
-	} else if p.Routes[ip] == nil {
+	case p.Routes[ip] == nil:
 		p.Routes[ip] = route
-	} else {
+	default:
 		p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, route.HostNames...)
 	}
+
 	return p
 }
 
 func uniqueStrings(xs []string) []string {
-	keys := make(map[string]bool)
 	var list []string
+
+	keys := make(map[string]bool)
+
 	for _, entry := range xs {
 		if _, value := keys[entry]; !value {
 			keys[entry] = true
+
 			list = append(list, entry)
 		}
 	}
+
 	return list
 }
 
 // parseLine checks if a line is a host line or a comment line.
 func parseLine(str string) (*Route, bool) {
 	p := strings.Split(cleanLine(str), " ")
+
 	i := 0
 	if p[0] == "#" && len(p) > 1 {
 		i = 1
 	}
+
 	ip := net.ParseIP(p[i])
 
 	if ip == nil {
@@ -159,5 +174,6 @@ func cleanLine(line string) string {
 	clean := spaceRemover.ReplaceAllString(line, " ")
 	clean = tabReplacer.ReplaceAllString(clean, " ")
 	clean = strings.TrimSpace(clean)
+
 	return clean
 }

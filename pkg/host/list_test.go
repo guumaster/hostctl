@@ -20,7 +20,7 @@ func TestFile_List(t *testing.T) {
 	t.Run("Table", func(t *testing.T) {
 		out := bytes.NewBufferString("\n")
 		m.List(&ListOptions{Writer: out})
-		expected := `
+		const expected = `
 +----------+--------+-----------+------------+
 | PROFILE  | STATUS |    IP     |   DOMAIN   |
 +----------+--------+-----------+------------+
@@ -39,7 +39,7 @@ func TestFile_List(t *testing.T) {
 	t.Run("Table Column order", func(t *testing.T) {
 		out := bytes.NewBufferString("\n")
 		m.List(&ListOptions{Writer: out, Columns: []string{"domain", "ip", "status"}})
-		expected := `
+		const expected = `
 +------------+-----------+--------+
 | DOMAIN     | IP        | STATUS |
 +------------+-----------+--------+
@@ -59,7 +59,7 @@ func TestFile_List(t *testing.T) {
 		out := bytes.NewBufferString("\n")
 		m.List(&ListOptions{Writer: out, RawTable: true})
 
-		expected := `
+		const expected = `
 PROFILE 	STATUS	IP       	DOMAIN
 default 	on    	127.0.0.1	localhost
 profile1	on    	127.0.0.1	first.loc
@@ -74,13 +74,14 @@ profile2	off   	127.0.0.1	second.loc
 		out := bytes.NewBufferString("\n")
 		m.List(&ListOptions{Writer: out, Profiles: []string{"profile1"}, RawTable: true})
 
-		expected := `
+		const expected = `
 PROFILE 	STATUS	IP       	DOMAIN
 profile1	on    	127.0.0.1	first.loc
 profile1	on    	127.0.0.1	second.loc
 `
 		assertListOutput(t, out.String(), expected)
 	})
+
 	t.Run("Table Raw Filtered", func(t *testing.T) {
 		out := bytes.NewBufferString("\n")
 		m.List(&ListOptions{
@@ -90,7 +91,7 @@ profile1	on    	127.0.0.1	second.loc
 			RawTable: true,
 		})
 
-		expected := `
+		const expected = `
 IP       	DOMAIN
 127.0.0.1	first.loc
 127.0.0.1	second.loc
@@ -102,7 +103,7 @@ IP       	DOMAIN
 		out := bytes.NewBufferString("\n")
 		m.ProfileStatus(&ListOptions{Writer: out})
 
-		expected := `
+		const expected = `
 +----------+--------+
 | PROFILE  | STATUS |
 +----------+--------+
@@ -117,7 +118,7 @@ IP       	DOMAIN
 		out := bytes.NewBufferString("\n")
 		m.ProfileStatus(&ListOptions{Writer: out, RawTable: true})
 
-		expected := `
+		const expected = `
 PROFILE 	STATUS
 profile1	on
 profile2	off
@@ -128,6 +129,7 @@ profile2	off
 
 func assertListOutput(t *testing.T, actual, expected string) {
 	t.Helper()
+
 	compact := regexp.MustCompile(`[ \t]+`)
 	got := compact.ReplaceAllString(actual, "")
 	want := compact.ReplaceAllString(expected, "")

@@ -28,7 +28,7 @@ func Test_List(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		assert.Contains(t, actual, `
 +----------+--------+-----------+------------+
 | PROFILE  | STATUS |    IP     |   DOMAIN   |
 +----------+--------+-----------+------------+
@@ -40,10 +40,11 @@ func Test_List(t *testing.T) {
 | profile2 | off    | 127.0.0.1 | first.loc  |
 | profile2 | off    | 127.0.0.1 | second.loc |
 +----------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
+`)
 	})
-	for _, filter := range []string{"enabled", "disabled"} {
+
+	for _, f := range []string{"enabled", "disabled"} {
+		filter := f
 		t.Run("List "+filter, func(t *testing.T) {
 			b := bytes.NewBufferString("")
 
@@ -83,6 +84,5 @@ func Test_List(t *testing.T) {
 			}
 			assert.Contains(t, actual, expected)
 		})
-
 	}
 }
