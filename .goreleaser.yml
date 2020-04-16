@@ -61,8 +61,6 @@ release:
   github:
     owner: guumaster
     name: hostctl
-  ids:
-    - hostctl
 
 nfpms:
   - id: hostctl
