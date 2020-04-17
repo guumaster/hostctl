@@ -13,6 +13,11 @@ import (
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
+type composeInfo struct {
+	ProjectName string
+	File        string
+}
+
 // syncDockerComposeCmd represents the sync docker command
 var syncDockerComposeCmd = &cobra.Command{
 	Use:   "docker-compose [profile] [flags]",
@@ -24,7 +29,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		profile, _ := cmd.Flags().GetString("profile")
 
 		if profile == "default" {
-			return host.DefaultProfileError
+			return host.ErrDefaultProfileError
 		}
 		return nil
 	},
@@ -51,7 +56,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		profile := profiles[0]
 
 		if profile == "" && compose.ProjectName == "" {
-			return host.MissingProfileError
+			return host.ErrMissingProfile
 		}
 
 		if profile == "" {
@@ -98,12 +103,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 	},
 }
 
-type ComposeInfo struct {
-	ProjectName string
-	File        string
-}
-
-func getComposeInfo(cmd *cobra.Command) (*ComposeInfo, error) {
+func getComposeInfo(cmd *cobra.Command) (*composeInfo, error) {
 	name, _ := cmd.Flags().GetString("project-name")
 	f, _ := cmd.Flags().GetString("compose-file")
 
@@ -122,7 +122,8 @@ func getComposeInfo(cmd *cobra.Command) (*ComposeInfo, error) {
 		name = strings.ToLower(name)
 		name = reg.ReplaceAllString(name, "")
 	}
-	return &ComposeInfo{
+
+	return &composeInfo{
 		ProjectName: name,
 		File:        f,
 	}, nil

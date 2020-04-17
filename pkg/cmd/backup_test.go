@@ -27,7 +27,7 @@ func Test_Backup(t *testing.T) {
 	assert.NoError(t, err)
 
 	actual := "\n" + string(out)
-	expected := `
+	assert.Contains(t, actual, `
 +----------+--------+-----------+------------+
 | PROFILE  | STATUS |    IP     |   DOMAIN   |
 +----------+--------+-----------+------------+
@@ -39,6 +39,5 @@ func Test_Backup(t *testing.T) {
 | profile2 | off    | 127.0.0.1 | first.loc  |
 | profile2 | off    | 127.0.0.1 | second.loc |
 +----------+--------+-----------+------------+
-`
-	assert.Contains(t, actual, expected)
+`)
 }

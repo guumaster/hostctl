@@ -62,10 +62,10 @@ func TestFile_ReplaceProfile(t *testing.T) {
 
 		p, err := NewProfileFromReader(r, true)
 		assert.NoError(t, err)
-		p.Name = "default"
+		p.Name = Default
 		p.Status = Enabled
 
 		err = m.ReplaceProfile(*p)
-		assert.EqualError(t, err, DefaultProfileError.Error())
+		assert.EqualError(t, err, ErrDefaultProfileError.Error())
 	})
 }

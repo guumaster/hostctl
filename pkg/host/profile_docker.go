@@ -21,14 +21,16 @@ type DockerOptions struct {
 	Cli         *client.Client
 }
 
-func NewProfileFromDocker(ctx context.Context, opts *DockerOptions) (*Profile, error) {
-	cli := opts.Cli
+func containerList(ctx context.Context, opts *DockerOptions) ([]types.Container, error) {
 	var err error
+
+	cli := opts.Cli
 	if opts.Cli == nil {
 		cli, err = client.NewEnvClient()
 		if err != nil {
 			return nil, err
 		}
+
 		opts.Cli = cli
 	}
 	defer cli.Close()
@@ -40,8 +42,19 @@ func NewProfileFromDocker(ctx context.Context, opts *DockerOptions) (*Profile, e
 	if err != nil {
 		return nil, err
 	}
+
 	if networkID != "" {
 		f.Add("network", networkID)
+	}
+
+	return cli.ContainerList(ctx, types.ContainerListOptions{Filters: f})
+}
+
+// NewProfileFromDocker creates a new profile from docker info
+func NewProfileFromDocker(ctx context.Context, opts *DockerOptions) (*Profile, error) {
+	containers, err := containerList(ctx, opts)
+	if err != nil {
+		return nil, err
 	}
 
 	var composeServices []string
@@ -52,27 +65,36 @@ func NewProfileFromDocker(ctx context.Context, opts *DockerOptions) (*Profile, e
 		}
 	}
 
-	list, err := cli.ContainerList(ctx, types.ContainerListOptions{
-		Filters: f,
-	})
-	if err != nil {
-		return nil, err
-	}
-
 	profile := &Profile{
 		Routes: map[string]*Route{},
 	}
 
-	for _, c := range list {
+	return addToProfile(ctx, profile, containers, composeServices, opts)
+}
+
+func addToProfile(
+	ctx context.Context,
+	profile *Profile,
+	containers []types.Container,
+	composeServices []string,
+	opts *DockerOptions) (*Profile, error) {
+	networkID, err := getNetworkID(ctx, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, c := range containers {
 		for _, n := range c.NetworkSettings.Networks {
 			if networkID != "" && n.NetworkID != networkID {
 				continue
 			}
+
 			name := strings.Replace(c.Names[0], "/", "", -1)
 
 			if len(composeServices) == 0 {
 				name := fmt.Sprintf("%s.%s", name, opts.Domain)
 				profile.AddRoute(n.IPAddress, name)
+
 				continue
 			}
 
@@ -81,16 +103,20 @@ func NewProfileFromDocker(ctx context.Context, opts *DockerOptions) (*Profile, e
 				if err != nil {
 					return nil, err
 				}
+
 				if match {
 					name = fmt.Sprintf("%s.%s", name, opts.Domain)
 					if !opts.KeepPrefix {
 						name = strings.Replace(name, opts.ProjectName+"_", "", 1)
 					}
+
 					name := fmt.Sprintf("%s.%s", name, opts.Domain)
+
 					profile.AddRoute(n.IPAddress, name)
 				}
 			}
 		}
 	}
+
 	return profile, nil
 }

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// BackupFile creates a copy of your hosts file to a new location with the date as extension
+// Backup creates a copy of your hosts file to a new location with the date as extension
 func (f *File) Backup(dst string) (string, error) {
 	_, _ = f.src.Seek(0, io.SeekStart)
 	bkpFilename := fmt.Sprintf("%s.%s", f.src.Name(), time.Now().UTC().Format("20060102"))
@@ -20,5 +20,6 @@ func (f *File) Backup(dst string) (string, error) {
 	defer b.Close()
 
 	_, err = io.Copy(b, f.src)
+
 	return bkpFilename, err
 }

@@ -50,5 +50,6 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	backupCmd.Flags().String("path", cwd, "A path to save the backup")
 }

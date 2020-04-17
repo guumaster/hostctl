@@ -27,7 +27,7 @@ func Test_AddDomains(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 +----------+--------+-----------+----------------+
 | PROFILE  | STATUS |    IP     |     DOMAIN     |
 +----------+--------+-----------+----------------+
@@ -54,7 +54,7 @@ func Test_AddDomains(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 +------------+--------+-----------+----------------+
 |  PROFILE   | STATUS |    IP     |     DOMAIN     |
 +------------+--------+-----------+----------------+
@@ -79,7 +79,7 @@ func Test_AddDomains(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 +----------+--------+-----------+-----------------+
 | PROFILE  | STATUS |    IP     |     DOMAIN      |
 +----------+--------+-----------+-----------------+
@@ -90,5 +90,4 @@ func Test_AddDomains(t *testing.T) {
 `
 		assert.Contains(t, actual, expected)
 	})
-
 }

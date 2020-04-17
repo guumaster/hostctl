@@ -24,6 +24,6 @@ func TestFile_Toggle(t *testing.T) {
 
 	t.Run("Toggle error", func(t *testing.T) {
 		err = m.Toggle([]string{"unknown"})
-		assert.EqualError(t, err, UnknownProfileError.Error())
+		assert.EqualError(t, err, ErrUnknownProfile.Error())
 	})
 }

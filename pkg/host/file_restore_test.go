@@ -22,5 +22,4 @@ func TestFile_Restore(t *testing.T) {
 
 	err = h.Restore(backup.Name())
 	assert.NoError(t, err)
-
 }

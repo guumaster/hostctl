@@ -4,20 +4,26 @@ import (
 	"errors"
 )
 
-// MissingProfileError when the profile is mandatory
-var MissingProfileError = errors.New("missing profile name")
+var (
+	// ErrMissingProfile when the profile is mandatory
+	ErrMissingProfile = errors.New("missing profile name")
 
-// UnknownProfileError when the profile is not present
-var UnknownProfileError = errors.New("unknown profile name")
+	// ErrUnknownProfile when the profile is not present
+	ErrUnknownProfile = errors.New("unknown profile name")
 
-// DefaultProfileError when trying to edit default content
-var DefaultProfileError = errors.New("'default' profile should not be handled by hostctl")
+	// ErrDefaultProfileError when trying to edit default content
+	ErrDefaultProfileError = errors.New("'default' profile should not be handled by hostctl")
 
-// MissingDomainsError when trying to set/add domains and none were given
-var MissingDomainsError = errors.New("no domains provided")
+	// ErrMissingDomainsError when trying to set/add domains and none were given
+	ErrMissingDomainsError = errors.New("no domains provided")
 
-// MissingSourceError when trying to write to a file
-var MissingDestError = errors.New("missing destination file")
+	// ErrMissingDestError when trying to write to a file
+	ErrMissingDestError = errors.New("missing destination file")
 
-// MissingSourceError when trying to read from a file
-var MissingSourceError = errors.New("missing source file")
+	// ErrMissingSourceError when trying to read from a file
+	ErrMissingSourceError = errors.New("missing source file")
+
+	// ErrSnapConfinement when trying to read files on snap installation
+	ErrSnapConfinement = errors.New("can't use --from or --host-file. " +
+		"Snap confinement restrictions doesn't allow to read other than /etc/hosts file")
+)

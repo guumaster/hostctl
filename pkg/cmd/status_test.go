@@ -28,7 +28,7 @@ func Test_Status(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		expected := `
+		const expected = `
 +----------+--------+
 | PROFILE  | STATUS |
 +----------+--------+

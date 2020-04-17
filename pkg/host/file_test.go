@@ -9,8 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestManager(t *testing.T) {
-
+func TestManagerStatus(t *testing.T) {
 	t.Run("Get Status", func(t *testing.T) {
 		mem := createBasicFS(t)
 
@@ -35,7 +34,8 @@ func TestManager(t *testing.T) {
 			assert.Equal(t, expected, actual)
 		})
 	})
-
+}
+func TestManagerRoutes(t *testing.T) {
 	t.Run("AddRoutes", func(t *testing.T) {
 		mem := createBasicFS(t)
 
@@ -126,7 +126,9 @@ func TestManager(t *testing.T) {
 		assert.Contains(t, string(c), testEnabledProfile)
 		assert.NotContains(t, string(c), testDisabledProfile)
 	})
+}
 
+func TestManagerWrite(t *testing.T) {
 	t.Run("WriteToFile", func(t *testing.T) {
 		mem := createBasicFS(t)
 

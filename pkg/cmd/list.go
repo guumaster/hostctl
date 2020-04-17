@@ -43,7 +43,6 @@ func init() {
 
 	listCmd.AddCommand(makeListStatusCmd(host.Enabled))
 	listCmd.AddCommand(makeListStatusCmd(host.Disabled))
-
 }
 
 // makeListStatusCmd represents the list enabled command

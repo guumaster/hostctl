@@ -6,6 +6,8 @@ import (
 	"runtime"
 
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/hostctl/pkg/host"
 )
 
 var (
@@ -90,8 +92,10 @@ func checkSnapRestrictions(cmd *cobra.Command, _ []string) error {
 	if snapBuild != "yes" {
 		return nil
 	}
+
 	if from != "" || src != defaultSrc {
-		return fmt.Errorf("can't use --from or --host-file. Snap confinement restristrions doesn't allow to read other than /etc/hosts file")
+		return host.ErrSnapConfinement
 	}
+
 	return nil
 }

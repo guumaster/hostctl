@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const longWaitTime = 999999
+
 var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Command, list bool) error {
 	quiet, _ := cmd.Flags().GetBool("quiet")
 	duration, _ := cmd.Flags().GetDuration("wait")
@@ -69,7 +71,7 @@ func waitSignalOrDuration(d time.Duration) <-chan struct{} {
 
 	if d == 0 {
 		// NOTE: It's large enough, practically it will never timeout.
-		d = 999999 * time.Hour
+		d = longWaitTime * time.Hour
 	}
 
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
