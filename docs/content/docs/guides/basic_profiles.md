@@ -7,7 +7,7 @@ weight: 10
 ## Adding a profile
 
 {{<info>}}
-**Add or Set**: For all this examples it's possible to replace `add` with `set` and 
+**Add or Replace**: For all this examples it's possible to replace `add` with `replace` and 
 it will replace all previous content of the chosen profile with the new one.
 {{</info>}}
 
@@ -24,7 +24,7 @@ For example, if you have this routing file on any of your projects:
 
 Command:
 
-`hostctl set awesome --from /path/to/some/project/.etchosts `
+`hostctl replace awesome --from /path/to/some/project/.etchosts `
 
 Output:
 ```
