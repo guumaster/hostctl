@@ -10,7 +10,7 @@ import (
 )
 
 func Test_Restore(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	from := makeTempHostsFile(t, "restoreFrom")
 	defer os.Remove(from.Name())

@@ -12,7 +12,7 @@ import (
 )
 
 func Test_Remove(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	t.Run("Remove", func(t *testing.T) {
 		tmp := makeTempHostsFile(t, "addCmd")

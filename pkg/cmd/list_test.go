@@ -10,7 +10,7 @@ import (
 )
 
 func Test_List(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	tmp := makeTempHostsFile(t, "listCmd")
 	defer os.Remove(tmp.Name())

@@ -68,12 +68,12 @@ func (p *Profile) RemoveRoutes(hostnames []string) {
 func (p *Profile) GetHostNames(ip string) ([]string, error) {
 	key := net.ParseIP(ip)
 	if key == nil {
-		return nil, fmt.Errorf("invalid ip '%s'", ip)
+		return nil, fmt.Errorf("%w '%s'", ErrInvalidIP, ip)
 	}
 
 	hosts, ok := p.Routes[key.String()]
 	if !ok {
-		return nil, fmt.Errorf("ip '%s' not present in profile '%s' ", key, p.Name)
+		return nil, fmt.Errorf("%w: %s[%s] ", ErrNotPresentIP, key, p.Name)
 	}
 
 	return hosts.HostNames, nil

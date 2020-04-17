@@ -11,10 +11,10 @@ import (
 )
 
 func Test_Add(t *testing.T) {
-	cmd := rootCmd
-
 	tmp := makeTempHostsFile(t, "addCmd")
 	defer os.Remove(tmp.Name())
+
+	cmd := NewRootCmd()
 
 	t.Run("Add from file", func(t *testing.T) {
 		b := bytes.NewBufferString("")
@@ -63,7 +63,7 @@ func Test_Add(t *testing.T) {
 }
 
 func Test_ReplaceStdin(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	tmp := makeTempHostsFile(t, "replaceStdinCmd")
 	defer os.Remove(tmp.Name())
@@ -93,7 +93,7 @@ func Test_ReplaceStdin(t *testing.T) {
 }
 
 func Test_ReplaceFile(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	in := strings.NewReader(`
 5.5.5.5 replaced.loc

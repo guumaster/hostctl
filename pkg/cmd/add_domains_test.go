@@ -10,7 +10,7 @@ import (
 )
 
 func Test_AddDomains(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	t.Run("Add domains", func(t *testing.T) {
 		tmp := makeTempHostsFile(t, "addDomainCmd")

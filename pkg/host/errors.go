@@ -14,14 +14,20 @@ var (
 	// ErrDefaultProfileError when trying to edit default content
 	ErrDefaultProfileError = errors.New("'default' profile should not be handled by hostctl")
 
-	// ErrMissingDomainsError when trying to set/add domains and none were given
-	ErrMissingDomainsError = errors.New("no domains provided")
+	// ErrNoContent when data to write is empty
+	ErrNoContent = errors.New("no content to write")
 
-	// ErrMissingDestError when trying to write to a file
-	ErrMissingDestError = errors.New("missing destination file")
+	// ErrNotPresentIP when looking for an IP not contained in profile
+	ErrNotPresentIP = errors.New("ip not present")
 
-	// ErrMissingSourceError when trying to read from a file
-	ErrMissingSourceError = errors.New("missing source file")
+	// ErrUnknownNetworkID when you pass an invalid network ID to sync docker
+	ErrUnknownNetworkID = errors.New("unknown network ID")
+
+	// ErrInvalidIP when the IP is malformed
+	ErrInvalidIP = errors.New("invalid ip")
+
+	// ErrInvalidProfileHeader when the profile header is invalid
+	ErrInvalidProfileHeader = errors.New("invalid format for profile header")
 
 	// ErrSnapConfinement when trying to read files on snap installation
 	ErrSnapConfinement = errors.New("can't use --from or --host-file. " +

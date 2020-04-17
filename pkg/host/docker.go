@@ -72,7 +72,7 @@ func getNetworkID(ctx context.Context, opts *DockerOptions) (string, error) {
 	}
 
 	if networkID == "" {
-		return "", fmt.Errorf("unknown network name or ID: '%s'", opts.Network)
+		return "", fmt.Errorf("%w: '%s'", ErrUnknownNetworkID, opts.Network)
 	}
 
 	return networkID, nil

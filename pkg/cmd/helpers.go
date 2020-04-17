@@ -1,17 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/host"
 )
-
-func postRunListOnly(cmd *cobra.Command, args []string) error {
-	return postActionCmd(cmd, args, nil, true)
-}
 
 func commonCheckProfileOnly(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
@@ -28,7 +24,7 @@ func commonCheckProfileOnly(cmd *cobra.Command, args []string) error {
 func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
 	all, _ := cmd.Flags().GetBool("all")
 	if all && len(args) > 0 {
-		return fmt.Errorf("args must be empty with --all flag")
+		return ErrIncompatibleAllFlag
 	}
 
 	if !all && len(args) == 0 {
@@ -42,11 +38,11 @@ func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func commonCheckArgs(cmd *cobra.Command, args []string) error {
+func commonCheckArgs(_ *cobra.Command, args []string) error {
 	if len(args) == 0 {
 		return host.ErrMissingProfile
 	} else if len(args) > 1 {
-		return fmt.Errorf("specify only one profile")
+		return ErrMultipleProfiles
 	}
 
 	if err := containsDefault(args); err != nil {
@@ -73,6 +69,41 @@ func containsDefault(args []string) error {
 		if p == "default" {
 			return host.ErrDefaultProfileError
 		}
+	}
+
+	return nil
+}
+
+func getDefaultHostFile(snapBuild bool) string {
+	// Snap confinement doesn't allow to read other than
+	if runtime.GOOS == "linux" && snapBuild {
+		return "/etc/hosts"
+	}
+
+	envHostFile := os.Getenv("HOSTCTL_FILE")
+	if envHostFile != "" {
+		return envHostFile
+	}
+
+	if runtime.GOOS == "windows" {
+		return `C:/Windows/System32/Drivers/etc/hosts`
+	}
+
+	return "/etc/hosts"
+}
+
+func checkSnapRestrictions(cmd *cobra.Command, isSnap bool) error {
+	from, _ := cmd.Flags().GetString("from")
+	src, _ := cmd.Flags().GetString("host-file")
+
+	defaultSrc := getDefaultHostFile(isSnap)
+
+	if !isSnap {
+		return nil
+	}
+
+	if from != "" || src != defaultSrc {
+		return host.ErrSnapConfinement
 	}
 
 	return nil

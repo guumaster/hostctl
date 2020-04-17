@@ -2,7 +2,6 @@ package host
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"net"
 	"regexp"
@@ -96,7 +95,7 @@ func parseToDefault(b []byte, currProfile string) *tableRow {
 func parseProfileHeader(b []byte) (*Profile, error) {
 	rs := profileNameRe.FindSubmatch(b)
 	if len(rs) != 3 || string(rs[2]) == "" {
-		return nil, fmt.Errorf("invalid format for profile header")
+		return nil, ErrInvalidProfileHeader
 	}
 
 	status := Enabled

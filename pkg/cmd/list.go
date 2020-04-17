@@ -8,44 +8,42 @@ import (
 	"github.com/guumaster/hostctl/pkg/host"
 )
 
-// listCmd represents the list command
-var listCmd = &cobra.Command{
-	Use:   "list [profiles] [flags]",
-	Short: "Shows a detailed list of profiles on your hosts file.",
-	Long: `
+func newListCmd() *cobra.Command {
+	listCmd := &cobra.Command{
+		Use:   "list [profiles] [flags]",
+		Short: "Shows a detailed list of profiles on your hosts file.",
+		Long: `
 Shows a detailed list of profiles on your hosts file with name, ip and host name.
 You can filter by profile name.
 
 The "default" profile is all the content that is not handled by hostctl tool.
 `,
-	RunE: func(cmd *cobra.Command, profiles []string) error {
-		src, _ := cmd.Flags().GetString("host-file")
-		raw, _ := cmd.Flags().GetBool("raw")
-		cols, _ := cmd.Flags().GetStringSlice("column")
+		RunE: func(cmd *cobra.Command, profiles []string) error {
+			src, _ := cmd.Flags().GetString("host-file")
+			raw, _ := cmd.Flags().GetBool("raw")
+			cols, _ := cmd.Flags().GetStringSlice("column")
 
-		h, err := host.NewFile(src)
-		if err != nil {
-			return err
-		}
+			h, err := host.NewFile(src)
+			if err != nil {
+				return err
+			}
 
-		h.List(&host.ListOptions{
-			Writer:   cmd.OutOrStdout(),
-			Profiles: profiles,
-			RawTable: raw,
-			Columns:  cols,
-		})
-		return nil
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(listCmd)
+			h.List(&host.ListOptions{
+				Writer:   cmd.OutOrStdout(),
+				Profiles: profiles,
+				RawTable: raw,
+				Columns:  cols,
+			})
+			return nil
+		},
+	}
 
 	listCmd.AddCommand(makeListStatusCmd(host.Enabled))
 	listCmd.AddCommand(makeListStatusCmd(host.Disabled))
+
+	return listCmd
 }
 
-// makeListStatusCmd represents the list enabled command
 var makeListStatusCmd = func(status host.ProfileStatus) *cobra.Command {
 	cmd := ""
 	alias := ""

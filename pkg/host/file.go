@@ -168,7 +168,7 @@ func (f *File) writeToFile(dst afero.File) error {
 	defer f.mutex.Unlock()
 
 	if f.data == nil {
-		return fmt.Errorf("no content to write")
+		return ErrNoContent
 	}
 
 	err := dst.Truncate(0)

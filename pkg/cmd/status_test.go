@@ -10,7 +10,7 @@ import (
 )
 
 func Test_Status(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	tmp := makeTempHostsFile(t, "statusCmd")
 	defer os.Remove(tmp.Name())

@@ -10,7 +10,7 @@ import (
 )
 
 func Test_RemoveDomains(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	t.Run("Remove domains", func(t *testing.T) {
 		tmp := makeTempHostsFile(t, "removeDomainCmd")

@@ -10,7 +10,7 @@ import (
 )
 
 func Test_Backup(t *testing.T) {
-	cmd := rootCmd
+	cmd := NewRootCmd()
 
 	tmp := makeTempHostsFile(t, "backupCmd")
 	defer os.Remove(tmp.Name())
