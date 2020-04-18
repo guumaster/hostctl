@@ -1,17 +1,23 @@
 package cmd
 
 import (
+	"bytes"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
 	"runtime"
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/errors"
+	"github.com/guumaster/hostctl/pkg/host/render"
 )
 
 func commonCheckProfileOnly(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return host.ErrMissingProfile
+		return errors.ErrMissingProfile
 	}
 
 	if err := containsDefault(args); err != nil {
@@ -28,7 +34,7 @@ func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
 	}
 
 	if !all && len(args) == 0 {
-		return host.ErrMissingProfile
+		return errors.ErrMissingProfile
 	}
 
 	if err := containsDefault(args); err != nil {
@@ -40,7 +46,7 @@ func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
 
 func commonCheckArgs(_ *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return host.ErrMissingProfile
+		return errors.ErrMissingProfile
 	} else if len(args) > 1 {
 		return ErrMultipleProfiles
 	}
@@ -67,7 +73,7 @@ func isPiped() bool {
 func containsDefault(args []string) error {
 	for _, p := range args {
 		if p == "default" {
-			return host.ErrDefaultProfileError
+			return errors.ErrDefaultProfileError
 		}
 	}
 
@@ -102,9 +108,71 @@ func checkSnapRestrictions(cmd *cobra.Command, isSnap bool) error {
 		return nil
 	}
 
-	if from != "" || src != defaultSrc {
-		return host.ErrSnapConfinement
+	if from != "" || src != defaultSrc && !isValidURL(from) {
+		return errors.ErrSnapConfinement
 	}
 
 	return nil
+}
+
+// isValidURL tests a string to determine if it is a well-structured url or not.
+func isValidURL(s string) bool {
+	_, err := url.ParseRequestURI(s)
+	if err != nil {
+		return false
+	}
+
+	u, err := url.Parse(s)
+	if err != nil || u.Scheme == "" || u.Host == "" {
+		return false
+	}
+
+	return true
+}
+
+func readerFromURL(url string) (io.Reader, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	b, err := ioutil.ReadAll(resp.Body)
+
+	return bytes.NewReader(b), err
+}
+
+func getRenderer(cmd *cobra.Command, opts *render.TableRendererOptions) render.Renderer {
+	raw, _ := cmd.Flags().GetBool("raw")
+	out, _ := cmd.Flags().GetString("out")
+	cols, _ := cmd.Flags().GetStringSlice("column")
+
+	if opts == nil {
+		opts = &render.TableRendererOptions{}
+	}
+
+	if len(opts.Columns) == 0 {
+		opts.Columns = cols
+	}
+
+	if opts.Writer == nil {
+		opts.Writer = cmd.OutOrStdout()
+	}
+
+	switch {
+	case raw || out == "raw":
+		return render.NewRawRenderer(opts)
+
+	case out == "md" || out == "markdown":
+		return render.NewMarkdownRenderer(opts)
+
+	case out == "json":
+		return render.NewJSONRenderer(&render.JSONRendererOptions{
+			Writer:  cmd.OutOrStdout(),
+			Columns: cols,
+		})
+
+	default:
+		return render.NewTableRenderer(opts)
+	}
 }

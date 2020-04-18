@@ -5,7 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/docker"
+	"github.com/guumaster/hostctl/pkg/host/file"
+	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 func newSyncDockerCmd(removeCmd *cobra.Command) *cobra.Command {
@@ -23,7 +25,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 
 			ctx := context.Background()
 
-			p, err := host.NewProfileFromDocker(ctx, &host.DockerOptions{
+			p, err := docker.NewProfileFromDocker(ctx, &docker.Options{
 				Domain:  domain,
 				Network: network,
 				Cli:     nil,
@@ -32,15 +34,15 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 				return err
 			}
 
-			h, err := host.NewFile(src)
+			h, err := file.NewFile(src)
 			if err != nil {
 				return err
 			}
 
 			p.Name = profiles[0]
-			p.Status = host.Enabled
+			p.Status = types.Enabled
 
-			err = h.AddProfile(*p)
+			err = h.AddProfile(p)
 			if err != nil {
 				return err
 			}

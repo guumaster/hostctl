@@ -3,32 +3,10 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/file"
 )
 
-type enableDisableFn func(h *host.File, profiles []string, only, all bool) error
-
-var enableActionFn = func(h *host.File, profiles []string, only, all bool) error {
-	switch {
-	case only:
-		return h.EnableOnly(profiles)
-	case all:
-		return h.EnableAll()
-	default:
-		return h.Enable(profiles)
-	}
-}
-
-var disableActionFn = func(h *host.File, profiles []string, only, all bool) error {
-	switch {
-	case only:
-		return h.DisableOnly(profiles)
-	case all:
-		return h.DisableAll()
-	default:
-		return h.Disable(profiles)
-	}
-}
+type enableDisableFn func(h *file.File, profiles []string, only, all bool) error
 
 func newEnableDisableCmd() (*cobra.Command, *cobra.Command) {
 	enableCmd := &cobra.Command{
@@ -39,7 +17,16 @@ Enables an existing profile.
 It will be listed as "on" while it is enabled.
 `,
 		Args: commonCheckArgsWithAll,
-		RunE: makeEnableDisable(enableActionFn),
+		RunE: makeEnableDisable(func(h *file.File, profiles []string, only, all bool) error {
+			switch {
+			case only:
+				return h.EnableOnly(profiles)
+			case all:
+				return h.EnableAll()
+			default:
+				return h.Enable(profiles)
+			}
+		}),
 	}
 
 	disableCmd := &cobra.Command{
@@ -50,7 +37,16 @@ Disable a profile from your hosts file without removing it.
 It will be listed as "off" while it is disabled.
 `,
 		Args: commonCheckArgsWithAll,
-		RunE: makeEnableDisable(disableActionFn),
+		RunE: makeEnableDisable(func(h *file.File, profiles []string, only, all bool) error {
+			switch {
+			case only:
+				return h.DisableOnly(profiles)
+			case all:
+				return h.DisableAll()
+			default:
+				return h.Disable(profiles)
+			}
+		}),
 	}
 
 	enableCmd.PostRunE = func(cmd *cobra.Command, args []string) error {
@@ -70,7 +66,7 @@ func makeEnableDisable(actionFn enableDisableFn) func(cmd *cobra.Command, profil
 		only, _ := cmd.Flags().GetBool("only")
 		all, _ := cmd.Flags().GetBool("all")
 
-		h, err := host.NewFile(src)
+		h, err := file.NewFile(src)
 		if err != nil {
 			return err
 		}

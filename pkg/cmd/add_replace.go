@@ -6,10 +6,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/file"
+	"github.com/guumaster/hostctl/pkg/host/profile"
+	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
-type addRemoveFn func(h *host.File, p *host.Profile) error
+type addRemoveFn func(h *file.File, p *types.Profile) error
 
 func newAddRemoveCmd() (*cobra.Command, *cobra.Command) {
 	addCmd := newAddCmd()
@@ -30,8 +32,8 @@ func newAddCmd() *cobra.Command {
 Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be added to it.`,
 		Args: commonCheckArgs,
-		RunE: makeAddReplace(func(h *host.File, p *host.Profile) error {
-			return h.AddProfile(*p)
+		RunE: makeAddReplace(func(h *file.File, p *types.Profile) error {
+			return h.AddProfile(p)
 		}),
 	}
 }
@@ -45,8 +47,8 @@ Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be overwritten.
 `,
 		Args: commonCheckArgs,
-		RunE: makeAddReplace(func(h *host.File, p *host.Profile) error {
-			return h.ReplaceProfile(*p)
+		RunE: makeAddReplace(func(h *file.File, p *types.Profile) error {
+			return h.ReplaceProfile(p)
 		}),
 		PostRunE: postRunListOnly,
 	}
@@ -54,37 +56,23 @@ If the profile already exists it will be overwritten.
 
 func makeAddReplace(actionFn addRemoveFn) func(cmd *cobra.Command, profiles []string) error {
 	return func(cmd *cobra.Command, profiles []string) error {
-		var (
-			r   io.Reader
-			err error
-		)
-
 		src, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
 		uniq, _ := cmd.Flags().GetBool("uniq")
 		in := cmd.InOrStdin()
 
-		if isPiped() || in != os.Stdin {
-			r = in
-		} else {
-			r, err = os.Open(from)
-			if err != nil {
-				return err
-			}
-		}
-
-		p, err := host.NewProfileFromReader(r, uniq)
+		p, err := getProfileFromInput(in, from, uniq)
 		if err != nil {
 			return err
 		}
 
-		h, err := host.NewFile(src)
+		h, err := file.NewFile(src)
 		if err != nil {
 			return err
 		}
 
 		p.Name = profiles[0]
-		p.Status = host.Enabled
+		p.Status = types.Enabled
 
 		err = actionFn(h, p)
 		if err != nil {
@@ -93,4 +81,28 @@ func makeAddReplace(actionFn addRemoveFn) func(cmd *cobra.Command, profiles []st
 
 		return h.Flush()
 	}
+}
+
+func getProfileFromInput(in io.Reader, from string, uniq bool) (*types.Profile, error) {
+	var (
+		r   io.Reader
+		err error
+	)
+
+	switch {
+	case isPiped() || in != os.Stdin:
+		r = in
+
+	case isValidURL(from):
+		r, err = readerFromURL(from)
+
+	default:
+		r, err = os.Open(from)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return profile.NewProfileFromReader(r, uniq)
 }

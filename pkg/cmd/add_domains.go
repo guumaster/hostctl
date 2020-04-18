@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/file"
 )
 
 func newAddRemoveDomainsCmd() (*cobra.Command, *cobra.Command) {
@@ -25,7 +25,7 @@ If the profile already exists it will be added to it.`,
 			name := args[0]
 			routes := args[1:]
 
-			h, err := host.NewFile(src)
+			h, err := file.NewFile(src)
 			if err != nil {
 				return err
 			}

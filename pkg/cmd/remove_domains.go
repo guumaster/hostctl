@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/file"
 )
 
 func newRemoveDomainsCmd() *cobra.Command {
@@ -26,7 +26,7 @@ It cannot be undone unless you have a backup and restore it.
 			name := args[0]
 			domains := args[1:]
 
-			h, err := host.NewFile(src)
+			h, err := file.NewFile(src)
 			if err != nil {
 				return err
 			}

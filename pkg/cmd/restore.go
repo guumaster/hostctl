@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/file"
 )
 
 func newRestoreCmd() *cobra.Command {
@@ -23,7 +23,7 @@ WARNING: the complete hosts file will be overwritten with the backup data.
 			from, _ := cmd.Flags().GetString("from")
 			quiet, _ := cmd.Flags().GetBool("quiet")
 
-			h, err := host.NewFile(dst)
+			h, err := file.NewFile(dst)
 			if err != nil {
 				return err
 			}

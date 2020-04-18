@@ -49,8 +49,10 @@ github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoA
 github.com/grpc-ecosystem/go-grpc-middleware v1.0.0/go.mod h1:FiyG127CGDf3tlThmgyCl78X/SZQqEOJBCDaAfeWzPs=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
 github.com/grpc-ecosystem/grpc-gateway v1.9.0/go.mod h1:vNeuVxBJEsws4ogUvrchl83t/GYV9WGTSLVdBhOQFDY=
-github.com/guumaster/tablewriter v0.0.6 h1:s2n2YeOJn8dmH9RvrHPwxVOrZjPdwzWJhT5tzJJqnUk=
-github.com/guumaster/tablewriter v0.0.6/go.mod h1:9B1xy1BLPtcVAeYjC1EXPxcklqnzk7dU2c3ywGbUnKY=
+github.com/guumaster/tablewriter v0.0.8 h1:bQGbe9Tx+i2CyX1+LwqBtrP/6gUowNbrnUUvyikuq1I=
+github.com/guumaster/tablewriter v0.0.8/go.mod h1:9B1xy1BLPtcVAeYjC1EXPxcklqnzk7dU2c3ywGbUnKY=
+github.com/guumaster/tablewriter v0.0.9 h1:qyswXhSCI1SWYH78MLApi8AfL8JsWZWAUkZLONNMiYI=
+github.com/guumaster/tablewriter v0.0.9/go.mod h1:9B1xy1BLPtcVAeYjC1EXPxcklqnzk7dU2c3ywGbUnKY=
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
 github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NHg9XEKhtSvM=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=

@@ -52,12 +52,7 @@ func Test_RemoveDomains(t *testing.T) {
 		assert.NoError(t, err)
 
 		actual := "\n" + string(out)
-		const expected = `
-+---------+--------+----+--------+
-| PROFILE | STATUS | IP | DOMAIN |
-+---------+--------+----+--------+
-+---------+--------+----+--------+
-`
-		assert.Contains(t, actual, expected)
+
+		assert.Contains(t, actual, `Profile 'profile1' removed.`)
 	})
 }

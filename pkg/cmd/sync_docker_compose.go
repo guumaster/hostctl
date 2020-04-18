@@ -10,7 +10,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/docker"
+	"github.com/guumaster/hostctl/pkg/host/errors"
+	"github.com/guumaster/hostctl/pkg/host/file"
+	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 type composeInfo struct {
@@ -26,10 +29,10 @@ func newSyncDockerComposeCmd(removeCmd *cobra.Command) *cobra.Command {
 Reads from a docker-compose.yml file  the list of containers and add names and IPs to a profile in your hosts file.
 `,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			profile, _ := cmd.Flags().GetString("profile")
+			name, _ := cmd.Flags().GetString("profile")
 
-			if profile == "default" {
-				return host.ErrDefaultProfileError
+			if name == "default" {
+				return errors.ErrDefaultProfileError
 			}
 			return nil
 		},
@@ -45,25 +48,25 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 				return err
 			}
 
-			profile := profiles[0]
+			name := profiles[0]
 
-			if profile == "" && compose.ProjectName == "" {
-				return host.ErrMissingProfile
+			if name == "" && compose.ProjectName == "" {
+				return errors.ErrMissingProfile
 			}
 
-			if profile == "" {
-				profile = compose.ProjectName
-				profiles = append(profiles, profile)
+			if name == "" {
+				name = compose.ProjectName
+				profiles = append(profiles, name)
 				cmd.SetArgs(profiles)
 			}
 
 			if domain == "" {
-				domain = fmt.Sprintf("%s.loc", profile)
+				domain = fmt.Sprintf("%s.loc", name)
 			}
 
 			ctx := context.Background()
 
-			p, err := host.NewProfileFromDocker(ctx, &host.DockerOptions{
+			p, err := docker.NewProfileFromDocker(ctx, &docker.Options{
 				Domain:      domain,
 				Network:     network,
 				ComposeFile: compose.File,
@@ -75,15 +78,15 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 				return err
 			}
 
-			h, err := host.NewFile(src)
+			h, err := file.NewFile(src)
 			if err != nil {
 				return err
 			}
 
-			p.Name = profile
-			p.Status = host.Enabled
+			p.Name = name
+			p.Status = types.Enabled
 
-			err = h.AddProfile(*p)
+			err = h.AddProfile(p)
 			if err != nil {
 				return err
 			}

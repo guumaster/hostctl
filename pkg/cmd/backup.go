@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/file"
 )
 
 func newBackupCmd() *cobra.Command {
@@ -22,7 +22,7 @@ as extension.
 			dst, _ := cmd.Flags().GetString("path")
 			quiet, _ := cmd.Flags().GetBool("quiet")
 
-			h, err := host.NewFile(src)
+			h, err := file.NewFile(src)
 			if err != nil {
 				return err
 			}

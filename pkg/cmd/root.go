@@ -36,10 +36,12 @@ you need each time with a simple interface.
 				return err
 			}
 			host, _ := cmd.Flags().GetString("host-file")
-			quiet, _ := cmd.Flags().GetBool("quiet")
 
-			defaultHostsFile := getDefaultHostFile(isSnapBuild)
-			if (host != defaultHostsFile || os.Getenv("HOSTCTL_FILE") != "") && !quiet {
+			showHostFile := host != getDefaultHostFile(isSnapBuild) || os.Getenv("HOSTCTL_FILE") != ""
+
+			quiet := needsQuietOutput(cmd)
+
+			if showHostFile && !quiet {
 				_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Using hosts file: %s\n", host)
 			}
 
@@ -54,12 +56,34 @@ you need each time with a simple interface.
 	// rootCmd
 	rootCmd.PersistentFlags().String("host-file", getDefaultHostFile(isSnapBuild), "Hosts file path")
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
-	rootCmd.PersistentFlags().Bool("raw", false, "Output without table borders")
+	rootCmd.PersistentFlags().Bool("raw", false, "Output without borders (same as -o raw)")
+	rootCmd.PersistentFlags().StringP("out", "o", "table", "Output type (table|raw|markdown|json)")
 	rootCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
 
 	registerCommands(rootCmd)
 
 	return rootCmd
+}
+
+func needsQuietOutput(cmd *cobra.Command) bool {
+	quiet, _ := cmd.Flags().GetBool("quiet")
+	out, _ := cmd.Flags().GetString("out")
+
+	if quiet {
+		return true
+	}
+
+	switch {
+	case quiet:
+		return true
+	case out == "json":
+		return true
+	case out == "md" || out == "markdown":
+		return false
+
+	default:
+		return false
+	}
 }
 
 func registerCommands(rootCmd *cobra.Command) {
@@ -138,7 +162,6 @@ func registerCommands(rootCmd *cobra.Command) {
 
 	// status
 	statusCmd := newStatusCmd()
-	statusCmd.Flags().Bool("raw", false, "Output without table borders")
 
 	// register sub-commands
 	addCmd.AddCommand(addDomainsCmd)

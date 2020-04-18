@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/file"
 )
 
 func newRemoveCmd() *cobra.Command {
@@ -27,7 +27,7 @@ use 'hosts disable' instead.
 			quiet, _ := cmd.Flags().GetBool("quiet")
 			all, _ := cmd.Flags().GetBool("all")
 
-			h, err := host.NewFile(src)
+			h, err := file.NewFile(src)
 			if err != nil {
 				return err
 			}
