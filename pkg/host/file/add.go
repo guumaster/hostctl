@@ -11,12 +11,7 @@ func (f *File) AddProfile(p *types.Profile) error {
 		return errors.ErrDefaultProfileError
 	}
 
-	f.MergeProfiles(&types.Content{
-		ProfileNames: []string{p.Name},
-		Profiles: map[string]*types.Profile{
-			p.Name: p,
-		},
-	})
+	f.MergeProfiles([]*types.Profile{p})
 
 	return nil
 }

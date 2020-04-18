@@ -5,9 +5,9 @@ import (
 )
 
 // MergeProfiles joins new content with existing content
-func (f *File) MergeProfiles(content *types.Content) {
-	for _, newName := range content.ProfileNames {
-		newP := content.Profiles[newName]
+func (f *File) MergeProfiles(profiles []*types.Profile) {
+	for _, newP := range profiles {
+		newName := newP.Name
 
 		_, ok := f.data.Profiles[newName]
 		if !ok {
