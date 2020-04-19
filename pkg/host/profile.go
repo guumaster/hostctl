@@ -1,6 +1,7 @@
 package host
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"net"
@@ -129,7 +130,9 @@ func (p *Profile) GetAllHostNames() ([]string, error) {
 
 // Render writes the profile content to the given StringWriter
 func (p *Profile) Render(w io.StringWriter) error {
-	_, err := w.WriteString(fmt.Sprintf("\n# profile.%s %s\n", p.Status, p.Name))
+	tmp := bytes.NewBufferString("")
+
+	_, err := tmp.WriteString(fmt.Sprintf("\n# profile.%s %s\n", p.Status, p.Name))
 	if err != nil {
 		return err
 	}
@@ -142,23 +145,28 @@ func (p *Profile) Render(w io.StringWriter) error {
 				prefix = "# "
 			}
 
-			_, err = w.WriteString(fmt.Sprintf("%s%s %s\n", prefix, ip, host))
+			_, err = tmp.WriteString(fmt.Sprintf("%s%s %s\n", prefix, ip, host))
 			if err != nil {
 				return err
 			}
 		}
 	}
 
-	_, err = w.WriteString("# end\n")
+	_, err = tmp.WriteString("# end\n")
 	if err != nil {
 		return err
 	}
 
-	return nil
+	// Write to input writer after knowing the profile is well formed
+	_, err = w.WriteString(tmp.String())
+
+	return err
 }
 
 // Render writes the default profile content to the given StringWriter
 func (d DefaultProfile) Render(w io.StringWriter) error {
+	tmp := bytes.NewBufferString("")
+
 	for _, row := range d {
 		line := ""
 		if row.Comment != "" {
@@ -172,13 +180,16 @@ func (d DefaultProfile) Render(w io.StringWriter) error {
 			line = fmt.Sprintf("%s%s %s", prefix, row.IP, row.Host)
 		}
 
-		_, err := w.WriteString(line + "\n")
+		_, err := tmp.WriteString(line + "\n")
 		if err != nil {
 			return err
 		}
 	}
 
-	return nil
+	// Write to input writer after knowing the profile is well formed
+	_, err := w.WriteString(tmp.String())
+
+	return err
 }
 
 func remove(s []string, n string) []string {

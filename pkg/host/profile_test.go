@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/host/render"
 )
 
 func TestProfile(t *testing.T) {
@@ -93,4 +95,41 @@ func TestProfile(t *testing.T) {
 		_, err = p.GetHostNames("13333t")
 		assert.EqualError(t, err, "invalid ip '13333t'")
 	})
+}
+
+func Test_appendIP(t *testing.T) {
+	r := strings.NewReader(`3.3.3.4 some.profile.loc`)
+	p, err := NewProfileFromReader(r, true)
+	assert.NoError(t, err)
+
+	p.appendIP("3.3.3.4")
+	p.appendIP("3.3.3.4")
+	p.appendIP("3.3.3.5")
+
+	assert.Equal(t, p.IPList, []string{"3.3.3.4", "3.3.3.5"})
+}
+
+func TestDefaultProfile_Render(t *testing.T) {
+	b := bytes.NewBufferString("")
+
+	d := DefaultProfile{}
+
+	d = append(d, &render.Row{
+		Comment: "# This is a comment",
+	}, &render.Row{
+		IP:   "127.0.0.1",
+		Host: "localhost",
+	})
+
+	err := d.Render(b)
+	assert.NoError(t, err)
+
+	c, err := ioutil.ReadAll(b)
+	assert.NoError(t, err)
+
+	out := "\n" + string(c)
+	assert.Equal(t, `
+# This is a comment
+127.0.0.1 localhost
+`, out)
 }
