@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/errors"
 	"github.com/guumaster/hostctl/pkg/host/render"
 )
@@ -72,7 +73,7 @@ func isPiped() bool {
 
 func containsDefault(args []string) error {
 	for _, p := range args {
-		if p == "default" {
+		if p == host.Default {
 			return errors.ErrDefaultProfile
 		}
 	}

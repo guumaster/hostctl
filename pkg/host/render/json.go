@@ -12,8 +12,9 @@ type JSONRendererOptions struct {
 }
 
 type JSONRenderer struct {
-	w       io.Writer
+	Type    RendererType
 	Columns []string
+	w       io.Writer
 	data    *data
 }
 
@@ -27,8 +28,9 @@ func NewJSONRenderer(opts *JSONRendererOptions) JSONRenderer {
 	}
 
 	return JSONRenderer{
-		w:       opts.Writer,
+		Type:    JSON,
 		Columns: opts.Columns,
+		w:       opts.Writer,
 		data:    &data{},
 	}
 }

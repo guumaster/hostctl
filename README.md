@@ -94,6 +94,11 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 * [guumaster](https://github.com/guumaster)
 
+If you like this tool and think is worth it, you can invite me a coffee: 
+
+[![paypal.me/guumaster][paypal-badge]][paypal-link]
+[![ko-fi.com/guumaster][kofi-badge]][kofi-link]
+
 
 ## LICENSE
 
@@ -125,3 +130,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [all-contributors-badge]: https://img.shields.io/badge/contributors-7-blue.svg
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [all-contributors-link]: #contributors-
+
+[paypal-link]: https://www.paypal.me/guumaster
+[paypal-badge]: https://img.shields.io/static/v1?label=donate&message=PayPal&color=00457C&logo=paypal
+
+[kofi-link]: https://ko-fi.com/guumaster
+[kofi-badge]: https://img.shields.io/static/v1?label=donate&message=Ko-fi&color=F16061&logo=ko-fi

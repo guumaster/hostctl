@@ -15,6 +15,7 @@ func NewMarkdownRenderer(opts *TableRendererOptions) TableRenderer {
 	table.SetTablePadding("\t") // pad with tabs
 
 	return TableRenderer{
+		Type:    Markdown,
 		Columns: opts.Columns,
 		table:   table,
 		opts:    opts,

@@ -12,7 +12,17 @@ type TableRendererOptions struct {
 	Columns []string
 }
 
+type RendererType string
+
+var (
+	Markdown RendererType = "markdown"
+	Table    RendererType = "table"
+	Raw      RendererType = "raw"
+	JSON     RendererType = "json"
+)
+
 type TableRenderer struct {
+	Type    RendererType
 	Columns []string
 	table   *tablewriter.Table
 	opts    *TableRendererOptions
@@ -39,6 +49,7 @@ func NewTableRenderer(opts *TableRendererOptions) TableRenderer {
 	table := createTableWriter(opts)
 
 	return TableRenderer{
+		Type:    Table,
 		Columns: opts.Columns,
 		table:   table,
 		opts:    opts,
