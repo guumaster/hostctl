@@ -175,8 +175,8 @@ func TestManagerWrite(t *testing.T) {
 
 		c, err := afero.ReadFile(mem, h.Name())
 		assert.NoError(t, err)
-		expected := defaultProfile + Banner + testEnabledProfile + testDisabledProfile
-		assert.Contains(t, string(c), expected)
+		assert.Contains(t, string(c), defaultProfile)
+		assert.Contains(t, string(c), Banner+"\n"+testEnabledProfile+testDisabledProfile)
 	})
 
 	t.Run("WriteTo", func(t *testing.T) {
@@ -192,8 +192,8 @@ func TestManagerWrite(t *testing.T) {
 
 		c, err := ioutil.ReadFile(f.Name())
 		assert.NoError(t, err)
-		expected := defaultProfile + Banner + testEnabledProfile + testDisabledProfile
-		assert.Contains(t, string(c), expected)
+		assert.Contains(t, string(c), defaultProfile)
+		assert.Contains(t, string(c), Banner+"\n"+testEnabledProfile+testDisabledProfile)
 	})
 
 	t.Run("writeBanner", func(t *testing.T) {
