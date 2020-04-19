@@ -52,7 +52,6 @@ func Test_postActionCmd(t *testing.T) {
 		out, _ := ioutil.ReadAll(b)
 		assert.Contains(t, string(out), "Waiting until ctrl+c to disable from profile 'profile1'")
 	})
-
 }
 
 func Test_waitSignalOrDuration(t *testing.T) {
@@ -102,5 +101,4 @@ func Test_waitSignalOrDuration(t *testing.T) {
 		assert.Equal(t, v, struct{}{})
 		assert.Equal(t, ok, true)
 	})
-
 }
