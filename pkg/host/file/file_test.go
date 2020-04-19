@@ -76,6 +76,36 @@ func TestManagerRoutes(t *testing.T) {
 		assert.Contains(t, string(c), added)
 	})
 
+	t.Run("AddRoutes new", func(t *testing.T) {
+		mem := CreateBasicFS(t)
+
+		f, err := NewWithFs("/tmp/etc/hosts", mem)
+		assert.NoError(t, err)
+
+		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+
+		err = f.AddRoutes("awesome", "3.3.3.4", []string{"host1.loc", "host2.loc"})
+		assert.NoError(t, err)
+
+		err = f.Flush()
+		assert.NoError(t, err)
+		f.Close()
+
+		c, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
+
+		assert.Contains(t, string(c), DefaultProfile)
+		assert.Contains(t, string(c), Banner)
+		assert.Contains(t, string(c), TestEnabledProfile)
+		var added = `
+# profile.on awesome
+3.3.3.4 host1.loc
+3.3.3.4 host2.loc
+# end
+`
+		assert.Contains(t, string(c), added)
+	})
+
 	t.Run("RemoveRoutes", func(t *testing.T) {
 		mem := CreateBasicFS(t)
 
