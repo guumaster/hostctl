@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/spf13/afero"
-
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 var Localhost = net.ParseIP("127.0.0.1")
@@ -34,7 +32,7 @@ func CreateBasicFS(t *testing.T) afero.Fs {
 	f, _ := appFS.Create("/tmp/etc/hosts")
 	defer f.Close()
 
-	_, _ = f.WriteString(DefaultProfile + types.Banner + TestEnabledProfile + TestDisabledProfile)
+	_, _ = f.WriteString(DefaultProfile + Banner + TestEnabledProfile + TestDisabledProfile)
 
 	return appFS
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/client"
 
-	types2 "github.com/guumaster/hostctl/pkg/host/types"
+	"github.com/guumaster/hostctl/pkg/host"
 )
 
 // DockerOptions contains parameters to sync with docker and docker-compose
@@ -53,7 +53,7 @@ func containerList(ctx context.Context, opts *Options) ([]types.Container, error
 }
 
 // NewProfileFromDocker creates a new profile from docker info
-func NewProfileFromDocker(ctx context.Context, opts *Options) (*types2.Profile, error) {
+func NewProfileFromDocker(ctx context.Context, opts *Options) (*host.Profile, error) {
 	containers, err := containerList(ctx, opts)
 	if err != nil {
 		return nil, err
@@ -67,8 +67,8 @@ func NewProfileFromDocker(ctx context.Context, opts *Options) (*types2.Profile, 
 		}
 	}
 
-	p := &types2.Profile{
-		Routes: map[string]*types2.Route{},
+	p := &host.Profile{
+		Routes: map[string]*host.Route{},
 	}
 
 	return addToProfile(ctx, p, containers, composeServices, opts)
@@ -76,10 +76,10 @@ func NewProfileFromDocker(ctx context.Context, opts *Options) (*types2.Profile, 
 
 func addToProfile(
 	ctx context.Context,
-	profile *types2.Profile,
+	profile *host.Profile,
 	containers []types.Container,
 	composeServices []string,
-	opts *Options) (*types2.Profile, error) {
+	opts *Options) (*host.Profile, error) {
 	networkID, err := getNetworkID(ctx, opts)
 	if err != nil {
 		return nil, err

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/host/types"
+	"github.com/guumaster/hostctl/pkg/host"
 )
 
 func TestFile_MergeProfiles(t *testing.T) {
@@ -21,18 +21,18 @@ func TestFile_MergeProfiles(t *testing.T) {
 	ip3 := net.ParseIP("2.2.2.2")
 	ip4 := net.ParseIP("3.3.3.3")
 
-	profiles := []*types.Profile{
+	profiles := []*host.Profile{
 		{
 			Name:   "profile2",
-			Status: types.Enabled,
-			Routes: map[string]*types.Route{
+			Status: host.Enabled,
+			Routes: map[string]*host.Route{
 				ip3.String(): {IP: ip3, HostNames: []string{"third.new.loc"}},
 			},
 		},
 		{
 			Name:   "profile3",
-			Status: types.Enabled,
-			Routes: map[string]*types.Route{
+			Status: host.Enabled,
+			Routes: map[string]*host.Route{
 				ip4.String(): {IP: ip4, HostNames: []string{"third.new.loc", "fourth.new.loc"}},
 			},
 		},
@@ -51,7 +51,7 @@ func TestFile_MergeProfiles(t *testing.T) {
 
 	modP2 := profiles[0]
 	modP2.IPList = []string{"127.0.0.1", "2.2.2.2"}
-	modP2.Routes[Localhost.String()] = &types.Route{IP: Localhost, HostNames: []string{"first.loc", "second.loc"}}
-	modP2.Status = types.Disabled
+	modP2.Routes[Localhost.String()] = &host.Route{IP: Localhost, HostNames: []string{"first.loc", "second.loc"}}
+	modP2.Status = host.Disabled
 	assert.Equal(t, modP2, p2)
 }

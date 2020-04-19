@@ -1,14 +1,14 @@
 package file
 
 import (
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/errors"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 // Toggle alternates between enable and disable status of a profile.
 func (f *File) Toggle(profiles []string) error {
 	for _, name := range profiles {
-		if name == types.Default {
+		if name == host.Default {
 			continue
 		}
 
@@ -17,10 +17,10 @@ func (f *File) Toggle(profiles []string) error {
 			return errors.ErrUnknownProfile
 		}
 
-		if p.Status == types.Enabled {
-			p.Status = types.Disabled
+		if p.Status == host.Enabled {
+			p.Status = host.Disabled
 		} else {
-			p.Status = types.Enabled
+			p.Status = host.Enabled
 		}
 
 		f.data.Profiles[name] = p

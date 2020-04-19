@@ -1,4 +1,4 @@
-package profile
+package host
 
 import (
 	"bytes"
@@ -7,18 +7,16 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 func TestProfile(t *testing.T) {
 	t.Run("String", func(t *testing.T) {
-		p := types.Profile{
+		p := Profile{
 			Name:   "awesome",
-			Status: types.Enabled,
+			Status: Enabled,
 		}
 		assert.Equal(t, "[on]awesome", p.String())
-		p.Status = types.Disabled
+		p.Status = Disabled
 		assert.Equal(t, "[off]awesome", p.String())
 	})
 
@@ -34,7 +32,7 @@ func TestProfile(t *testing.T) {
 		assert.NoError(t, err)
 
 		p.Name = "profile1"
-		p.Status = types.Enabled
+		p.Status = Enabled
 		b := bytes.NewBufferString("")
 
 		err = p.Render(b)

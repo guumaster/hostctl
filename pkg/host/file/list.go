@@ -1,8 +1,8 @@
 package file
 
 import (
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/render"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 // ListOptions contains available options for listing.
@@ -10,7 +10,7 @@ type ListOptions struct {
 	Renderer     render.Renderer
 	Profiles     []string
 	ProfilesOnly bool
-	StatusFilter types.Status
+	StatusFilter host.Status
 }
 
 func includeProfile(needle string, stack []string) bool {
@@ -58,7 +58,7 @@ func (f *File) List(r render.Renderer, opts *ListOptions) {
 
 func addDefault(f *File, r render.Renderer, opts *ListOptions) {
 	// First check if default should be shown
-	if !includeProfile(types.Default, opts.Profiles) {
+	if !includeProfile(host.Default, opts.Profiles) {
 		return
 	}
 
@@ -73,7 +73,7 @@ func addDefault(f *File, r render.Renderer, opts *ListOptions) {
 	}
 }
 
-func addProfiles(p *types.Profile, r render.Renderer, opts *ListOptions) {
+func addProfiles(p *host.Profile, r render.Renderer, opts *ListOptions) {
 	if !includeProfile(p.Name, opts.Profiles) {
 		return
 	}

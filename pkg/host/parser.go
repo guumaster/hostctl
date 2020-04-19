@@ -1,4 +1,4 @@
-package parser
+package host
 
 import (
 	"bufio"
@@ -9,26 +9,24 @@ import (
 
 	"github.com/guumaster/hostctl/pkg/host/errors"
 	"github.com/guumaster/hostctl/pkg/host/render"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 var (
 	profileNameRe = regexp.MustCompile(`# profile(?:.(on|off))?\s+([a-z0-9-_.\s]+)`)
 	profileEnd    = regexp.MustCompile(`(?i)# end\s*`)
-	//	disableRe     = regexp.MustCompile(`^#\s*`)
-	spaceRemover = regexp.MustCompile(`\s+`)
-	tabReplacer  = regexp.MustCompile(`\t+`)
+	spaceRemover  = regexp.MustCompile(`\s+`)
+	tabReplacer   = regexp.MustCompile(`\t+`)
 )
 
 type Parser interface {
-	Parse(reader io.Reader) types.Content
+	Parse(reader io.Reader) Content
 }
 
 // Parse reads content from reader into Data struct.
-func Parse(r io.Reader) (*types.Content, error) {
-	data := &types.Content{
+func Parse(r io.Reader) (*Content, error) {
+	data := &Content{
 		ProfileNames: []string{},
-		Profiles:     map[string]*types.Profile{},
+		Profiles:     map[string]*Profile{},
 	}
 
 	currProfile := ""
@@ -43,7 +41,7 @@ func Parse(r io.Reader) (*types.Content, error) {
 
 			currProfile = p.Name
 			data.ProfileNames = append(data.ProfileNames, currProfile)
-			data.Profiles[currProfile] = &types.Profile{
+			data.Profiles[currProfile] = &Profile{
 				Name:   currProfile,
 				Status: p.Status,
 			}
@@ -69,7 +67,7 @@ func Parse(r io.Reader) (*types.Content, error) {
 	return data, nil
 }
 
-func appendLine(p *types.Profile, line string) {
+func appendLine(p *Profile, line string) {
 	if line == "" {
 		return
 	}
@@ -100,12 +98,12 @@ func parseToDefault(b []byte, currProfile string) *render.Row {
 			Comment: string(b),
 		}
 	} else {
-		status := types.Enabled
+		status := Enabled
 		if off, _ := regexp.Match("^#", b); off {
-			status = types.Disabled
+			status = Disabled
 		}
 		row = &render.Row{
-			Profile: types.Default,
+			Profile: Default,
 			Status:  string(status),
 			IP:      line.IP.String(),
 			Host:    line.HostNames[0],
@@ -115,25 +113,25 @@ func parseToDefault(b []byte, currProfile string) *render.Row {
 	return row
 }
 
-func parseProfileHeader(b []byte) (*types.Profile, error) {
+func parseProfileHeader(b []byte) (*Profile, error) {
 	rs := profileNameRe.FindSubmatch(b)
 	if len(rs) != 3 || string(rs[2]) == "" {
 		return nil, errors.ErrInvalidProfileHeader
 	}
 
-	status := types.Enabled
-	if string(rs[1]) == string(types.Disabled) {
-		status = types.Disabled
+	status := Enabled
+	if string(rs[1]) == string(Disabled) {
+		status = Disabled
 	}
 
-	return &types.Profile{
+	return &Profile{
 		Name:   strings.TrimSpace(string(rs[2])),
 		Status: status,
 	}, nil
 }
 
 // ParseLine checks if a line is a host line or a comment line.
-func ParseLine(str string) (*types.Route, bool) {
+func ParseLine(str string) (*Route, bool) {
 	clean := spaceRemover.ReplaceAllString(str, " ")
 	clean = tabReplacer.ReplaceAllString(clean, " ")
 	clean = strings.TrimSpace(clean)
@@ -151,5 +149,5 @@ func ParseLine(str string) (*types.Route, bool) {
 		return nil, false
 	}
 
-	return &types.Route{IP: ip, HostNames: p[i+1:]}, true
+	return &Route{IP: ip, HostNames: p[i+1:]}, true
 }

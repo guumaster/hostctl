@@ -10,10 +10,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/docker"
 	"github.com/guumaster/hostctl/pkg/host/errors"
 	"github.com/guumaster/hostctl/pkg/host/file"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 type composeInfo struct {
@@ -32,7 +32,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			name, _ := cmd.Flags().GetString("profile")
 
 			if name == "default" {
-				return errors.ErrDefaultProfileError
+				return errors.ErrDefaultProfile
 			}
 			return nil
 		},
@@ -84,7 +84,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			}
 
 			p.Name = name
-			p.Status = types.Enabled
+			p.Status = host.Enabled
 
 			err = h.AddProfile(p)
 			if err != nil {

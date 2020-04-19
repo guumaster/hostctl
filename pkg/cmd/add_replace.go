@@ -6,12 +6,11 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/file"
-	"github.com/guumaster/hostctl/pkg/host/profile"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
-type addRemoveFn func(h *file.File, p *types.Profile) error
+type addRemoveFn func(h *file.File, p *host.Profile) error
 
 func newAddRemoveCmd() (*cobra.Command, *cobra.Command) {
 	addCmd := newAddCmd()
@@ -32,7 +31,7 @@ func newAddCmd() *cobra.Command {
 Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be added to it.`,
 		Args: commonCheckArgs,
-		RunE: makeAddReplace(func(h *file.File, p *types.Profile) error {
+		RunE: makeAddReplace(func(h *file.File, p *host.Profile) error {
 			return h.AddProfile(p)
 		}),
 	}
@@ -47,7 +46,7 @@ Reads from a file and set content to a profile in your hosts file.
 If the profile already exists it will be overwritten.
 `,
 		Args: commonCheckArgs,
-		RunE: makeAddReplace(func(h *file.File, p *types.Profile) error {
+		RunE: makeAddReplace(func(h *file.File, p *host.Profile) error {
 			return h.ReplaceProfile(p)
 		}),
 		PostRunE: postRunListOnly,
@@ -72,7 +71,7 @@ func makeAddReplace(actionFn addRemoveFn) func(cmd *cobra.Command, profiles []st
 		}
 
 		p.Name = profiles[0]
-		p.Status = types.Enabled
+		p.Status = host.Enabled
 
 		err = actionFn(h, p)
 		if err != nil {
@@ -83,7 +82,7 @@ func makeAddReplace(actionFn addRemoveFn) func(cmd *cobra.Command, profiles []st
 	}
 }
 
-func getProfileFromInput(in io.Reader, from string, uniq bool) (*types.Profile, error) {
+func getProfileFromInput(in io.Reader, from string, uniq bool) (*host.Profile, error) {
 	var (
 		r   io.Reader
 		err error
@@ -104,5 +103,5 @@ func getProfileFromInput(in io.Reader, from string, uniq bool) (*types.Profile, 
 		return nil, err
 	}
 
-	return profile.NewProfileFromReader(r, uniq)
+	return host.NewProfileFromReader(r, uniq)
 }

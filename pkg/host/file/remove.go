@@ -1,8 +1,8 @@
 package file
 
 import (
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/errors"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 // RemoveProfiles removes given profiles from the list
@@ -21,8 +21,8 @@ func (f *File) RemoveProfiles(profiles []string) error {
 func (f *File) RemoveProfile(name string) error {
 	var names []string
 
-	if name == types.Default {
-		return errors.ErrDefaultProfileError
+	if name == host.Default {
+		return errors.ErrDefaultProfile
 	}
 
 	_, ok := f.data.Profiles[name]

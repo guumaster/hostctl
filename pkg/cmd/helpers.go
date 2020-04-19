@@ -73,7 +73,7 @@ func isPiped() bool {
 func containsDefault(args []string) error {
 	for _, p := range args {
 		if p == "default" {
-			return errors.ErrDefaultProfileError
+			return errors.ErrDefaultProfile
 		}
 	}
 

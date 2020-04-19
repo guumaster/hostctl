@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/file"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 func newListCmd() *cobra.Command {
@@ -36,20 +36,20 @@ The "default" profile is all the content that is not handled by hostctl tool.
 		},
 	}
 
-	listCmd.AddCommand(makeListStatusCmd(types.Enabled))
-	listCmd.AddCommand(makeListStatusCmd(types.Disabled))
+	listCmd.AddCommand(makeListStatusCmd(host.Enabled))
+	listCmd.AddCommand(makeListStatusCmd(host.Disabled))
 
 	return listCmd
 }
 
-var makeListStatusCmd = func(status types.Status) *cobra.Command {
+var makeListStatusCmd = func(status host.Status) *cobra.Command {
 	cmd := ""
 	alias := ""
 	switch status {
-	case types.Enabled:
+	case host.Enabled:
 		cmd = "enabled"
 		alias = "on"
-	case types.Disabled:
+	case host.Disabled:
 		cmd = "disabled"
 		alias = "off"
 	}

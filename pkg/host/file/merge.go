@@ -1,11 +1,11 @@
 package file
 
 import (
-	"github.com/guumaster/hostctl/pkg/host/types"
+	"github.com/guumaster/hostctl/pkg/host"
 )
 
 // MergeProfiles joins new content with existing content
-func (f *File) MergeProfiles(profiles []*types.Profile) {
+func (f *File) MergeProfiles(profiles []*host.Profile) {
 	for _, newP := range profiles {
 		newName := newP.Name
 
@@ -19,7 +19,7 @@ func (f *File) MergeProfiles(profiles []*types.Profile) {
 
 		baseP := f.data.Profiles[newName]
 		if baseP.Routes == nil {
-			baseP.Routes = map[string]*types.Route{}
+			baseP.Routes = map[string]*host.Route{}
 		}
 
 		for _, r := range newP.Routes {

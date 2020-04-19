@@ -13,6 +13,7 @@ type Renderer interface {
 	Render() error
 }
 
+// Row represents a line for all output types
 type Row struct {
 	Comment string
 	Profile string

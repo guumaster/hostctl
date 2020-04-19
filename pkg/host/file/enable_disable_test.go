@@ -25,7 +25,7 @@ func TestFile_Enable(t *testing.T) {
 
 	t.Run("Enable Only", func(t *testing.T) {
 		err = m.Enable([]string{"profile1", "profile2"})
-		err = m.EnableOnly([]string{"profile2"})
+		err = m.EnableOnly([]string{"default", "profile2"})
 		assert.NoError(t, err)
 		assert.Contains(t, m.GetEnabled(), "profile2")
 		assert.Contains(t, m.GetDisabled(), "profile1")

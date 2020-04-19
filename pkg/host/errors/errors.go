@@ -11,8 +11,8 @@ var (
 	// ErrUnknownProfile when the profile is not present
 	ErrUnknownProfile = errors.New("unknown profile name")
 
-	// ErrDefaultProfileError when trying to edit default content
-	ErrDefaultProfileError = errors.New("'default' profile should not be handled by hostctl")
+	// ErrDefaultProfile when trying to edit default content
+	ErrDefaultProfile = errors.New("'default' profile should not be handled by hostctl")
 
 	// ErrNoContent when data to write is empty
 	ErrNoContent = errors.New("no content to write")

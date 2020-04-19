@@ -9,16 +9,15 @@ import (
 
 	"github.com/spf13/afero"
 
+	"github.com/guumaster/hostctl/pkg/host"
 	errors2 "github.com/guumaster/hostctl/pkg/host/errors"
-	"github.com/guumaster/hostctl/pkg/host/parser"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 // File container to handle a hosts file
 type File struct {
 	fs        afero.Fs
 	src       afero.File
-	data      *types.Content
+	data      *host.Content
 	hasBanner bool
 	mutex     sync.Mutex
 }
@@ -42,7 +41,7 @@ func NewWithFs(src string, fs afero.Fs) (*File, error) {
 	f := &File{src: s, fs: fs}
 
 	_, _ = f.src.Seek(0, io.SeekStart)
-	data, err := parser.Parse(f.src)
+	data, err := host.Parse(f.src)
 	f.data = data
 
 	if err != nil {
@@ -53,8 +52,8 @@ func NewWithFs(src string, fs afero.Fs) (*File, error) {
 }
 
 // GetStatus returns a map with the status of the given profiles
-func (f *File) GetStatus(profiles []string) map[string]types.Status {
-	st := map[string]types.Status{}
+func (f *File) GetStatus(profiles []string) map[string]host.Status {
+	st := map[string]host.Status{}
 
 	for _, name := range profiles {
 		p, ok := f.data.Profiles[name]
@@ -73,7 +72,7 @@ func (f *File) GetEnabled() []string {
 	enabled := []string{}
 
 	for _, name := range f.data.ProfileNames {
-		if f.data.Profiles[name].Status == types.Enabled {
+		if f.data.Profiles[name].Status == host.Enabled {
 			enabled = append(enabled, name)
 		}
 	}
@@ -86,7 +85,7 @@ func (f *File) GetDisabled() []string {
 	disabled := []string{}
 
 	for _, name := range f.data.ProfileNames {
-		if f.data.Profiles[name].Status == types.Disabled {
+		if f.data.Profiles[name].Status == host.Disabled {
 			disabled = append(disabled, name)
 		}
 	}
@@ -95,7 +94,7 @@ func (f *File) GetDisabled() []string {
 }
 
 // GetProfile return a Profile from the list
-func (f *File) GetProfile(name string) (*types.Profile, error) {
+func (f *File) GetProfile(name string) (*host.Profile, error) {
 	p, ok := f.data.Profiles[name]
 	if !ok {
 		return nil, errors2.ErrUnknownProfile
@@ -117,10 +116,10 @@ func (f *File) AddRoutes(name, ip string, hostnames []string) error {
 	}
 
 	if p == nil {
-		p = &types.Profile{
+		p = &host.Profile{
 			Name:   name,
-			Status: types.Enabled,
-			Routes: map[string]*types.Route{},
+			Status: host.Enabled,
+			Routes: map[string]*host.Route{},
 		}
 
 		p.AddRoutes(ip, hostnames)
@@ -198,7 +197,7 @@ func (f *File) writeToFile(dst afero.File) error {
 	f.writeBanner(dst)
 
 	for _, name := range f.data.ProfileNames {
-		if name == types.Default {
+		if name == host.Default {
 			continue
 		}
 
@@ -218,7 +217,7 @@ func (f *File) writeBanner(w io.StringWriter) {
 		return
 	}
 
-	_, _ = w.WriteString(fmt.Sprintf("%s\n", types.Banner))
+	_, _ = w.WriteString(fmt.Sprintf("%s\n", Banner))
 	f.hasBanner = true
 }
 

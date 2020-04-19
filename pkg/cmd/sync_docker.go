@@ -5,9 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/docker"
 	"github.com/guumaster/hostctl/pkg/host/file"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 func newSyncDockerCmd(removeCmd *cobra.Command) *cobra.Command {
@@ -40,7 +40,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 			}
 
 			p.Name = profiles[0]
-			p.Status = types.Enabled
+			p.Status = host.Enabled
 
 			err = h.AddProfile(p)
 			if err != nil {

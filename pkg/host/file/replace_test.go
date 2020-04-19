@@ -6,9 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/guumaster/hostctl/pkg/host"
 	"github.com/guumaster/hostctl/pkg/host/errors"
-	"github.com/guumaster/hostctl/pkg/host/profile"
-	"github.com/guumaster/hostctl/pkg/host/types"
 )
 
 func TestFile_ReplaceProfile(t *testing.T) {
@@ -22,10 +21,10 @@ func TestFile_ReplaceProfile(t *testing.T) {
 
 		r := strings.NewReader(`4.4.4.4 replaced.loc`)
 
-		p, err := profile.NewProfileFromReader(r, true)
+		p, err := host.NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "profile1"
-		p.Status = types.Enabled
+		p.Status = host.Enabled
 
 		err = m.ReplaceProfile(p)
 		assert.NoError(t, err)
@@ -43,10 +42,10 @@ func TestFile_ReplaceProfile(t *testing.T) {
 
 		r := strings.NewReader(`4.4.4.4 replaced.loc`)
 
-		p, err := profile.NewProfileFromReader(r, true)
+		p, err := host.NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "awesome"
-		p.Status = types.Enabled
+		p.Status = host.Enabled
 
 		err = m.ReplaceProfile(p)
 		assert.NoError(t, err)
@@ -64,12 +63,12 @@ func TestFile_ReplaceProfile(t *testing.T) {
 
 		r := strings.NewReader(`4.4.4.4 replaced.loc`)
 
-		p, err := profile.NewProfileFromReader(r, true)
+		p, err := host.NewProfileFromReader(r, true)
 		assert.NoError(t, err)
-		p.Name = types.Default
-		p.Status = types.Enabled
+		p.Name = host.Default
+		p.Status = host.Enabled
 
 		err = m.ReplaceProfile(p)
-		assert.EqualError(t, err, errors.ErrDefaultProfileError.Error())
+		assert.EqualError(t, err, errors.ErrDefaultProfile.Error())
 	})
 }

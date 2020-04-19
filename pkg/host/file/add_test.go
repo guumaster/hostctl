@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/host/profile"
-	"github.com/guumaster/hostctl/pkg/host/types"
+	"github.com/guumaster/hostctl/pkg/host"
+	"github.com/guumaster/hostctl/pkg/host/errors"
 )
 
 func TestFile_AddProfile(t *testing.T) {
@@ -20,10 +20,10 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 		r := strings.NewReader(`127.0.0.1 added.loc`)
 
-		p, err := profile.NewProfileFromReader(r, true)
+		p, err := host.NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "awesome"
-		p.Status = types.Enabled
+		p.Status = host.Enabled
 
 		err = m.AddProfile(p)
 		assert.NoError(t, err)
@@ -41,7 +41,7 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 		r := strings.NewReader(`127.0.0.1 added.loc`)
 
-		p, err := profile.NewProfileFromReader(r, true)
+		p, err := host.NewProfileFromReader(r, true)
 		assert.NoError(t, err)
 		p.Name = "profile1"
 
@@ -56,5 +56,18 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 
 		assert.Equal(t, hosts, []string{"first.loc", "second.loc", "added.loc"})
+	})
+
+	t.Run("Add default error", func(t *testing.T) {
+		m, err := NewWithFs(f.Name(), mem)
+		assert.NoError(t, err)
+		r := strings.NewReader(`127.0.0.1 added.loc`)
+
+		p, err := host.NewProfileFromReader(r, true)
+		assert.NoError(t, err)
+		p.Name = "default"
+
+		err = m.AddProfile(p)
+		assert.Error(t, err, errors.ErrDefaultProfile)
 	})
 }
