@@ -9,7 +9,7 @@ import (
 )
 
 func TestFile_RemoveProfile(t *testing.T) {
-	mem := CreateBasicFS(t)
+	mem := createBasicFS(t)
 	f, err := mem.Open("/tmp/etc/hosts")
 	assert.NoError(t, err)
 

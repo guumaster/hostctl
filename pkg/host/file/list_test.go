@@ -11,7 +11,7 @@ import (
 )
 
 func TestFile_List(t *testing.T) {
-	mem := CreateBasicFS(t)
+	mem := createBasicFS(t)
 
 	f, err := mem.Open("/tmp/etc/hosts")
 	assert.NoError(t, err)
@@ -72,7 +72,7 @@ func TestFile_List(t *testing.T) {
 }
 
 func Test_TableRaw(t *testing.T) {
-	mem := CreateBasicFS(t)
+	mem := createBasicFS(t)
 
 	f, err := mem.Open("/tmp/etc/hosts")
 	assert.NoError(t, err)
@@ -137,7 +137,7 @@ IP       	DOMAIN
 }
 
 func Test_TableMarkdown(t *testing.T) {
-	mem := CreateBasicFS(t)
+	mem := createBasicFS(t)
 
 	f, err := mem.Open("/tmp/etc/hosts")
 	assert.NoError(t, err)
@@ -169,7 +169,7 @@ func Test_TableMarkdown(t *testing.T) {
 }
 
 func TestFile_ProfileStatus(t *testing.T) {
-	mem := CreateBasicFS(t)
+	mem := createBasicFS(t)
 
 	f, err := mem.Open("/tmp/etc/hosts")
 	assert.NoError(t, err)

@@ -8,7 +8,7 @@ import (
 )
 
 func TestFile_Backup(t *testing.T) {
-	mem := CreateBasicFS(t)
+	mem := createBasicFS(t)
 	h, err := NewWithFs("/tmp/etc/hosts", mem)
 	assert.NoError(t, err)
 
