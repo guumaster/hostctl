@@ -60,22 +60,39 @@ func TestContainsDefault(t *testing.T) {
 
 func TestGetRenderer(t *testing.T) {
 	t.Run("Markdown", func(t *testing.T) {
-		cmd := newInfoCmd()
+		cmd := NewRootCmd()
 		b := bytes.NewBufferString("")
 		cmd.SetOut(b)
 		cmd.SetArgs([]string{"list", "--out", "md"})
 
+		err := cmd.Execute()
+		assert.NoError(t, err)
+
 		r := getRenderer(cmd, nil)
+
+		assert.IsType(t, render.TableRenderer{}, r)
+		assert.IsType(t, render.Markdown, r.(render.TableRenderer).Type)
+
+		cmd.SetOut(b)
+		cmd.SetArgs([]string{"list", "--out", "markdown"})
+
+		err = cmd.Execute()
+		assert.NoError(t, err)
+
+		r = getRenderer(cmd, nil)
 
 		assert.IsType(t, render.TableRenderer{}, r)
 		assert.IsType(t, render.Markdown, r.(render.TableRenderer).Type)
 	})
 
 	t.Run("Raw", func(t *testing.T) {
-		cmd := newInfoCmd()
+		cmd := NewRootCmd()
 		b := bytes.NewBufferString("")
 		cmd.SetOut(b)
 		cmd.SetArgs([]string{"list", "--out", "raw"})
+
+		err := cmd.Execute()
+		assert.NoError(t, err)
 
 		r := getRenderer(cmd, nil)
 
