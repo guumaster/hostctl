@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/cligger"
 )
 
 const longWaitTime = 999999
@@ -41,9 +43,9 @@ var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Comma
 	if !quiet {
 		p := strings.Join(args, ", ")
 		if duration == 0 {
-			_, _ = fmt.Fprintf(cmd.OutOrStdout(), "\nWaiting until ctrl+c to %s from profile '%s'\n\n", action, p)
+			cligger.Info("\nWaiting until ctrl+c to %s from profile '%s'\n\n", action, p)
 		} else if duration > 0 {
-			_, _ = fmt.Fprintf(cmd.OutOrStdout(), "\nWaiting for %s or ctrl+c to %s from profile '%s'\n\n", duration, action, p)
+			cligger.Info("\nWaiting for %s or ctrl+c to %s from profile '%s'\n\n", duration, action, p)
 		}
 	}
 

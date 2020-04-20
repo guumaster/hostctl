@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/cligger"
 
 	"github.com/guumaster/hostctl/pkg/host/file"
 )
@@ -50,7 +51,7 @@ use 'hosts disable' instead.
 			}
 
 			if !quiet {
-				_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Profile(s) '%s' removed.\n\n", strings.Join(profiles, ", "))
+				cligger.Success("Profile(s) '%s' removed.\n\n", strings.Join(profiles, ", "))
 			}
 
 			return nil

@@ -177,3 +177,16 @@ func getRenderer(cmd *cobra.Command, opts *render.TableRendererOptions) render.R
 		return render.NewTableRenderer(opts)
 	}
 }
+
+func isHelperCmd(cmd *cobra.Command) bool {
+	executed := cmd.Name()
+	helpers := []string{"info", "help", "completion", "gen-md-docs"}
+
+	for _, name := range helpers {
+		if executed == name {
+			return true
+		}
+	}
+
+	return false
+}

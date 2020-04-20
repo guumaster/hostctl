@@ -2,21 +2,23 @@
 package main
 
 import (
-	"log"
 	"os"
+
+	"github.com/guumaster/cligger"
 
 	"github.com/guumaster/hostctl/pkg/cmd"
 )
 
 func main() {
 	_, err := os.Getwd()
+
 	if err != nil {
-		log.Fatal(err)
+		cligger.Fatal("error: %w\n", err)
 	}
 
 	rootCmd := cmd.NewRootCmd()
 
 	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
+		cligger.Fatal("error: %s\n", err)
 	}
 }

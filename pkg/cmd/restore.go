@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/cligger"
 
 	"github.com/guumaster/hostctl/pkg/host/file"
 )
@@ -34,7 +34,7 @@ WARNING: the complete hosts file will be overwritten with the backup data.
 			}
 
 			if !quiet {
-				_, _ = fmt.Fprintf(cmd.OutOrStdout(), "File '%s' restored.\n\n", from)
+				cligger.Success("File '%s' restored.\n\n", from)
 			}
 
 			return nil

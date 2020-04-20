@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/cligger"
 
 	"github.com/guumaster/hostctl/pkg/host/file"
 )
@@ -33,7 +33,7 @@ as extension.
 			}
 
 			if !quiet {
-				_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Backup '%s' created.\n", fname)
+				cligger.Success("Backup '%s' created.\n", fname)
 			}
 
 			return nil

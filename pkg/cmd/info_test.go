@@ -23,5 +23,5 @@ func Test_Info(t *testing.T) {
 	assert.NoError(t, err)
 
 	actual := "\n" + string(out)
-	assert.Contains(t, actual, "Your dev tool to manage /etc/hosts like a pro!")
+	assert.Contains(t, actual, "Your dev tool to manage /etc/hosts like a pro")
 }

@@ -147,3 +147,13 @@ func TestReadFromURL(t *testing.T) {
 
 	assert.Equal(t, c, "Hello, test!")
 }
+
+func TestHelperCmd(t *testing.T) {
+	info := newInfoCmd()
+	helper := isHelperCmd(info)
+	assert.True(t, helper)
+
+	list := newListCmd()
+	noHelper := isHelperCmd(list)
+	assert.False(t, noHelper)
+}

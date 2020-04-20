@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/cligger"
 )
 
 var (
@@ -14,22 +15,23 @@ var (
 
 func NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
-		Use:   "hostctl",
-		Short: "Your dev tool to manage /etc/hosts like a pro",
+		Use:     "hostctl",
+		Short:   "Your dev tool to manage /etc/hosts like a pro",
+		Version: version,
 		Long: `
-		    __                    __           __     __
-		   / /_   ____    _____  / /_  _____  / /_   / /
-		  / __ \ / __ \  / ___/ / __/ / ___/ / __/  / /
-		 / / / // /_/ / (__  ) / /_  / /__  / /_   / /
-		/_/ /_/ \____/ /____/  \__/  \___/  \__/  /_/
-
-
 hostctl is a CLI tool to manage your hosts file with ease.
 You can have multiple profiles, enable/disable exactly what
 you need each time with a simple interface.
 `,
-		SilenceUsage: true,
+		SilenceUsage:  true,
+		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			noColor, _ := cmd.Flags().GetBool("no-color")
+
+			if noColor {
+				cligger.DisableColor()
+			}
+			cligger.SetWriter(cmd.OutOrStdout())
 			isSnapBuild := snapBuild == "yes"
 			err := checkSnapRestrictions(cmd, isSnapBuild)
 			if err != nil {
@@ -40,9 +42,10 @@ you need each time with a simple interface.
 			showHostFile := host != getDefaultHostFile(isSnapBuild) || os.Getenv("HOSTCTL_FILE") != ""
 
 			quiet := needsQuietOutput(cmd)
+			isHelper := isHelperCmd(cmd)
 
-			if showHostFile && !quiet {
-				_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Using hosts file: %s\n", host)
+			if showHostFile && !quiet && !isHelper {
+				cligger.Info("Using hosts file: %s\n", host)
 			}
 
 			return nil
@@ -58,7 +61,9 @@ you need each time with a simple interface.
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
 	rootCmd.PersistentFlags().Bool("raw", false, "Output without borders (same as -o raw)")
 	rootCmd.PersistentFlags().StringP("out", "o", "table", "Output type (table|raw|markdown|json)")
-	rootCmd.PersistentFlags().StringSliceP("column", "c", nil, "Columns to show on lists")
+	rootCmd.PersistentFlags().StringSliceP("column", "c", nil, "Column names to show on lists. comma separated")
+
+	rootCmd.PersistentFlags().Bool("no-color", false, "force colorless output")
 
 	registerCommands(rootCmd)
 
@@ -99,7 +104,8 @@ func registerCommands(rootCmd *cobra.Command) {
 	addCmd, removeCmd := newAddRemoveCmd()
 
 	addCmd.Flags().StringP("from", "f", "", "file to read")
-	addCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
+	addCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific "+
+		"amount of time. (example: 5m, 1h)")
 	addCmd.PersistentFlags().BoolP("uniq", "u", false, "only keep uniq domains per IP")
 
 	// remove

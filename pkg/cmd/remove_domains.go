@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/cligger"
 
 	"github.com/guumaster/hostctl/pkg/host/file"
 )
@@ -42,9 +43,9 @@ It cannot be undone unless you have a backup and restore it.
 			}
 			if !quiet {
 				if removed {
-					_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Profile '%s' removed.\n\n", name)
+					cligger.Success("Profile '%s' removed.\n\n", name)
 				} else {
-					_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Domains '%s' removed.\n\n", strings.Join(args[1:], ", "))
+					cligger.Success("Domains '%s' removed.\n\n", strings.Join(args[1:], ", "))
 				}
 			}
 			return nil

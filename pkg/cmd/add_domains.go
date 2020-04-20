@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/cligger"
 
 	"github.com/guumaster/hostctl/pkg/host/file"
 )
@@ -40,7 +41,7 @@ If the profile already exists it will be added to it.`,
 				return err
 			}
 			if !quiet {
-				_, _ = fmt.Fprintf(cmd.OutOrStdout(), "Domains '%s' added.\n\n", strings.Join(args[1:], ", "))
+				cligger.Success("Domains '%s' added.\n\n", strings.Join(args[1:], ", "))
 			}
 			return nil
 		},
