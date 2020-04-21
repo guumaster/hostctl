@@ -103,7 +103,7 @@ snapcrafts:
     grade: stable
     confinement: strict
     license: MIT
-    publish: true
+    publish: false
     apps:
       hostctl:
         plugs: ["network-control"]
