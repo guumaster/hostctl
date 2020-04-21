@@ -3,8 +3,9 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host/file"
-	"github.com/guumaster/hostctl/pkg/host/render"
+	"github.com/guumaster/hostctl/pkg/file"
+	"github.com/guumaster/hostctl/pkg/render"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func newStatusCmd() *cobra.Command {
@@ -25,7 +26,7 @@ The "default" profile is always on and will be skipped.
 			}
 
 			r := getRenderer(cmd, &render.TableRendererOptions{
-				Columns: render.ProfilesOnlyColumns,
+				Columns: types.ProfilesOnlyColumns,
 			})
 
 			h.ProfileStatus(r, profiles)

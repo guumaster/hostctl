@@ -10,10 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
-	"github.com/guumaster/hostctl/pkg/host/docker"
-	"github.com/guumaster/hostctl/pkg/host/errors"
-	"github.com/guumaster/hostctl/pkg/host/file"
+	"github.com/guumaster/hostctl/pkg/file"
+	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 type composeInfo struct {
@@ -32,7 +31,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			name, _ := cmd.Flags().GetString("profile")
 
 			if name == "default" {
-				return errors.ErrDefaultProfile
+				return types.ErrDefaultProfile
 			}
 			return nil
 		},
@@ -51,7 +50,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			name := profiles[0]
 
 			if name == "" && compose.ProjectName == "" {
-				return errors.ErrMissingProfile
+				return types.ErrMissingProfile
 			}
 
 			if name == "" {
@@ -66,7 +65,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 
 			ctx := context.Background()
 
-			p, err := docker.NewProfileFromDocker(ctx, &docker.Options{
+			p, err := profile.NewProfileFromDocker(ctx, &profile.DockerOptions{
 				Domain:      domain,
 				Network:     network,
 				ComposeFile: compose.File,
@@ -84,7 +83,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			}
 
 			p.Name = name
-			p.Status = host.Enabled
+			p.Status = types.Enabled
 
 			err = h.AddProfile(p)
 			if err != nil {

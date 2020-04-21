@@ -42,10 +42,11 @@ var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Comma
 
 	if !quiet {
 		p := strings.Join(args, ", ")
+		_, _ = fmt.Fprintln(cmd.OutOrStdout())
 		if duration == 0 {
-			cligger.Info("\nWaiting until ctrl+c to %s from profile '%s'\n\n", action, p)
+			cligger.Info("Waiting until ctrl+c to %s from profile '%s'\n\n", action, p)
 		} else if duration > 0 {
-			cligger.Info("\nWaiting for %s or ctrl+c to %s from profile '%s'\n\n", duration, action, p)
+			cligger.Info("Waiting for %s or ctrl+c to %s from profile '%s'\n\n", duration, action, p)
 		}
 	}
 

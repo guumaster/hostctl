@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/host/errors"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func Test_Toggle(t *testing.T) {
@@ -48,6 +48,6 @@ func Test_Toggle(t *testing.T) {
 		cmd.SetArgs([]string{"toggle", "unknown", "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
-		assert.EqualError(t, err, errors.ErrUnknownProfile.Error())
+		assert.EqualError(t, err, types.ErrUnknownProfile.Error())
 	})
 }

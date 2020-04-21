@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host/file"
+	"github.com/guumaster/hostctl/pkg/file"
 )
 
 type enableDisableFn func(h *file.File, profiles []string, only, all bool) error

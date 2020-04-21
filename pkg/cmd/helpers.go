@@ -11,14 +11,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/guumaster/hostctl/pkg/host"
-	"github.com/guumaster/hostctl/pkg/host/errors"
-	"github.com/guumaster/hostctl/pkg/host/render"
+	"github.com/guumaster/hostctl/pkg/render"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
-func commonCheckProfileOnly(cmd *cobra.Command, args []string) error {
+func commonCheckProfileOnly(_ *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return errors.ErrMissingProfile
+		return types.ErrMissingProfile
 	}
 
 	if err := containsDefault(args); err != nil {
@@ -35,7 +34,7 @@ func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
 	}
 
 	if !all && len(args) == 0 {
-		return errors.ErrMissingProfile
+		return types.ErrMissingProfile
 	}
 
 	if err := containsDefault(args); err != nil {
@@ -47,7 +46,7 @@ func commonCheckArgsWithAll(cmd *cobra.Command, args []string) error {
 
 func commonCheckArgs(_ *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return errors.ErrMissingProfile
+		return types.ErrMissingProfile
 	} else if len(args) > 1 {
 		return ErrMultipleProfiles
 	}
@@ -73,8 +72,8 @@ func isPiped() bool {
 
 func containsDefault(args []string) error {
 	for _, p := range args {
-		if p == host.Default {
-			return errors.ErrDefaultProfile
+		if p == types.Default {
+			return types.ErrDefaultProfile
 		}
 	}
 
@@ -110,7 +109,7 @@ func checkSnapRestrictions(cmd *cobra.Command, isSnap bool) error {
 	}
 
 	if from != "" || src != defaultSrc && !isValidURL(from) {
-		return errors.ErrSnapConfinement
+		return types.ErrSnapConfinement
 	}
 
 	return nil
@@ -143,7 +142,7 @@ func readerFromURL(url string) (io.Reader, error) {
 	return bytes.NewReader(b), err
 }
 
-func getRenderer(cmd *cobra.Command, opts *render.TableRendererOptions) render.Renderer {
+func getRenderer(cmd *cobra.Command, opts *render.TableRendererOptions) types.Renderer {
 	raw, _ := cmd.Flags().GetBool("raw")
 	out, _ := cmd.Flags().GetString("out")
 	cols, _ := cmd.Flags().GetStringSlice("column")

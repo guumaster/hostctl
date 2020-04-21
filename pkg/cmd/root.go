@@ -104,15 +104,14 @@ func registerCommands(rootCmd *cobra.Command) {
 	addCmd, removeCmd := newAddRemoveCmd()
 
 	addCmd.Flags().StringP("from", "f", "", "file to read")
-	addCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific "+
-		"amount of time. (example: 5m, 1h)")
+	addCmd.PersistentFlags().
+		DurationP("wait", "w", -1, "Enables a profile for a specific amount of time. (example: 5m, 1h)")
 	addCmd.PersistentFlags().BoolP("uniq", "u", false, "only keep uniq domains per IP")
 
 	// remove
 	removeCmd.Flags().Bool("all", false, "Remove all profiles")
 
 	// add domains
-
 	addDomainsCmd, removeDomainsCmd := newAddRemoveDomainsCmd()
 	addDomainsCmd.Flags().String("ip", "127.0.0.1", "domains ip")
 
@@ -146,22 +145,20 @@ func registerCommands(rootCmd *cobra.Command) {
 
 	// sync
 	syncCmd := newSyncCmd()
-
-	syncCmd.PersistentFlags().String("network", "", "Filter containers from a specific network")
-	syncCmd.PersistentFlags().StringP("domain", "d", "loc", "domain where your docker containers will be added")
 	syncCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
 
 	// sync docker
 	syncDockerCmd := newSyncDockerCmd(removeCmd)
+	syncDockerCmd.Flags().String("network", "", "Filter containers from a specific network")
+	syncDockerCmd.Flags().StringP("domain", "d", "loc", "domain where your docker containers will be added")
 
 	// sync docker compose
 	syncDockerComposeCmd := newSyncDockerComposeCmd(removeCmd)
+	syncDockerComposeCmd.Flags().String("network", "", "Filter containers from a specific network")
+	syncDockerComposeCmd.Flags().StringP("domain", "d", "loc", "domain where your docker containers will be added")
 	syncDockerComposeCmd.Flags().String("compose-file", "", "path to docker-compose.yml")
 	syncDockerComposeCmd.Flags().String("project-name", "", "docker compose project name")
 	syncDockerComposeCmd.Flags().Bool("prefix", false, "keep project name prefix from domain name")
-
-	syncCmd.AddCommand(syncDockerCmd)
-	syncCmd.AddCommand(syncDockerComposeCmd)
 
 	// list
 	listCmd := newListCmd()
@@ -172,6 +169,8 @@ func registerCommands(rootCmd *cobra.Command) {
 	// register sub-commands
 	addCmd.AddCommand(addDomainsCmd)
 	removeCmd.AddCommand(removeDomainsCmd)
+	syncCmd.AddCommand(syncDockerCmd)
+	syncCmd.AddCommand(syncDockerComposeCmd)
 
 	// register all commands
 	rootCmd.AddCommand(addCmd)

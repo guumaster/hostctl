@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/host/errors"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func Test_Disable(t *testing.T) {
@@ -48,7 +48,7 @@ func Test_Disable(t *testing.T) {
 		cmd.SetArgs([]string{"disable", "unknown", "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
-		assert.EqualError(t, err, errors.ErrUnknownProfile.Error())
+		assert.EqualError(t, err, types.ErrUnknownProfile.Error())
 	})
 
 	t.Run("Disable Only", func(t *testing.T) {
@@ -209,7 +209,7 @@ func Test_Enable(t *testing.T) {
 		cmd.SetArgs([]string{"enable", "unknown", "--host-file", tmp.Name()})
 
 		err := cmd.Execute()
-		assert.EqualError(t, err, errors.ErrUnknownProfile.Error())
+		assert.EqualError(t, err, types.ErrUnknownProfile.Error())
 	})
 
 	t.Run("Enable Only", func(t *testing.T) {

@@ -10,8 +10,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/host/errors"
-	"github.com/guumaster/hostctl/pkg/host/render"
+	"github.com/guumaster/hostctl/pkg/render"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 var defaultProfile = "127.0.0.1 localhost\n"
@@ -52,7 +52,7 @@ func makeTempHostsFile(t *testing.T, pattern string) *os.File {
 
 func TestContainsDefault(t *testing.T) {
 	err := containsDefault([]string{"default"})
-	assert.EqualError(t, err, errors.ErrDefaultProfile.Error())
+	assert.EqualError(t, err, types.ErrDefaultProfile.Error())
 
 	err = containsDefault([]string{"awesome"})
 	assert.NoError(t, err)

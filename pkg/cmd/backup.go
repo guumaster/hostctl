@@ -5,7 +5,7 @@ import (
 
 	"github.com/guumaster/cligger"
 
-	"github.com/guumaster/hostctl/pkg/host/file"
+	"github.com/guumaster/hostctl/pkg/file"
 )
 
 func newBackupCmd() *cobra.Command {
