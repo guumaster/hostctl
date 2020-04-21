@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"strings"
 
 	"github.com/guumaster/hostctl/pkg/host/errors"
 	"github.com/guumaster/hostctl/pkg/host/render"
@@ -167,17 +168,17 @@ func (p *Profile) Render(w io.StringWriter) error {
 func (d DefaultProfile) Render(w io.StringWriter) error {
 	tmp := bytes.NewBufferString("")
 
-	for _, row := range d {
-		line := ""
-		if row.Comment != "" {
-			line = row.Comment
-		} else {
-			prefix := ""
-			if row.Status == string(Disabled) {
-				prefix = "# "
-			}
+	for i, row := range d {
+		line := getLine(row)
+		nextLine := ""
 
-			line = fmt.Sprintf("%s%s %s", prefix, row.IP, row.Host)
+		if i+1 < len(d) {
+			nextLine = getLine(d[i+1])
+		}
+
+		// skips two consecutive empty lines
+		if line == "" && nextLine == "" {
+			continue
 		}
 
 		_, err := tmp.WriteString(line + "\n")
@@ -190,6 +191,22 @@ func (d DefaultProfile) Render(w io.StringWriter) error {
 	_, err := w.WriteString(tmp.String())
 
 	return err
+}
+
+func getLine(row *render.Row) string {
+	line := ""
+	if row.Comment != "" {
+		line = row.Comment
+	} else {
+		prefix := ""
+		if row.Status == string(Disabled) {
+			prefix = "# "
+		}
+
+		line = fmt.Sprintf("%s%s %s", prefix, row.IP, row.Host)
+	}
+
+	return strings.TrimSpace(line)
 }
 
 func remove(s []string, n string) []string {
