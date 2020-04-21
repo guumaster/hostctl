@@ -50,7 +50,15 @@ func Parse(r io.Reader) (*Content, error) {
 
 		default:
 			row := parseToDefault(b, currProfile)
-			data.DefaultProfile = append(data.DefaultProfile, row)
+
+			// When hostctl banner line is detected, remove previous and next line
+			if isBannerLine(row) {
+				data.DefaultProfile = data.DefaultProfile[0 : len(data.DefaultProfile)-1]
+
+				s.Scan() // skip next line
+			} else {
+				data.DefaultProfile = append(data.DefaultProfile, row)
+			}
 		}
 
 		if err := s.Err(); err != nil {
@@ -59,6 +67,10 @@ func Parse(r io.Reader) (*Content, error) {
 	}
 
 	return data, nil
+}
+
+func isBannerLine(r *tableRow) bool {
+	return strings.Contains(r.Comment, "# Content under this line is handled by hostctl. DO NOT EDIT.")
 }
 
 func parseToDefault(b []byte, currProfile string) *tableRow {

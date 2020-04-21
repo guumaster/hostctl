@@ -1,9 +1,11 @@
 package host
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"net"
+	"strings"
 )
 
 // String returns a string representation of the profile
@@ -122,24 +124,45 @@ func (p *Profile) Render(w io.StringWriter) error {
 
 // Render writes the default profile content to the given StringWriter
 func (d DefaultProfile) Render(w io.StringWriter) error {
-	for _, row := range d {
-		line := ""
-		if row.Comment != "" {
-			line = row.Comment
-		} else {
-			prefix := ""
-			if row.Status == string(Disabled) {
-				prefix = "# "
-			}
+	tmp := bytes.NewBufferString("")
 
-			line = fmt.Sprintf("%s%s %s", prefix, row.IP, row.Host)
+	for i, row := range d {
+		line := getLine(row)
+		nextLine := ""
+
+		if i+1 < len(d) {
+			nextLine = getLine(d[i+1])
 		}
 
-		_, err := w.WriteString(line + "\n")
+		// skips two consecutive empty lines
+		if line == "" && nextLine == "" {
+			continue
+		}
+
+		_, err := tmp.WriteString(line + "\n")
 		if err != nil {
 			return err
 		}
 	}
 
-	return nil
+	// Write to input writer after knowing the profile is well formed
+	_, err := w.WriteString(tmp.String())
+
+	return err
+}
+
+func getLine(row *tableRow) string {
+	line := ""
+	if row.Comment != "" {
+		line = row.Comment
+	} else {
+		prefix := ""
+		if row.Status == string(Disabled) {
+			prefix = "# "
+		}
+
+		line = fmt.Sprintf("%s%s %s", prefix, row.IP, row.Host)
+	}
+
+	return strings.TrimSpace(line)
 }
