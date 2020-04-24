@@ -24,3 +24,8 @@ Here you can read about how to use `hostctl` to get most of every feature.
 * [Ephemeral profiles](./ephemeral_profiles)
 * [Backup/Restore hosts file](./backup_restore)
 * [CLI autocompletion](./auto_completion)
+
+
+## Use Cases
+
+* ["How I Force Myself to Work"](https://peterthaleikis.com/posts/how-i-force-myself-to-work/) - using hostctl to ensure you aren't drifting off into other things while working
