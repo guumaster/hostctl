@@ -6,7 +6,7 @@ import (
 
 	"github.com/guumaster/cligger"
 
-	"github.com/guumaster/hostctl/pkg/cmd"
+	"github.com/guumaster/hostctl/cmd/hostctl/actions"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		cligger.Fatal("error: %w\n", err)
 	}
 
-	rootCmd := cmd.NewRootCmd()
+	rootCmd := actions.NewRootCmd()
 
 	if err := rootCmd.Execute(); err != nil {
 		cligger.Fatal("error: %s\n", err)
