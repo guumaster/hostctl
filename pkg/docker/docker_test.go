@@ -3,14 +3,45 @@ package docker
 import (
 	"bytes"
 	"context"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"testing"
 
-	"github.com/docker/docker/api/types"
+	dtypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
+
+func TestGetNetworkID(t *testing.T) {
+	cli := newClientWithResponse(t, map[string]string{
+		"/v1.22/networks": `[
+{"Id": "networkId1", "Name": "networkName1" },
+{"Id": "networkId2", "Name": "networkName2" }
+]`,
+	})
+
+	t.Run("By Name", func(t *testing.T) {
+		net, err := GetNetworkID(context.Background(), cli, "networkName2")
+		assert.NoError(t, err)
+
+		assert.Equal(t, "networkId2", net)
+	})
+
+	t.Run("By Name error", func(t *testing.T) {
+		_, err := GetNetworkID(context.Background(), cli, "invent")
+		assert.True(t, errors.Is(err, types.ErrUnknownNetworkID))
+	})
+
+	t.Run("By Name empty", func(t *testing.T) {
+		list, err := GetNetworkID(context.Background(), cli, "")
+		assert.NoError(t, err)
+		assert.Empty(t, list)
+	})
+
+}
 
 func TestGetContainerList(t *testing.T) {
 	cli := newClientWithResponse(t, map[string]string{
@@ -32,17 +63,17 @@ func TestGetContainerList(t *testing.T) {
 
 	assert.Len(t, list, 2)
 
-	assert.IsType(t, types.Container{}, list[0])
-	assert.IsType(t, types.Container{}, list[1])
+	assert.IsType(t, dtypes.Container{}, list[0])
+	assert.IsType(t, dtypes.Container{}, list[1])
 	assert.Equal(t, "networkID1", list[1].NetworkSettings.Networks["networkName1"].NetworkID)
 
-	assert.Equal(t, types.Container{
+	assert.Equal(t, dtypes.Container{
 		ID:    "container_id1",
 		Names: []string{"container1"},
 
 		NetworkSettings: list[0].NetworkSettings, // simplify the comparison
 	}, list[0])
-	assert.Equal(t, types.Container{
+	assert.Equal(t, dtypes.Container{
 		ID:    "container_id2",
 		Names: []string{"container2"},
 
