@@ -36,45 +36,58 @@ func (p *Profile) AppendIP(n string) {
 }
 
 // AddRoute adds a single route to the profile
-func (p *Profile) AddRoute(ip, hostname string) {
+func (p *Profile) AddRoute(route *Route) {
+	p.AddRoutes([]*Route{route})
+}
+
+// AddRoute adds a single route to the profile
+func (p *Profile) AddRouteUniq(route *Route) {
+	p.AddRoutesUniq([]*Route{route})
+}
+
+// AddRoutes adds a list of routes to the profile
+func (p *Profile) AddRoutes(routes []*Route) {
 	if p.Routes == nil {
 		p.Routes = map[string]*Route{}
 	}
 
-	if p.Routes[ip] == nil {
-		p.AppendIP(ip)
-		p.Routes[ip] = &Route{
-			IP:        net.ParseIP(ip),
-			HostNames: []string{hostname},
+	for _, r := range routes {
+		ip := r.IP.String()
+		if p.Routes[ip] == nil {
+			p.AppendIP(ip)
+			p.Routes[ip] = &Route{
+				IP:        net.ParseIP(ip),
+				HostNames: r.HostNames,
+			}
+		} else {
+			p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, r.HostNames...)
 		}
-	} else {
-		p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, hostname)
 	}
 }
 
-// AddRoutes adds multiple routes to the profile
-func (p *Profile) AddRoutes(ip string, hostnames []string) {
-	if p.Routes == nil {
-		p.Routes = map[string]*Route{}
-	}
+// AddRoutesUniq adds non duplicated routes to a profile
+func (p *Profile) AddRoutesUniq(routes []*Route) {
+	p.AddRoutes(routes)
 
-	if p.Routes[ip] == nil {
-		p.AppendIP(ip)
-		p.Routes[ip] = &Route{
-			IP:        net.ParseIP(ip),
-			HostNames: hostnames,
+	done := map[string]bool{}
+
+	for _, r := range routes {
+		ip := r.IP.String()
+		if _, ok := done[ip]; ok {
+			continue
 		}
-	} else {
-		p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, hostnames...)
+
+		p.Routes[ip].HostNames = uniqueStrings(p.Routes[ip].HostNames)
+		done[ip] = true
 	}
 }
 
-// RemoveRoutes removes multiple hostnames of a profile
-func (p *Profile) RemoveRoutes(hostnames []string) {
+// RemoveHostnames removes multiple hostnames of a profile
+func (p *Profile) RemoveHostnames(hostnames []string) {
 	for _, h := range hostnames {
-		for ip, r := range p.Routes {
-			r.HostNames = remove(r.HostNames, h)
-			if len(r.HostNames) == 0 {
+		for _, ip := range p.IPList {
+			p.Routes[ip].HostNames = remove(p.Routes[ip].HostNames, h)
+			if len(p.Routes[ip].HostNames) == 0 {
 				delete(p.Routes, ip)
 			}
 		}
@@ -100,8 +113,12 @@ func (p *Profile) GetHostNames(ip string) ([]string, error) {
 func (p *Profile) GetAllHostNames() ([]string, error) {
 	list := []string{}
 
-	for _, r := range p.Routes {
-		list = append(list, r.HostNames...)
+	if p.IPList == nil {
+		return list, nil
+	}
+
+	for _, ip := range p.IPList {
+		list = append(list, p.Routes[ip].HostNames...)
 	}
 
 	return list, nil
@@ -140,6 +157,22 @@ func (p *Profile) Render(w io.StringWriter) error {
 	_, err = w.WriteString(tmp.String())
 
 	return err
+}
+
+func uniqueStrings(xs []string) []string {
+	var list []string
+
+	keys := make(map[string]bool)
+
+	for _, entry := range xs {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+
+			list = append(list, entry)
+		}
+	}
+
+	return list
 }
 
 func remove(s []string, n string) []string {

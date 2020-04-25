@@ -8,6 +8,7 @@ import (
 	"github.com/guumaster/cligger"
 
 	"github.com/guumaster/hostctl/pkg/file"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func newAddRemoveDomainsCmd() (*cobra.Command, *cobra.Command) {
@@ -24,14 +25,14 @@ If the profile already exists it will be added to it.`,
 			ip, _ := cmd.Flags().GetString("ip")
 			quiet, _ := cmd.Flags().GetBool("quiet")
 			name := args[0]
-			routes := args[1:]
+			hostnames := args[1:]
 
 			h, err := file.NewFile(src)
 			if err != nil {
 				return err
 			}
 
-			err = h.AddRoutes(name, ip, routes)
+			err = h.AddRoute(name, types.NewRoute(ip, hostnames...))
 			if err != nil {
 				return err
 			}

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"net"
 	"strings"
 )
 
@@ -13,12 +12,6 @@ type Content struct {
 	DefaultProfile DefaultProfile
 	ProfileNames   []string
 	Profiles       map[string]*Profile
-}
-
-// Route contains hostnames of all routes with the same IP
-type Route struct {
-	IP        net.IP
-	HostNames []string
 }
 
 // ProfileStatus represents the status of a Profile

@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"path"
@@ -63,12 +62,15 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 				domain = fmt.Sprintf("%s.loc", name)
 			}
 
-			ctx := context.Background()
+			f, err := os.Open(compose.File)
+			if err != nil {
+				return err
+			}
 
-			p, err := profile.NewProfileFromDocker(ctx, &profile.DockerOptions{
+			p, err := profile.NewProfileFromDockerCompose(&profile.DockerOptions{
 				Domain:      domain,
 				Network:     network,
-				ComposeFile: compose.File,
+				ComposeFile: f,
 				ProjectName: compose.ProjectName,
 				KeepPrefix:  prefix,
 				Cli:         nil,
@@ -85,7 +87,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			p.Name = name
 			p.Status = types.Enabled
 
-			err = h.AddProfile(p)
+			err = h.ReplaceProfile(p)
 			if err != nil {
 				return err
 			}

@@ -9,6 +9,39 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
+func TestFile_MergeFile(t *testing.T) {
+	mem := createBasicFS(t)
+
+	f, err := mem.Open("/tmp/etc/hosts")
+	assert.NoError(t, err)
+
+	m1, err := NewWithFs(f.Name(), mem)
+	assert.NoError(t, err)
+
+	f, _ = mem.Create("/tmp/etc/hosts")
+	defer f.Close()
+
+	_, _ = f.WriteString(`
+# profile.on profile3
+2.2.2.2 awesome.loc
+2.2.2.3 super.awesome.loc
+# end
+`)
+	m2, err := NewWithFs(f.Name(), mem)
+	assert.NoError(t, err)
+
+	expected, err := m2.GetProfile("profile3")
+	assert.NoError(t, err)
+	m1.MergeFile(m2)
+
+	p, err := m1.GetProfile("profile3")
+	assert.NoError(t, err)
+	assert.EqualValues(t, expected, p)
+
+	list := []string{"profile1", "profile2", "profile3"}
+	assert.Equal(t, list, m1.GetProfileNames())
+}
+
 func TestFile_MergeProfiles(t *testing.T) {
 	mem := createBasicFS(t)
 

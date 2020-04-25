@@ -12,8 +12,20 @@ func NewProfileFromReader(r io.Reader, uniq bool) (*types.Profile, error) {
 	p := &types.Profile{}
 	s := bufio.NewScanner(r)
 
+	routes := []*types.Route{}
+
 	for s.Scan() {
-		appendLine(p, string(s.Bytes()))
+		line := string(s.Bytes())
+		if line == "" {
+			continue
+		}
+
+		route, ok := parseRouteLine(line)
+		if !ok {
+			continue
+		}
+
+		routes = append(routes, route)
 
 		if err := s.Err(); err != nil {
 			return nil, err
@@ -21,26 +33,10 @@ func NewProfileFromReader(r io.Reader, uniq bool) (*types.Profile, error) {
 	}
 
 	if uniq {
-		for _, r := range p.Routes {
-			r.HostNames = uniqueStrings(r.HostNames)
-		}
+		p.AddRoutesUniq(routes)
+	} else {
+		p.AddRoutes(routes)
 	}
 
 	return p, nil
-}
-
-func uniqueStrings(xs []string) []string {
-	var list []string
-
-	keys := make(map[string]bool)
-
-	for _, entry := range xs {
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-
-			list = append(list, entry)
-		}
-	}
-
-	return list
 }

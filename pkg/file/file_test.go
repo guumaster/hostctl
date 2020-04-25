@@ -37,8 +37,15 @@ func TestManagerStatus(t *testing.T) {
 			}
 			assert.Equal(t, expected, actual)
 		})
+
+		t.Run("GetStatus unknown", func(t *testing.T) {
+			actual := m.GetStatus([]string{"unknown"})
+			expected := map[string]types.Status{}
+			assert.Equal(t, expected, actual)
+		})
 	})
 }
+
 func TestManagerRoutes(t *testing.T) {
 	t.Run("AddRoutes", func(t *testing.T) {
 		mem := createBasicFS(t)
@@ -55,7 +62,7 @@ func TestManagerRoutes(t *testing.T) {
 		hosts, err := p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
 
-		err = f.AddRoutes("profile2", "3.3.3.4", hosts)
+		err = f.AddRoute("profile2", types.NewRoute("3.3.3.4", hosts...))
 		assert.NoError(t, err)
 
 		err = f.Flush()
@@ -86,7 +93,7 @@ func TestManagerRoutes(t *testing.T) {
 
 		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 
-		err = f.AddRoutes("awesome", "3.3.3.4", []string{"host1.loc", "host2.loc"})
+		err = f.AddRoute("awesome", types.NewRoute("3.3.3.4", "host1.loc", "host2.loc"))
 		assert.NoError(t, err)
 
 		err = f.Flush()
@@ -116,7 +123,7 @@ func TestManagerRoutes(t *testing.T) {
 
 		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 
-		removed, err := f.RemoveRoutes("profile2", []string{"second.loc"})
+		removed, err := f.RemoveHostnames("profile2", []string{"second.loc"})
 		assert.NoError(t, err)
 		assert.Equal(t, false, removed)
 
@@ -145,7 +152,7 @@ func TestManagerRoutes(t *testing.T) {
 
 		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 
-		removed, err := f.RemoveRoutes("profile2", []string{"first.loc", "second.loc"})
+		removed, err := f.RemoveHostnames("profile2", []string{"first.loc", "second.loc"})
 		assert.NoError(t, err)
 		assert.Equal(t, true, removed)
 
@@ -204,6 +211,23 @@ func TestManagerWrite(t *testing.T) {
 		f, err := NewWithFs("/tmp/etc/hosts", mem)
 		assert.NoError(t, err)
 
+		f.writeBanner(h)
+		h.Close()
+
+		content, err := afero.ReadFile(mem, h.Name())
+		assert.NoError(t, err)
+
+		assert.Contains(t, string(content), Banner)
+	})
+
+	t.Run("writeBanner once", func(t *testing.T) {
+		mem := createBasicFS(t)
+		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+
+		f, err := NewWithFs("/tmp/etc/hosts", mem)
+		assert.NoError(t, err)
+
+		f.writeBanner(h)
 		f.writeBanner(h)
 		h.Close()
 

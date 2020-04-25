@@ -49,9 +49,17 @@ func Parse(r io.Reader) (*types.Content, error) {
 			currProfile = ""
 
 		case currProfile != "":
-			p := data.Profiles[currProfile]
-			appendLine(p, string(b))
-			data.Profiles[currProfile] = p
+			line := string(b)
+			if line == "" {
+				continue
+			}
+
+			route, ok := parseRouteLine(line)
+			if !ok {
+				continue
+			}
+
+			data.Profiles[currProfile].AddRoute(route)
 
 		default:
 			row := parseToDefault(b, currProfile)
@@ -78,20 +86,6 @@ func isBannerLine(r *types.Row) bool {
 	return strings.Contains(r.Comment, "# Content under this line is handled by hostctl. DO NOT EDIT.")
 }
 
-func appendLine(p *types.Profile, line string) {
-	if line == "" {
-		return
-	}
-
-	route, ok := parseLine(line)
-	if !ok {
-		return
-	}
-
-	ip := route.IP.String()
-	p.AddRoutes(ip, route.HostNames)
-}
-
 func parseToDefault(b []byte, currProfile string) *types.Row {
 	var row *types.Row
 
@@ -103,7 +97,7 @@ func parseToDefault(b []byte, currProfile string) *types.Row {
 		return row
 	}
 
-	line, ok := parseLine(string(b))
+	line, ok := parseRouteLine(string(b))
 	if !ok {
 		row = &types.Row{
 			Comment: string(b),
@@ -141,8 +135,8 @@ func parseProfileHeader(b []byte) (*types.Profile, error) {
 	}, nil
 }
 
-// ParseLine checks if a line is a host line or a comment line.
-func parseLine(str string) (*types.Route, bool) {
+// parseRouteLine checks if a line is a host line or a comment line.
+func parseRouteLine(str string) (*types.Route, bool) {
 	clean := spaceRemover.ReplaceAllString(str, " ")
 	clean = tabReplacer.ReplaceAllString(clean, " ")
 	clean = strings.TrimSpace(clean)

@@ -108,8 +108,13 @@ func (f *File) GetProfileNames() []string {
 	return f.data.ProfileNames
 }
 
-// AddRoutes add route information to a given profile
-func (f *File) AddRoutes(name, ip string, hostnames []string) error {
+// AddRoute adds a single route information to a given profile
+func (f *File) AddRoute(name string, route *types.Route) error {
+	return f.AddRoutes(name, []*types.Route{route})
+}
+
+// AddRoutes adds routes information to a given profile
+func (f *File) AddRoutes(name string, routes []*types.Route) error {
 	p, err := f.GetProfile(name)
 	if err != nil && !errors.Is(err, types.ErrUnknownProfile) {
 		return err
@@ -122,25 +127,25 @@ func (f *File) AddRoutes(name, ip string, hostnames []string) error {
 			Routes: map[string]*types.Route{},
 		}
 
-		p.AddRoutes(ip, hostnames)
+		p.AddRoutes(routes)
 
 		return f.AddProfile(p)
 	}
 
-	p.AddRoutes(ip, hostnames)
+	p.AddRoutes(routes)
 
 	return nil
 }
 
-// RemoveRoutes removes route information from a given types.
+// RemoveHostnames removes route information from a given types.
 // also removes the profile if gets empty.
-func (f *File) RemoveRoutes(name string, routes []string) (bool, error) {
+func (f *File) RemoveHostnames(name string, routes []string) (bool, error) {
 	p, err := f.GetProfile(name)
 	if err != nil {
 		return false, err
 	}
 
-	p.RemoveRoutes(routes)
+	p.RemoveHostnames(routes)
 
 	if len(p.Routes) == 0 {
 		err := f.RemoveProfile(p.Name)

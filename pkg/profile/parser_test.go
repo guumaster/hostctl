@@ -41,6 +41,19 @@ func TestHostFile(t *testing.T) {
 	})
 }
 
+func appendLine(p *types.Profile, line string) {
+	if line == "" {
+		return
+	}
+
+	route, ok := parseRouteLine(line)
+	if !ok {
+		return
+	}
+
+	p.AddRoute(route)
+}
+
 func TestParser(t *testing.T) {
 	t.Run("appendLine enabled", func(t *testing.T) {
 		p := &types.Profile{

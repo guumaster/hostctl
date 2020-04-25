@@ -5,7 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/ghodss/yaml"
+	"gopkg.in/yaml.v2"
 )
 
 // ComposeData represents data in a docker-compose.yml file

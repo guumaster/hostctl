@@ -1,24 +1,21 @@
-package profile
+package types
 
 import (
 	"bytes"
 	"io/ioutil"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func TestProfile(t *testing.T) {
 	t.Run("String", func(t *testing.T) {
-		p := types.Profile{
+		p := Profile{
 			Name:   "awesome",
-			Status: types.Enabled,
+			Status: Enabled,
 		}
 		assert.Equal(t, "[on]awesome", p.String())
-		p.Status = types.Disabled
+		p.Status = Disabled
 		assert.Equal(t, "[off]awesome", p.String())
 	})
 
@@ -29,15 +26,16 @@ func TestProfile(t *testing.T) {
 127.0.0.1 second.loc
 # end
 `
-		r := strings.NewReader(testEnabledProfile)
-		p, err := NewProfileFromReader(r, true)
-		assert.NoError(t, err)
 
-		p.Name = "profile1"
-		p.Status = types.Enabled
+		p := Profile{
+			Name:   "profile1",
+			Status: Enabled,
+		}
+		p.AddRoute(NewRoute("127.0.0.1", "first.loc", "second.loc"))
+
 		b := bytes.NewBufferString("")
 
-		err = p.Render(b)
+		err := p.Render(b)
 		assert.NoError(t, err)
 
 		c, err := ioutil.ReadAll(b)
@@ -47,11 +45,9 @@ func TestProfile(t *testing.T) {
 	})
 
 	t.Run("AddRoute empty profile", func(t *testing.T) {
-		r := strings.NewReader(``)
-		p, err := NewProfileFromReader(r, true)
-		assert.NoError(t, err)
+		p := Profile{}
 
-		p.AddRoute("1.1.1.1", "added.loc")
+		p.AddRoute(NewRoute("1.1.1.1", "added.loc"))
 		names, err := p.GetHostNames("1.1.1.1")
 		assert.NoError(t, err)
 
@@ -59,12 +55,10 @@ func TestProfile(t *testing.T) {
 	})
 
 	t.Run("AddRoute same IP", func(t *testing.T) {
-		r := strings.NewReader(``)
-		p, err := NewProfileFromReader(r, true)
-		assert.NoError(t, err)
+		p := Profile{}
 
-		p.AddRoute("1.1.1.1", "added.loc")
-		p.AddRoute("1.1.1.1", "second.loc")
+		p.AddRoute(NewRoute("1.1.1.1", "added.loc"))
+		p.AddRoute(NewRoute("1.1.1.1", "second.loc"))
 		names, err := p.GetHostNames("1.1.1.1")
 		assert.NoError(t, err)
 
@@ -72,35 +66,46 @@ func TestProfile(t *testing.T) {
 	})
 
 	t.Run("AddRoute", func(t *testing.T) {
-		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := NewProfileFromReader(r, true)
-		assert.NoError(t, err)
+		p := Profile{
+			IPList: []string{"3.3.3.4"},
+			Routes: map[string]*Route{
+				"3.3.3.4": NewRoute("3.3.3.4", "some.profile.loc"),
+			},
+		}
 
-		p.AddRoute("1.1.1.1", "added.loc")
+		p.AddRoute(NewRoute("1.1.1.1", "added.loc"))
 		names, err := p.GetHostNames("1.1.1.1")
 		assert.NoError(t, err)
 
 		assert.Equal(t, []string{"added.loc"}, names)
-	})
 
-	t.Run("AddRoutes", func(t *testing.T) {
-		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := NewProfileFromReader(r, true)
+		names, err = p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
 
-		p.AddRoutes("1.1.1.1", []string{"added.loc", "another.loc"})
+		assert.Equal(t, []string{"some.profile.loc"}, names)
+	})
+
+	t.Run("AddRouteUniq", func(t *testing.T) {
+		p := Profile{}
+
+		p.AddRoute(NewRoute("1.1.1.1", "another.loc", "added.loc"))
+		p.AddRouteUniq(NewRoute("1.1.1.1", "added.loc", "third.loc"))
+
 		names, err := p.GetHostNames("1.1.1.1")
 		assert.NoError(t, err)
 
-		assert.Equal(t, []string{"added.loc", "another.loc"}, names)
+		assert.Equal(t, []string{"another.loc", "added.loc", "third.loc"}, names)
 	})
 
-	t.Run("RemoveRoutes", func(t *testing.T) {
-		r := strings.NewReader("3.3.3.4 some.profile.loc\n5.5.5.5 another.profile.loc")
-		p, err := NewProfileFromReader(r, true)
-		assert.NoError(t, err)
+	t.Run("RemoveHostnames", func(t *testing.T) {
+		p := Profile{
+			IPList: []string{"3.3.3.4"},
+			Routes: map[string]*Route{
+				"3.3.3.4": NewRoute("3.3.3.4", "another.profile.loc", "some.profile.loc"),
+			},
+		}
 
-		p.RemoveRoutes([]string{"another.profile.loc"})
+		p.RemoveHostnames([]string{"another.profile.loc"})
 		names, err := p.GetAllHostNames()
 		assert.NoError(t, err)
 
@@ -108,9 +113,9 @@ func TestProfile(t *testing.T) {
 	})
 
 	t.Run("GetHostnames", func(t *testing.T) {
-		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := NewProfileFromReader(r, true)
-		assert.NoError(t, err)
+		p := Profile{}
+
+		p.AddRoute(NewRoute("3.3.3.4", "some.profile.loc"))
 
 		names, err := p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
@@ -123,9 +128,9 @@ func TestProfile(t *testing.T) {
 }
 
 func Test_appendIP(t *testing.T) {
-	r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-	p, err := NewProfileFromReader(r, true)
-	assert.NoError(t, err)
+	p := Profile{}
+
+	p.AddRoute(NewRoute("3.3.3.4", "some.profile.loc"))
 
 	p.AppendIP("3.3.3.4")
 	p.AppendIP("3.3.3.4")
@@ -137,11 +142,11 @@ func Test_appendIP(t *testing.T) {
 func TestDefaultProfile_Render(t *testing.T) {
 	b := bytes.NewBufferString("")
 
-	d := types.DefaultProfile{}
+	d := DefaultProfile{}
 
-	d = append(d, &types.Row{
+	d = append(d, &Row{
 		Comment: "# This is a comment",
-	}, &types.Row{
+	}, &Row{
 		IP:   "127.0.0.1",
 		Host: "localhost",
 	})

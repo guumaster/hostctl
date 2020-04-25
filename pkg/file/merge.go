@@ -4,7 +4,17 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-// MergeProfiles joins new content with existing content
+// MergeFile joins new content with existing content
+func (f *File) MergeFile(from *File) {
+	var ps []*types.Profile
+	for _, p := range from.data.Profiles {
+		ps = append(ps, p)
+	}
+
+	f.MergeProfiles(ps)
+}
+
+// MergeProfiles joins new profiles with existing content
 func (f *File) MergeProfiles(profiles []*types.Profile) {
 	for _, newP := range profiles {
 		newName := newP.Name
@@ -22,10 +32,12 @@ func (f *File) MergeProfiles(profiles []*types.Profile) {
 			baseP.Routes = map[string]*types.Route{}
 		}
 
+		routes := []*types.Route{}
 		for _, r := range newP.Routes {
-			ip := r.IP.String()
-			baseP.AddRoutes(ip, r.HostNames)
+			routes = append(routes, r)
 		}
+
+		baseP.AddRoutes(routes)
 
 		f.data.Profiles[newName] = baseP
 	}

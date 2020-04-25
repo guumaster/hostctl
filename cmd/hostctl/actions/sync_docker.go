@@ -1,8 +1,6 @@
 package actions
 
 import (
-	"context"
-
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/file"
@@ -23,9 +21,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 			domain, _ := cmd.Flags().GetString("domain")
 			network, _ := cmd.Flags().GetString("network")
 
-			ctx := context.Background()
-
-			p, err := profile.NewProfileFromDocker(ctx, &profile.DockerOptions{
+			p, err := profile.NewProfileFromDocker(&profile.DockerOptions{
 				Domain:  domain,
 				Network: network,
 				Cli:     nil,

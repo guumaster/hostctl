@@ -32,7 +32,7 @@ It cannot be undone unless you have a backup and restore it.
 				return err
 			}
 
-			removed, err := h.RemoveRoutes(name, domains)
+			removed, err := h.RemoveHostnames(name, domains)
 			if err != nil {
 				return err
 			}
