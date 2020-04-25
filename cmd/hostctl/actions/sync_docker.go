@@ -8,7 +8,11 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-func newSyncDockerCmd(removeCmd *cobra.Command) *cobra.Command {
+func newSyncDockerCmd(removeCmd *cobra.Command, optsFn getOptionsFn) *cobra.Command {
+	if optsFn == nil {
+		optsFn = getDockerOptions
+	}
+
 	return &cobra.Command{
 		Use:   "docker [profile] [flags]",
 		Short: "Sync your Docker containers IPs with a profile.",
@@ -18,14 +22,13 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 		Args: commonCheckArgs,
 		RunE: func(cmd *cobra.Command, profiles []string) error {
 			src, _ := cmd.Flags().GetString("host-file")
-			domain, _ := cmd.Flags().GetString("domain")
-			network, _ := cmd.Flags().GetString("network")
 
-			p, err := profile.NewProfileFromDocker(&profile.DockerOptions{
-				Domain:  domain,
-				Network: network,
-				Cli:     nil,
-			})
+			opts, err := optsFn(cmd, nil)
+			if err != nil {
+				return err
+			}
+
+			p, err := profile.NewProfileFromDocker(opts)
 			if err != nil {
 				return err
 			}
@@ -38,7 +41,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 			p.Name = profiles[0]
 			p.Status = types.Enabled
 
-			err = h.AddProfile(p)
+			err = h.ReplaceProfile(p)
 			if err != nil {
 				return err
 			}
@@ -49,4 +52,19 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 			return postActionCmd(cmd, args, removeCmd, true)
 		},
 	}
+}
+
+func getDockerOptions(cmd *cobra.Command, _ []string) (*profile.DockerOptions, error) {
+	domain, _ := cmd.Flags().GetString("domain")
+	network, _ := cmd.Flags().GetString("network")
+
+	if domain == "" {
+		domain = "loc"
+	}
+
+	return &profile.DockerOptions{
+		Domain:  domain,
+		Network: network,
+		Cli:     nil,
+	}, nil
 }

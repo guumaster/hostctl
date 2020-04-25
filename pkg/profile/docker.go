@@ -107,7 +107,6 @@ func addFromContainer(profile *types.Profile, containers []dtypes.Container, opt
 }
 
 func addFromComposeService(p *types.Profile, containers []dtypes.Container, srv []string, opts *DockerOptions) {
-	// removeSuffix := regexp.MustCompile("(_[0-9]+)$")
 	for _, c := range containers {
 		for _, n := range c.NetworkSettings.Networks {
 			if opts.NetworkID != "" && n.NetworkID != opts.NetworkID {
@@ -115,24 +114,32 @@ func addFromComposeService(p *types.Profile, containers []dtypes.Container, srv 
 			}
 
 			name := strings.Replace(c.Names[0], "/", "", -1)
-			routes := []*types.Route{}
 
-			for _, s := range srv {
-				if !strings.Contains(name, s) {
-					continue
-				}
-
-				// name := removeSuffix.ReplaceAllString(name, "")
-				if !opts.KeepPrefix {
-					name = strings.Replace(name, opts.ProjectName+"_", "", 1)
-				}
-
-				name = fmt.Sprintf("%s.%s", name, opts.Domain)
-
-				routes = append(routes, types.NewRoute(n.IPAddress, name))
+			routes := routeFromService(srv, name, n.IPAddress, opts)
+			if len(routes) > 0 {
+				p.AddRoutes(routes)
 			}
-
-			p.AddRoutes(routes)
 		}
 	}
+}
+
+func routeFromService(srv []string, name string, ip string, opts *DockerOptions) []*types.Route {
+	// removeSuffix := regexp.MustCompile("(_[0-9]+)$")
+	routes := []*types.Route{}
+
+	for _, s := range srv {
+		if !strings.Contains(name, s) {
+			continue
+		}
+
+		// name := removeSuffix.ReplaceAllString(name, "")
+		if !opts.KeepPrefix {
+			name = strings.Replace(name, opts.ProjectName+"_", "", 1)
+		}
+
+		name = fmt.Sprintf("%s.%s", name, opts.Domain)
+		routes = append(routes, types.NewRoute(ip, name))
+	}
+
+	return routes
 }

@@ -1,0 +1,109 @@
+package actions
+
+import (
+	"bytes"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"testing"
+
+	"github.com/docker/docker/client"
+	"github.com/spf13/cobra"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/profile"
+)
+
+func testGetOptions(t *testing.T, cli *client.Client) getOptionsFn {
+	t.Helper()
+
+	return func(cmd *cobra.Command, profiles []string) (*profile.DockerOptions, error) {
+		opts, err := getDockerOptions(cmd, nil)
+		assert.NoError(t, err)
+
+		opts.Cli = cli
+
+		return opts, nil
+	}
+}
+
+type transportFunc func(*http.Request) (*http.Response, error)
+
+func (tf transportFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return tf(req)
+}
+
+func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client {
+	t.Helper()
+
+	v := "1.22"
+	c, err := client.NewClient("tcp://fake:2345", v,
+		&http.Client{
+			Transport: transportFunc(func(req *http.Request) (*http.Response, error) {
+				url := req.URL.Path
+				b, ok := resp[url]
+				if !ok {
+					b = "{}"
+				}
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       ioutil.NopCloser(bytes.NewReader([]byte(b))),
+				}, nil
+			}),
+		},
+		map[string]string{})
+
+	assert.NoError(t, err)
+
+	return c
+}
+
+func Test_SyncDocker(t *testing.T) {
+	cmd := NewRootCmd()
+
+	cli := newClientWithResponse(t, map[string]string{
+		"/v1.22/networks": `[
+{"Id": "networkID1", "Name": "networkName1" }
+]`,
+		"/v1.22/containers/json": `[{
+	"Id": "container_id-first", "Names": ["first"],
+	"NetworkSettings": { "Networks": { "networkName2": { "NetworkID": "networkID1", "IPAddress": "172.0.0.2" }}}
+}, {
+	"Id": "container_id-second", "Names": ["second"],
+	"NetworkSettings": { "Networks": { "networkName2": { "NetworkID": "networkID1", "IPAddress": "172.0.0.3" }}}
+}]`,
+	})
+
+	opts := testGetOptions(t, cli)
+	cmdSync := newSyncDockerCmd(nil, opts)
+	cmdSync.Use = "test-sync-docker"
+
+	cmd.AddCommand(cmdSync)
+
+	tmp := makeTempHostsFile(t, "syncDockerCmd")
+	defer os.Remove(tmp.Name())
+
+	b := bytes.NewBufferString("")
+
+	cmd.SetOut(b)
+	cmd.SetArgs([]string{"test-sync-docker", "profile2", "--host-file", tmp.Name()})
+
+	err := cmd.Execute()
+	assert.NoError(t, err)
+
+	out, err := ioutil.ReadAll(b)
+	assert.NoError(t, err)
+
+	actual := "\n" + string(out)
+
+	const expected = `
++----------+--------+-----------+------------+
+| PROFILE  | STATUS |    IP     |   DOMAIN   |
++----------+--------+-----------+------------+
+| profile2 | on     | 172.0.0.2 | first.loc  |
+| profile2 | on     | 172.0.0.3 | second.loc |
++----------+--------+-----------+------------+
+`
+
+	assert.Contains(t, actual, expected)
+}

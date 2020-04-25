@@ -127,13 +127,15 @@ func registerCommands(rootCmd *cobra.Command) {
 	// enable / disable
 	enableCmd, disableCmd := newEnableDisableCmd()
 
+	waitUsage := "Enables a profile for a specific amount of time"
+
 	enableCmd.Flags().BoolP("all", "", false, "Enable all profiles")
 	enableCmd.Flags().Bool("only", false, "Disable all other profiles")
-	enableCmd.Flags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
+	enableCmd.Flags().DurationP("wait", "w", -1, waitUsage)
 
 	disableCmd.Flags().BoolP("all", "", false, "Disable all profiles")
 	disableCmd.Flags().Bool("only", false, "Enable all other profiles")
-	disableCmd.Flags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
+	disableCmd.Flags().DurationP("wait", "w", -1, waitUsage)
 
 	// backup
 	backupCmd := newBackupCmd()
@@ -145,15 +147,15 @@ func registerCommands(rootCmd *cobra.Command) {
 
 	// sync
 	syncCmd := newSyncCmd()
-	syncCmd.PersistentFlags().DurationP("wait", "w", -1, "Enables a profile for a specific amount of time")
+	syncCmd.PersistentFlags().DurationP("wait", "w", -1, waitUsage)
 
 	// sync docker
-	syncDockerCmd := newSyncDockerCmd(removeCmd)
+	syncDockerCmd := newSyncDockerCmd(removeCmd, nil)
 	syncDockerCmd.Flags().String("network", "", "Filter containers from a specific network")
 	syncDockerCmd.Flags().StringP("domain", "d", "loc", "domain where your docker containers will be added")
 
 	// sync docker compose
-	syncDockerComposeCmd := newSyncDockerComposeCmd(removeCmd)
+	syncDockerComposeCmd := newSyncDockerComposeCmd(removeCmd, nil)
 	syncDockerComposeCmd.Flags().String("network", "", "Filter containers from a specific network")
 	syncDockerComposeCmd.Flags().StringP("domain", "d", "loc", "domain where your docker containers will be added")
 	syncDockerComposeCmd.Flags().String("compose-file", "", "path to docker-compose.yml")

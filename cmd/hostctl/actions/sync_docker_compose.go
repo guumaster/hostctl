@@ -19,7 +19,13 @@ type composeInfo struct {
 	File        string
 }
 
-func newSyncDockerComposeCmd(removeCmd *cobra.Command) *cobra.Command {
+type getOptionsFn func(cmd *cobra.Command, profiles []string) (*profile.DockerOptions, error)
+
+func newSyncDockerComposeCmd(removeCmd *cobra.Command, getOptionsFn getOptionsFn) *cobra.Command {
+	if getOptionsFn == nil {
+		getOptionsFn = defaultGetOptions
+	}
+
 	return &cobra.Command{
 		Use:   "docker-compose [profile] [flags]",
 		Short: "Sync your docker-compose containers IPs with a profile.",
@@ -37,44 +43,14 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 		Args: commonCheckArgs,
 		RunE: func(cmd *cobra.Command, profiles []string) error {
 			src, _ := cmd.Flags().GetString("host-file")
-			domain, _ := cmd.Flags().GetString("domain")
-			network, _ := cmd.Flags().GetString("network")
-			prefix, _ := cmd.Flags().GetBool("prefix")
-
-			compose, err := getComposeInfo(cmd)
-			if err != nil {
-				return err
-			}
-
 			name := profiles[0]
 
-			if name == "" && compose.ProjectName == "" {
-				return types.ErrMissingProfile
-			}
-
-			if name == "" {
-				name = compose.ProjectName
-				profiles = append(profiles, name)
-				cmd.SetArgs(profiles)
-			}
-
-			if domain == "" {
-				domain = fmt.Sprintf("%s.loc", name)
-			}
-
-			f, err := os.Open(compose.File)
+			opts, err := getOptionsFn(cmd, profiles)
 			if err != nil {
 				return err
 			}
 
-			p, err := profile.NewProfileFromDockerCompose(&profile.DockerOptions{
-				Domain:      domain,
-				Network:     network,
-				ComposeFile: f,
-				ProjectName: compose.ProjectName,
-				KeepPrefix:  prefix,
-				Cli:         nil,
-			})
+			p, err := profile.NewProfileFromDockerCompose(opts)
 			if err != nil {
 				return err
 			}
@@ -98,6 +74,47 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 			return postActionCmd(cmd, args, removeCmd, false)
 		},
 	}
+}
+
+func defaultGetOptions(cmd *cobra.Command, profiles []string) (*profile.DockerOptions, error) {
+	domain, _ := cmd.Flags().GetString("domain")
+	network, _ := cmd.Flags().GetString("network")
+	prefix, _ := cmd.Flags().GetBool("prefix")
+
+	name := profiles[0]
+
+	compose, err := getComposeInfo(cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	if name == "" && compose.ProjectName == "" {
+		return nil, types.ErrMissingProfile
+	}
+
+	if name == "" {
+		name = compose.ProjectName
+		profiles = append(profiles, name)
+		cmd.SetArgs(profiles)
+	}
+
+	if domain == "" {
+		domain = fmt.Sprintf("%s.loc", name)
+	}
+
+	f, err := os.Open(compose.File)
+	if err != nil {
+		return nil, err
+	}
+
+	return &profile.DockerOptions{
+		Domain:      domain,
+		Network:     network,
+		ComposeFile: f,
+		ProjectName: compose.ProjectName,
+		KeepPrefix:  prefix,
+		Cli:         nil,
+	}, nil
 }
 
 func getComposeInfo(cmd *cobra.Command) (*composeInfo, error) {

@@ -14,7 +14,7 @@ import (
 func Test_Toggle(t *testing.T) {
 	cmd := NewRootCmd()
 
-	tmp := makeTempHostsFile(t, "enableCmd")
+	tmp := makeTempHostsFile(t, "toggleCmd")
 	defer os.Remove(tmp.Name())
 
 	t.Run("Toggle", func(t *testing.T) {
