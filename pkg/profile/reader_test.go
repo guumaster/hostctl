@@ -19,4 +19,18 @@ func TestNewProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, []string{"some.profile.loc", "first.loc"}, hosts)
 	})
+
+	t.Run("NewProfileFromReader non-uniq", func(t *testing.T) {
+		r := strings.NewReader(`
+3.3.3.4 some.profile.loc
+# non-route-line
+3.3.3.4 first.loc
+3.3.3.4 first.loc
+`)
+		p, err := NewProfileFromReader(r, false)
+		assert.NoError(t, err)
+		hosts, err := p.GetHostNames("3.3.3.4")
+		assert.NoError(t, err)
+		assert.Equal(t, []string{"some.profile.loc", "first.loc", "first.loc"}, hosts)
+	})
 }

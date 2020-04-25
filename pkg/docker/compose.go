@@ -29,7 +29,7 @@ func ParseComposeFile(r io.Reader, projectName string) ([]string, error) {
 
 	err = yaml.Unmarshal(bytes, &data)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error parsing docker-compose content: %w", err)
 	}
 
 	var containers []string

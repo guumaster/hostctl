@@ -8,9 +8,8 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-func TestFile_Enable(t *testing.T) {
+func TestFile_EnableDisable(t *testing.T) {
 	mem := createBasicFS(t)
-
 	f, err := mem.Open("/tmp/etc/hosts")
 	assert.NoError(t, err)
 
@@ -41,6 +40,33 @@ func TestFile_Enable(t *testing.T) {
 
 	t.Run("Enable error", func(t *testing.T) {
 		err = m.Enable([]string{"unknown"})
+		assert.EqualError(t, err, types.ErrUnknownProfile.Error())
+	})
+
+	t.Run("Disable", func(t *testing.T) {
+		err = m.Disable([]string{"profile2"})
+		assert.NoError(t, err)
+		assert.Contains(t, m.GetDisabled(), "profile2")
+	})
+
+	t.Run("Disable Only", func(t *testing.T) {
+		err = m.Disable([]string{"profile1", "profile2"})
+		err = m.DisableOnly([]string{"default", "profile2"})
+		assert.NoError(t, err)
+		assert.Contains(t, m.GetEnabled(), "profile1")
+		assert.Contains(t, m.GetDisabled(), "profile2")
+	})
+
+	t.Run("Disable All", func(t *testing.T) {
+		err = m.DisableAll()
+		assert.NoError(t, err)
+		Disabled := m.GetDisabled()
+		assert.Contains(t, Disabled, "profile1")
+		assert.Contains(t, Disabled, "profile2")
+	})
+
+	t.Run("Disable error", func(t *testing.T) {
+		err = m.Disable([]string{"unknown"})
 		assert.EqualError(t, err, types.ErrUnknownProfile.Error())
 	})
 }
