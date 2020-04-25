@@ -40,7 +40,6 @@ func TestGetNetworkID(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Empty(t, list)
 	})
-
 }
 
 func TestGetContainerList(t *testing.T) {

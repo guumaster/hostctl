@@ -2,14 +2,16 @@ package actions
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"os"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/guumaster/hostctl/pkg/profile"
 	"github.com/guumaster/hostctl/pkg/render"
 	"github.com/guumaster/hostctl/pkg/types"
 )
@@ -130,22 +132,35 @@ func TestIsValidURL(t *testing.T) {
 	assert.Equal(t, valid, true)
 }
 
+type handlerFn func(w http.ResponseWriter, r *http.Request)
+
+type MyHandler struct {
+	sync.Mutex
+	fn handlerFn
+}
+
+func (h *MyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.fn(w, r)
+}
+
 func TestReadFromURL(t *testing.T) {
-	t.SkipNow()
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+	server := httptest.NewServer(&MyHandler{
+		fn: func(w http.ResponseWriter, r *http.Request) {
+			_, _ = w.Write([]byte(`3.3.3.4 some.profile.loc`))
+		},
 	})
+	defer server.Close()
 
-	go func() {
-		_ = http.ListenAndServe(":9998", nil)
-	}()
-
-	r, err := readerFromURL("http://0.0.0.0:9998/test")
+	r, err := readerFromURL(server.URL)
 	assert.NoError(t, err)
 
-	c, _ := ioutil.ReadAll(r)
+	p, err := profile.NewProfileFromReader(r, true)
+	assert.NoError(t, err)
 
-	assert.Equal(t, c, "Hello, test!")
+	hosts, err := p.GetAllHostNames()
+	assert.NoError(t, err)
+
+	assert.Equal(t, []string{"some.profile.loc"}, hosts)
 }
 
 func TestHelperCmd(t *testing.T) {
