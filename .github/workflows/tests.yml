@@ -27,7 +27,7 @@ jobs:
 
       - name: Test
         run: |
-          go test -cover -coverprofile=${{ matrix.platform }}_coverage.out $(go list ./... | grep -v "*docker*" | grep -e "hostctl/")
+          go test -cover -coverprofile=${{ matrix.platform }}_coverage.out ./...
           go tool cover -func=${{ matrix.platform }}_coverage.out
 
       - name: Upload coverage report
