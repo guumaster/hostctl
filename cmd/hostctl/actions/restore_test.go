@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"bytes"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -12,7 +11,10 @@ import (
 func Test_Restore(t *testing.T) {
 	cmd := NewRootCmd()
 
-	from := makeTempHostsFile(t, "restoreFrom")
+	r := NewRunner(t, cmd, "remove")
+	defer r.Clean()
+
+	from := r.TempHostfile("restoreFrom")
 	defer os.Remove(from.Name())
 
 	to, err := ioutil.TempFile("/tmp", "restoreTo")
@@ -20,33 +22,26 @@ func Test_Restore(t *testing.T) {
 
 	defer os.Remove(to.Name())
 
-	b := bytes.NewBufferString("")
+	r.Runf("hostctl restore --from %s --host-file %s", from.Name(), to.Name()).
+		Containsf(`
+			[ℹ] Using hosts file: %s
 
-	cmd.SetOut(b)
-	cmd.SetArgs([]string{"restore", "--from", from.Name(), "--host-file", to.Name()})
+			[✔] File '%s' restored.
 
-	err = cmd.Execute()
-	assert.NoError(t, err)
-
-	out, err := ioutil.ReadAll(b)
-	assert.NoError(t, err)
+			+----------+--------+-----------+------------+
+			| PROFILE  | STATUS |    IP     |   DOMAIN   |
+			+----------+--------+-----------+------------+
+			| default  | on     | 127.0.0.1 | localhost  |
+			+----------+--------+-----------+------------+
+			| profile1 | on     | 127.0.0.1 | first.loc  |
+			| profile1 | on     | 127.0.0.1 | second.loc |
+			+----------+--------+-----------+------------+
+			| profile2 | off    | 127.0.0.1 | first.loc  |
+			| profile2 | off    | 127.0.0.1 | second.loc |
+			+----------+--------+-----------+------------+
+		`, to.Name(), from.Name())
 
 	toData, _ := ioutil.ReadFile(to.Name())
 	fromData, _ := ioutil.ReadFile(from.Name())
 	assert.Equal(t, string(toData), string(fromData))
-
-	actual := "\n" + string(out)
-	assert.Contains(t, actual, `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| default  | on     | 127.0.0.1 | localhost  |
-+----------+--------+-----------+------------+
-| profile1 | on     | 127.0.0.1 | first.loc  |
-| profile1 | on     | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-| profile2 | off    | 127.0.0.1 | first.loc  |
-| profile2 | off    | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`)
 }

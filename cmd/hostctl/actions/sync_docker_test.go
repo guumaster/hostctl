@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"testing"
 
 	"github.com/docker/docker/client"
@@ -61,6 +60,9 @@ func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client 
 func Test_SyncDocker(t *testing.T) {
 	cmd := NewRootCmd()
 
+	r := NewRunner(t, cmd, "remove")
+	defer r.Clean()
+
 	cli := newClientWithResponse(t, map[string]string{
 		"/v1.22/networks": `[
 {"Id": "networkID1", "Name": "networkName1" }
@@ -80,30 +82,15 @@ func Test_SyncDocker(t *testing.T) {
 
 	cmd.AddCommand(cmdSync)
 
-	tmp := makeTempHostsFile(t, "syncDockerCmd")
-	defer os.Remove(tmp.Name())
+	r.Run("hostctl test-sync-docker profile2").
+		Containsf(`
+				[ℹ] Using hosts file: %s
 
-	b := bytes.NewBufferString("")
-
-	cmd.SetOut(b)
-	cmd.SetArgs([]string{"test-sync-docker", "profile2", "--host-file", tmp.Name()})
-
-	err := cmd.Execute()
-	assert.NoError(t, err)
-
-	out, err := ioutil.ReadAll(b)
-	assert.NoError(t, err)
-
-	actual := "\n" + string(out)
-
-	const expected = `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| profile2 | on     | 172.0.0.2 | first.loc  |
-| profile2 | on     | 172.0.0.3 | second.loc |
-+----------+--------+-----------+------------+
-`
-
-	assert.Contains(t, actual, expected)
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| profile2 | on     | 172.0.0.2 | first.loc  |
+				| profile2 | on     | 172.0.0.3 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile())
 }

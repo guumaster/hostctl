@@ -1,15 +1,45 @@
 package actions
 
 import (
-	"bytes"
-	"io/ioutil"
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/docker/docker/client"
 )
 
-var composeFile = `
+func Test_SyncDockerCompose(t *testing.T) {
+	cmd := NewRootCmd()
+
+	r := NewRunner(t, cmd, "remove")
+	defer r.Clean()
+
+	cli := prepareComposeCli(t, r)
+
+	opts := testGetOptions(t, cli)
+	cmdSync := newSyncDockerCmd(nil, opts)
+	cmdSync.Use = "test-sync-docker-compose"
+
+	cmd.AddCommand(cmdSync)
+
+	r.Run("hostctl test-sync-docker-compose profile2").
+		Containsf(`
+				[ℹ] Using hosts file: %s
+
+        +----------+--------+-----------+------------------------------+
+        | PROFILE  | STATUS |    IP     |            DOMAIN            |
+        +----------+--------+-----------+------------------------------+
+        | profile2 | on     | 172.0.0.2 | testing-app_container1_1.loc |
+        | profile2 | on     | 172.0.0.3 | testing-app_container2_1.loc |
+        | profile2 | on     | 172.0.0.4 | testing-app_db.loc           |
+        +----------+--------+-----------+------------------------------+
+			`, r.Hostfile())
+}
+
+func prepareComposeCli(t *testing.T, r Runner) *client.Client {
+	c := r.TempHostfile("docker-compose.yml")
+	defer os.Remove(c.Name())
+
+	_, _ = c.WriteString(`
 version: "3"
 services:
 
@@ -31,13 +61,13 @@ services:
 
 networks:
   networkName1:
-`
+`)
 
-var dockerComposeResponse = map[string]string{
-	"/v1.22/networks": `[
+	dockerResponse := map[string]string{
+		"/v1.22/networks": `[
 {"Id": "testing-app_networkID1", "Name": "testing-app_networkName1" }
 ]`,
-	"/v1.22/containers/json": `[{
+		"/v1.22/containers/json": `[{
 	"Id": "container_id1", "Names": ["/testing-app_container1_1"],
 	"NetworkSettings": {
 		"Networks": { "testing-app_networkName1": { "NetworkID": "testing-app_networkID1", "IPAddress": "172.0.0.2" }}
@@ -53,49 +83,6 @@ var dockerComposeResponse = map[string]string{
 		"Networks": { "testing-app_networkName1": { "NetworkID": "testing-app_networkID1", "IPAddress": "172.0.0.4" }}
   }
 }]`,
-}
-
-func Test_SyncDockerCompose(t *testing.T) {
-	c := makeTempHostsFile(t, "docker-compose.yml")
-
-	_, _ = c.WriteString(composeFile)
-	defer os.Remove(c.Name())
-
-	cli := newClientWithResponse(t, dockerComposeResponse)
-
-	cmd := NewRootCmd()
-
-	opts := testGetOptions(t, cli)
-	cmdSync := newSyncDockerCmd(nil, opts)
-	cmdSync.Use = "test-sync-docker-compose"
-
-	cmd.AddCommand(cmdSync)
-
-	tmp := makeTempHostsFile(t, "syncDockerCmd")
-	defer os.Remove(tmp.Name())
-
-	b := bytes.NewBufferString("")
-
-	cmd.SetOut(b)
-	cmd.SetArgs([]string{"test-sync-docker-compose", "profile2", "--host-file", tmp.Name()})
-
-	err := cmd.Execute()
-	assert.NoError(t, err)
-
-	out, err := ioutil.ReadAll(b)
-	assert.NoError(t, err)
-
-	actual := "\n" + string(out)
-
-	const expected = `
-+----------+--------+-----------+------------------------------+
-| PROFILE  | STATUS |    IP     |            DOMAIN            |
-+----------+--------+-----------+------------------------------+
-| profile2 | on     | 172.0.0.2 | testing-app_container1_1.loc |
-| profile2 | on     | 172.0.0.3 | testing-app_container2_1.loc |
-| profile2 | on     | 172.0.0.4 | testing-app_db.loc           |
-+----------+--------+-----------+------------------------------+
-`
-
-	assert.Contains(t, actual, expected)
+	}
+	return newClientWithResponse(t, dockerResponse)
 }

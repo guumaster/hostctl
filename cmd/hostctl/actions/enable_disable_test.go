@@ -1,12 +1,7 @@
 package actions
 
 import (
-	"bytes"
-	"io/ioutil"
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 
 	"github.com/guumaster/hostctl/pkg/types"
 )
@@ -14,235 +9,179 @@ import (
 func Test_Disable(t *testing.T) {
 	cmd := NewRootCmd()
 
-	tmp := makeTempHostsFile(t, "disableCmd")
-	defer os.Remove(tmp.Name())
+	r := NewRunner(t, cmd, "disable")
+	defer r.Clean()
 
 	t.Run("Disable", func(t *testing.T) {
-		b := bytes.NewBufferString("")
+		r.Run("hostctl disable profile1").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"disable", "profile1", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.NoError(t, err)
-
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
-
-		actual := "\n" + string(out)
-		const expected = `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| profile1 | off    | 127.0.0.1 | first.loc  |
-| profile1 | off    | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
-	})
-
-	t.Run("Disable unknown", func(t *testing.T) {
-		b := bytes.NewBufferString("")
-
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"disable", "unknown", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.EqualError(t, err, types.ErrUnknownProfile.Error())
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| profile1 | off    | 127.0.0.1 | first.loc  |
+				| profile1 | off    | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile())
 	})
 
 	t.Run("Disable Only", func(t *testing.T) {
-		cmd := NewRootCmd()
-		b := bytes.NewBufferString("")
+		r.Run("hostctl disable profile1 --only").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"disable", "profile1", "--only", "--host-file", tmp.Name()})
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| profile1 | off    | 127.0.0.1 | first.loc  |
+				| profile1 | off    | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile()).
+			Run("hostctl list").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		err := cmd.Execute()
-		assert.NoError(t, err)
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| default  | on     | 127.0.0.1 | localhost  |
+				+----------+--------+-----------+------------+
+				| profile1 | off    | 127.0.0.1 | first.loc  |
+				| profile1 | off    | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+				| profile2 | on     | 127.0.0.1 | first.loc  |
+				| profile2 | on     | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile())
+	})
+}
 
-		cmd.SetArgs([]string{"list", "--host-file", tmp.Name()})
+func Test_EnableDisableErrors(t *testing.T) {
+	cmd := NewRootCmd()
 
-		err = cmd.Execute()
-		assert.NoError(t, err)
+	r := NewRunner(t, cmd, "enableDisableErrors")
+	defer r.Clean()
 
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
+	t.Run("Enable/Disable all error", func(t *testing.T) {
+		r.RunE("hostctl disable something --all", ErrIncompatibleAllFlag).Empty()
+		r.RunE("hostctl enable something --all", ErrIncompatibleAllFlag).Empty()
+	})
+}
 
-		actual := "\n" + string(out)
-		const expected = `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| default  | on     | 127.0.0.1 | localhost  |
-+----------+--------+-----------+------------+
-| profile1 | off    | 127.0.0.1 | first.loc  |
-| profile1 | off    | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-| profile2 | on     | 127.0.0.1 | first.loc  |
-| profile2 | on     | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
+func Test_EnableDisableUnknown(t *testing.T) {
+	cmd := NewRootCmd()
+
+	r := NewRunner(t, cmd, "enableDisableUnknown")
+	defer r.Clean()
+
+	t.Run("Enable unknown", func(t *testing.T) {
+		r.RunE("hostctl enable unknown", types.ErrUnknownProfile).
+			Containsf(`
+				[ℹ] Using hosts file: %s
+			`, r.Hostfile())
+	})
+
+	t.Run("Disable unknown", func(t *testing.T) {
+		r.RunE("hostctl disable unknown", types.ErrUnknownProfile).
+			Containsf(`
+				[ℹ] Using hosts file: %s
+			`, r.Hostfile())
 	})
 }
 
 func Test_EnableDisableAll(t *testing.T) {
 	cmd := NewRootCmd()
 
-	tmp := makeTempHostsFile(t, "disableCmd")
-	defer os.Remove(tmp.Name())
+	r := NewRunner(t, cmd, "disable")
+	defer r.Clean()
 
 	t.Run("Disable All", func(t *testing.T) {
-		b := bytes.NewBufferString("")
+		r.Run("hostctl disable --all").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"disable", "--all", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.NoError(t, err)
-
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
-
-		actual := "\n" + string(out)
-		const expected = `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| default  | on     | 127.0.0.1 | localhost  |
-+----------+--------+-----------+------------+
-| profile1 | off    | 127.0.0.1 | first.loc  |
-| profile1 | off    | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-| profile2 | off    | 127.0.0.1 | first.loc  |
-| profile2 | off    | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
-	})
-
-	t.Run("Disable all error", func(t *testing.T) {
-		b := bytes.NewBufferString("")
-
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"disable", "any", "--all", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.EqualError(t, err, "args must be empty with --all flag")
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| default  | on     | 127.0.0.1 | localhost  |
+				+----------+--------+-----------+------------+
+				| profile1 | off    | 127.0.0.1 | first.loc  |
+				| profile1 | off    | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+				| profile2 | off    | 127.0.0.1 | first.loc  |
+				| profile2 | off    | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile())
 	})
 
 	t.Run("Enable All", func(t *testing.T) {
-		b := bytes.NewBufferString("")
+		r.Run("hostctl enable --all").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"enable", "--all", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.NoError(t, err)
-
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
-
-		actual := "\n" + string(out)
-		const expected = `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| default  | on     | 127.0.0.1 | localhost  |
-+----------+--------+-----------+------------+
-| profile1 | on     | 127.0.0.1 | first.loc  |
-| profile1 | on     | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-| profile2 | on     | 127.0.0.1 | first.loc  |
-| profile2 | on     | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
-	})
-
-	t.Run("Enable all error", func(t *testing.T) {
-		b := bytes.NewBufferString("")
-
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"enable", "any", "--all", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.EqualError(t, err, "args must be empty with --all flag")
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| default  | on     | 127.0.0.1 | localhost  |
+				+----------+--------+-----------+------------+
+				| profile1 | on     | 127.0.0.1 | first.loc  |
+				| profile1 | on     | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+				| profile2 | on     | 127.0.0.1 | first.loc  |
+				| profile2 | on     | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile())
 	})
 }
 
 func Test_Enable(t *testing.T) {
 	cmd := NewRootCmd()
 
-	tmp := makeTempHostsFile(t, "disableCmd")
-	defer os.Remove(tmp.Name())
+	r := NewRunner(t, cmd, "disable")
+	defer r.Clean()
 
 	t.Run("Enable", func(t *testing.T) {
-		b := bytes.NewBufferString("")
+		r.Run("hostctl enable profile1").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"enable", "profile2", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.NoError(t, err)
-
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
-
-		actual := "\n" + string(out)
-		const expected = `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| profile2 | on     | 127.0.0.1 | first.loc  |
-| profile2 | on     | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
-	})
-
-	t.Run("Enable unknown", func(t *testing.T) {
-		b := bytes.NewBufferString("")
-
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"enable", "unknown", "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.EqualError(t, err, types.ErrUnknownProfile.Error())
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| profile1 | on     | 127.0.0.1 | first.loc  |
+				| profile1 | on     | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile())
 	})
 
 	t.Run("Enable Only", func(t *testing.T) {
-		b := bytes.NewBufferString("")
+		r.Run("hostctl enable profile1 --only").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"enable", "profile2", "--only", "--host-file", tmp.Name()})
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| profile1 | on     | 127.0.0.1 | first.loc  |
+				| profile1 | on     | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile()).
+			Run("hostctl list").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		err := cmd.Execute()
-		assert.NoError(t, err)
-
-		cmd.SetArgs([]string{"list", "--host-file", tmp.Name()})
-
-		err = cmd.Execute()
-		assert.NoError(t, err)
-
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
-
-		actual := "\n" + string(out)
-		const expected = `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| default  | on     | 127.0.0.1 | localhost  |
-+----------+--------+-----------+------------+
-| profile1 | off    | 127.0.0.1 | first.loc  |
-| profile1 | off    | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-| profile2 | on     | 127.0.0.1 | first.loc  |
-| profile2 | on     | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| default  | on     | 127.0.0.1 | localhost  |
+				+----------+--------+-----------+------------+
+				| profile1 | on     | 127.0.0.1 | first.loc  |
+				| profile1 | on     | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+				| profile2 | off    | 127.0.0.1 | first.loc  |
+				| profile2 | off    | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile())
 	})
 }

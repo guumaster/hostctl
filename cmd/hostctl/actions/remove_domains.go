@@ -43,9 +43,9 @@ It cannot be undone unless you have a backup and restore it.
 			}
 			if !quiet {
 				if removed {
-					cligger.Success("Profile '%s' removed.\n\n", name)
+					cligger.Success("Profile '%s' removed.\n", name)
 				} else {
-					cligger.Success("Domains '%s' removed.\n\n", strings.Join(args[1:], ", "))
+					cligger.Success("Domains '%s' removed.\n", strings.Join(args[1:], ", "))
 				}
 			}
 			return nil

@@ -34,7 +34,7 @@ WARNING: the complete hosts file will be overwritten with the backup data.
 			}
 
 			if !quiet {
-				cligger.Success("File '%s' restored.\n\n", from)
+				cligger.Success("File '%s' restored.\n", from)
 			}
 
 			return nil

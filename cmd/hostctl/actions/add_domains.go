@@ -42,7 +42,7 @@ If the profile already exists it will be added to it.`,
 				return err
 			}
 			if !quiet {
-				cligger.Success("Domains '%s' added.\n\n", strings.Join(args[1:], ", "))
+				cligger.Success("Domains '%s' added.\n", strings.Join(args[1:], ", "))
 			}
 			return nil
 		},

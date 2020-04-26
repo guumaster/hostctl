@@ -1,127 +1,104 @@
 package actions
 
 import (
-	"bytes"
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_Add(t *testing.T) {
-	tmp := makeTempHostsFile(t, "addCmd")
-	defer os.Remove(tmp.Name())
-
 	cmd := NewRootCmd()
 
+	r := NewRunner(t, cmd, "add")
+	defer r.Clean()
+
+	tmp := r.TempHostfile("source")
+	defer os.Remove(tmp.Name())
+
 	t.Run("Add from file", func(t *testing.T) {
-		b := bytes.NewBufferString("")
-
-		cmd.SetOut(b)
-		cmd.SetArgs([]string{"add", "awesome", "--uniq", "--from", tmp.Name(), "--host-file", tmp.Name()})
-
-		err := cmd.Execute()
-		assert.NoError(t, err)
-
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
-
-		actual := "\n" + string(out)
-		const expected = `
-+---------+--------+-----------+------------+
-| PROFILE | STATUS |    IP     |   DOMAIN   |
-+---------+--------+-----------+------------+
-| awesome | on     | 127.0.0.1 | localhost  |
-| awesome | on     | 127.0.0.1 | first.loc  |
-| awesome | on     | 127.0.0.1 | second.loc |
-+---------+--------+-----------+------------+
-`
-		assert.Contains(t, actual, expected)
+		r.Runf("hostctl add awesome --uniq --from %s", tmp.Name()).
+			Contains(`
+				+---------+--------+-----------+------------+
+				| PROFILE | STATUS |    IP     |   DOMAIN   |
+				+---------+--------+-----------+------------+
+				| awesome | on     | 127.0.0.1 | localhost  |
+				| awesome | on     | 127.0.0.1 | first.loc  |
+				| awesome | on     | 127.0.0.1 | second.loc |
+				+---------+--------+-----------+------------+
+			`)
 	})
 
 	t.Run("Add from stdin", func(t *testing.T) {
-		b := bytes.NewBufferString("")
+		r := NewRunner(t, cmd, "add")
+		defer r.Clean()
+
+		tmp := r.TempHostfile("source")
+		defer os.Remove(tmp.Name())
 
 		in := strings.NewReader(`3.3.3.3 stdin.loc`)
-		cmd.SetOut(b)
 		cmd.SetIn(in)
-		cmd.SetArgs([]string{"add", "awesome", "--host-file", tmp.Name()})
 
-		err := cmd.Execute()
-		assert.NoError(t, err)
+		r.Run("hostctl add awesome").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		out, err := ioutil.ReadAll(b)
-		assert.NoError(t, err)
-
-		actual := "\n" + string(out)
-		const expected = `
-`
-		assert.Contains(t, actual, expected)
+        +---------+--------+---------+-----------+
+        | PROFILE | STATUS |   IP    |  DOMAIN   |
+        +---------+--------+---------+-----------+
+        | awesome | on     | 3.3.3.3 | stdin.loc |
+        +---------+--------+---------+-----------+
+			`, r.Hostfile())
 	})
 }
 
 func Test_ReplaceStdin(t *testing.T) {
 	cmd := NewRootCmd()
 
-	tmp := makeTempHostsFile(t, "replaceStdinCmd")
-	defer os.Remove(tmp.Name())
+	r := NewRunner(t, cmd, "replace")
+	defer r.Clean()
 
-	b := bytes.NewBufferString("")
-	cmd.SetOut(b)
+	tmp := r.TempHostfile("source")
+	defer os.Remove(tmp.Name())
 
 	in := strings.NewReader(`3.3.3.3 stdin.replaced.loc`)
 	cmd.SetIn(in)
 
-	cmd.SetArgs([]string{"replace", "profile1", "--host-file", tmp.Name()})
+	r.Run("hostctl replace profile1").
+		Containsf(`
+				[ℹ] Using hosts file: %s
 
-	err := cmd.Execute()
-	assert.NoError(t, err)
-
-	out, err := ioutil.ReadAll(b)
-	assert.NoError(t, err)
-
-	actual := "\n" + string(out)
-	assert.Contains(t, actual, `
-+----------+--------+---------+--------------------+
-| PROFILE  | STATUS |   IP    |       DOMAIN       |
-+----------+--------+---------+--------------------+
-| profile1 | on     | 3.3.3.3 | stdin.replaced.loc |
-+----------+--------+---------+--------------------+
-`)
+				+----------+--------+---------+--------------------+
+				| PROFILE  | STATUS |   IP    |       DOMAIN       |
+				+----------+--------+---------+--------------------+
+				| profile1 | on     | 3.3.3.3 | stdin.replaced.loc |
+				+----------+--------+---------+--------------------+
+			`, r.Hostfile())
 }
 
 func Test_ReplaceFile(t *testing.T) {
 	cmd := NewRootCmd()
 
 	in := strings.NewReader(`
-5.5.5.5 replaced.loc
-5.5.5.6 replaced2.loc
+		5.5.5.5 replaced.loc
+		5.5.5.6 replaced2.loc
 `)
+	cmd.SetIn(in)
 
-	tmp := makeTempHostsFile(t, "replaceFileCmd")
+	r := NewRunner(t, cmd, "replace")
+	defer r.Clean()
+
+	tmp := r.TempHostfile("source")
 	defer os.Remove(tmp.Name())
 
-	b := bytes.NewBufferString("")
+	r.Run("hostctl replace awesome").
+		Containsf(`
+				[ℹ] Using hosts file: %s
 
-	cmd.SetIn(in)
-	cmd.SetOut(b)
-	cmd.SetArgs([]string{"replace", "awesome", "--host-file", tmp.Name()})
-
-	err := cmd.Execute()
-	assert.NoError(t, err)
-
-	out, err := ioutil.ReadAll(b)
-	assert.NoError(t, err)
-
-	actual := "\n" + string(out)
-	assert.Contains(t, actual, `
-+---------+--------+---------+---------------+
-| PROFILE | STATUS |   IP    |    DOMAIN     |
-+---------+--------+---------+---------------+
-| awesome | on     | 5.5.5.5 | replaced.loc  |
-| awesome | on     | 5.5.5.6 | replaced2.loc |
-+---------+--------+---------+---------------+
-`)
+				+---------+--------+---------+---------------+
+				| PROFILE | STATUS |   IP    |    DOMAIN     |
+				+---------+--------+---------+---------------+
+				| awesome | on     | 5.5.5.5 | replaced.loc  |
+				| awesome | on     | 5.5.5.6 | replaced2.loc |
+				+---------+--------+---------+---------------+
+			`, r.Hostfile())
 }

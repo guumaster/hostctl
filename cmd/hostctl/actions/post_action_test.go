@@ -1,8 +1,6 @@
 package actions
 
 import (
-	"bytes"
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
@@ -13,30 +11,34 @@ import (
 func Test_postActionCmd(t *testing.T) {
 	cmd := NewRootCmd()
 
-	tmp := makeTempHostsFile(t, "postActionCmd")
-	defer os.Remove(tmp.Name())
+	r := NewRunner(t, cmd, "postAction")
+	defer r.Clean()
 
 	t.Run("Wait and disable", func(t *testing.T) {
-		b := bytes.NewBufferString("")
-		args := []string{"enable", "profile1", "--host-file", tmp.Name(), "--wait", "10ms"}
+		r.Run("hostctl enable profile1 --wait 10ms").
+			Containsf(`
+				[ℹ] Using hosts file: %s
 
-		cmd.SetOut(b)
-		cmd.SetArgs(args)
+        +----------+--------+-----------+------------+
+        | PROFILE  | STATUS |    IP     |   DOMAIN   |
+        +----------+--------+-----------+------------+
+        | profile1 | on     | 127.0.0.1 | first.loc  |
+        | profile1 | on     | 127.0.0.1 | second.loc |
+        +----------+--------+-----------+------------+
 
-		err := cmd.Execute()
-		assert.NoError(t, err)
-
-		out, _ := ioutil.ReadAll(b)
-		assert.Contains(t, string(out), "Waiting for 10ms or ctrl+c to disable from profile 'profile1'")
+        [ℹ] Waiting for 10ms or ctrl+c to disable from profile 'profile1'
+			`, r.Hostfile()).
+			Contains(`
+        +----------+--------+-----------+------------+
+        | PROFILE  | STATUS |    IP     |   DOMAIN   |
+        +----------+--------+-----------+------------+
+        | profile1 | off    | 127.0.0.1 | first.loc  |
+        | profile1 | off    | 127.0.0.1 | second.loc |
+        +----------+--------+-----------+------------+
+			`)
 	})
 
 	t.Run("Wait and disable on SIGTERM", func(t *testing.T) {
-		b := bytes.NewBufferString("")
-		args := []string{"enable", "profile1", "--host-file", tmp.Name(), "--wait", "0"}
-
-		cmd.SetOut(b)
-		cmd.SetArgs(args)
-
 		proc, err := os.FindProcess(os.Getpid())
 		assert.NoError(t, err)
 
@@ -46,11 +48,27 @@ func Test_postActionCmd(t *testing.T) {
 			assert.NoError(t, err)
 		}()
 
-		err = cmd.Execute()
-		assert.NoError(t, err)
+		r.Run("hostctl enable profile1 --wait 0").
+			Containsf(`
+        [ℹ] Using hosts file: %s
 
-		out, _ := ioutil.ReadAll(b)
-		assert.Contains(t, string(out), "Waiting until ctrl+c to disable from profile 'profile1'")
+        +----------+--------+-----------+------------+
+        | PROFILE  | STATUS |    IP     |   DOMAIN   |
+        +----------+--------+-----------+------------+
+        | profile1 | on     | 127.0.0.1 | first.loc  |
+        | profile1 | on     | 127.0.0.1 | second.loc |
+        +----------+--------+-----------+------------+
+
+				[ℹ] Waiting until ctrl+c to disable from profile 'profile1'
+			`, r.Hostfile()).
+			Contains(`
+        +----------+--------+-----------+------------+
+        | PROFILE  | STATUS |    IP     |   DOMAIN   |
+        +----------+--------+-----------+------------+
+        | profile1 | off    | 127.0.0.1 | first.loc  |
+        | profile1 | off    | 127.0.0.1 | second.loc |
+        +----------+--------+-----------+------------+
+			`)
 	})
 }
 

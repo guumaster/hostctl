@@ -1,43 +1,39 @@
 package actions
 
 import (
-	"bytes"
-	"io/ioutil"
+	"fmt"
 	"os"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
+	"time"
 )
 
 func Test_Backup(t *testing.T) {
 	cmd := NewRootCmd()
 
-	tmp := makeTempHostsFile(t, "backupCmd")
-	defer os.Remove(tmp.Name())
+	r := NewRunner(t, cmd, "backup")
+	defer r.Clean()
 
-	b := bytes.NewBufferString("")
+	date := time.Now().UTC().Format("20060102")
 
-	cmd.SetOut(b)
-	cmd.SetArgs([]string{"backup", "--path", "/tmp", "--host-file", tmp.Name()})
+	backupFile := fmt.Sprintf("%s.%s", r.Hostfile(), date)
+	defer os.Remove(backupFile)
 
-	err := cmd.Execute()
-	assert.NoError(t, err)
+	r.Run("hostctl backup --path /tmp").
+		Containsf(`
+				[ℹ] Using hosts file: %s
 
-	out, err := ioutil.ReadAll(b)
-	assert.NoError(t, err)
+				[✔] Backup '%s' created.
 
-	actual := "\n" + string(out)
-	assert.Contains(t, actual, `
-+----------+--------+-----------+------------+
-| PROFILE  | STATUS |    IP     |   DOMAIN   |
-+----------+--------+-----------+------------+
-| default  | on     | 127.0.0.1 | localhost  |
-+----------+--------+-----------+------------+
-| profile1 | on     | 127.0.0.1 | first.loc  |
-| profile1 | on     | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-| profile2 | off    | 127.0.0.1 | first.loc  |
-| profile2 | off    | 127.0.0.1 | second.loc |
-+----------+--------+-----------+------------+
-`)
+				+----------+--------+-----------+------------+
+				| PROFILE  | STATUS |    IP     |   DOMAIN   |
+				+----------+--------+-----------+------------+
+				| default  | on     | 127.0.0.1 | localhost  |
+				+----------+--------+-----------+------------+
+				| profile1 | on     | 127.0.0.1 | first.loc  |
+				| profile1 | on     | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+				| profile2 | off    | 127.0.0.1 | first.loc  |
+				| profile2 | off    | 127.0.0.1 | second.loc |
+				+----------+--------+-----------+------------+
+			`, r.Hostfile(), backupFile)
 }
