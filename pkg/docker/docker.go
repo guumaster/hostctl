@@ -3,6 +3,7 @@ package docker
 import (
 	"context"
 	"fmt"
+	"io"
 
 	dtypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
@@ -11,8 +12,40 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
+// Options contains parameters to sync with docker and docker-compose
+type Options struct {
+	Domain      string
+	Network     string
+	NetworkID   string
+	ComposeFile io.Reader
+	ProjectName string
+	KeepPrefix  bool
+	Cli         *client.Client
+}
+
 // GetContainerList returns a list of running docker containers, filter by network if networkID passed
-func GetContainerList(ctx context.Context, cli *client.Client, networkID string) ([]dtypes.Container, error) {
+func GetContainerList(opts *Options) ([]dtypes.Container, error) {
+	var (
+		networkID string
+		err       error
+	)
+
+	ctx := context.Background()
+
+	err = checkCli(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	if opts.NetworkID == "" && opts.Network != "" {
+		networkID, err = GetNetworkID(ctx, opts.Cli, opts.Network)
+		if err != nil {
+			return nil, err
+		}
+
+		opts.NetworkID = networkID
+	}
+
 	f := filters.NewArgs()
 	f.Add("status", "running")
 
@@ -20,7 +53,7 @@ func GetContainerList(ctx context.Context, cli *client.Client, networkID string)
 		f.Add("network", networkID)
 	}
 
-	return cli.ContainerList(ctx, dtypes.ContainerListOptions{Filters: f})
+	return opts.Cli.ContainerList(ctx, dtypes.ContainerListOptions{Filters: f})
 }
 
 // GetNetworkID returns the an ID that match a network name
@@ -48,4 +81,18 @@ func GetNetworkID(ctx context.Context, cli *client.Client, network string) (stri
 	}
 
 	return networkID, nil
+}
+
+func checkCli(opts *Options) error {
+	cli := opts.Cli
+	if cli == nil {
+		cli, err := client.NewEnvClient()
+		if err != nil {
+			return err
+		}
+
+		opts.Cli = cli
+	}
+
+	return nil
 }

@@ -28,11 +28,8 @@ func (f *File) MergeProfiles(profiles []*types.Profile) {
 		}
 
 		baseP := f.data.Profiles[newName]
-		if baseP.Routes == nil {
-			baseP.Routes = map[string]*types.Route{}
-		}
 
-		routes := []*types.Route{}
+		var routes []*types.Route
 		for _, r := range newP.Routes {
 			routes = append(routes, r)
 		}

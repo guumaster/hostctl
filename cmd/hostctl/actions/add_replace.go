@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/file"
-	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
@@ -104,5 +104,5 @@ func getProfileFromInput(in io.Reader, from string, uniq bool) (*types.Profile, 
 		return nil, err
 	}
 
-	return profile.NewProfileFromReader(r, uniq)
+	return parser.ParseProfile(r, uniq)
 }

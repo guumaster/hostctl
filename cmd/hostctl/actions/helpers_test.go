@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/render"
 	"github.com/guumaster/hostctl/pkg/types"
 )
@@ -116,7 +116,7 @@ func TestReadFromURL(t *testing.T) {
 	r, err := readerFromURL(server.URL)
 	assert.NoError(t, err)
 
-	p, err := profile.NewProfileFromReader(r, true)
+	p, err := parser.ParseProfile(r, true)
 	assert.NoError(t, err)
 
 	hosts := p.GetAllHostNames()

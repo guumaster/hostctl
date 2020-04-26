@@ -9,8 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/guumaster/hostctl/pkg/docker"
 	"github.com/guumaster/hostctl/pkg/file"
-	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
@@ -19,7 +20,7 @@ type composeInfo struct {
 	File        string
 }
 
-type getOptionsFn func(cmd *cobra.Command, profiles []string) (*profile.DockerOptions, error)
+type getOptionsFn func(cmd *cobra.Command, profiles []string) (*docker.Options, error)
 
 func newSyncDockerComposeCmd(removeCmd *cobra.Command, getOptionsFn getOptionsFn) *cobra.Command {
 	if getOptionsFn == nil {
@@ -50,7 +51,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 				return err
 			}
 
-			p, err := profile.NewProfileFromDockerCompose(opts)
+			p, err := parser.NewProfileFromDockerCompose(opts)
 			if err != nil {
 				return err
 			}
@@ -76,7 +77,7 @@ Reads from a docker-compose.yml file  the list of containers and add names and I
 	}
 }
 
-func defaultGetOptions(cmd *cobra.Command, profiles []string) (*profile.DockerOptions, error) {
+func defaultGetOptions(cmd *cobra.Command, profiles []string) (*docker.Options, error) {
 	domain, _ := cmd.Flags().GetString("domain")
 	network, _ := cmd.Flags().GetString("network")
 	prefix, _ := cmd.Flags().GetBool("prefix")
@@ -107,7 +108,7 @@ func defaultGetOptions(cmd *cobra.Command, profiles []string) (*profile.DockerOp
 		return nil, err
 	}
 
-	return &profile.DockerOptions{
+	return &docker.Options{
 		Domain:      domain,
 		Network:     network,
 		ComposeFile: f,

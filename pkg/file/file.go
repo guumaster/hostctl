@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/afero"
 
-	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
@@ -41,7 +41,7 @@ func NewWithFs(src string, fs afero.Fs) (*File, error) {
 	f := &File{src: s, fs: fs}
 
 	_, _ = f.src.Seek(0, io.SeekStart)
-	data, err := profile.Parse(f.src)
+	data, err := parser.Parse(f.src)
 	f.data = data
 
 	if err != nil {

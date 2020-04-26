@@ -1,4 +1,4 @@
-package profile
+package parser
 
 import (
 	"net"
@@ -13,6 +13,9 @@ import (
 func TestHostFile(t *testing.T) {
 	testFile := `
 127.0.0.1 localhost
+##################################################################
+# Content under this line is handled by hostctl. DO NOT EDIT.
+##################################################################
 
 # profile.on profile1
 127.0.0.1 first.loc
@@ -52,6 +55,34 @@ func appendLine(p *types.Profile, line string) {
 	}
 
 	p.AddRoute(route)
+}
+
+func TestNewProfile(t *testing.T) {
+	t.Run("parser.ParseProfile", func(t *testing.T) {
+		r := strings.NewReader(`
+3.3.3.4 some.profile.loc
+3.3.3.4 first.loc
+`)
+		p, err := ParseProfile(r, true)
+		assert.NoError(t, err)
+		hosts, err := p.GetHostNames("3.3.3.4")
+		assert.NoError(t, err)
+		assert.Equal(t, []string{"some.profile.loc", "first.loc"}, hosts)
+	})
+
+	t.Run("parser.ParseProfile non-uniq", func(t *testing.T) {
+		r := strings.NewReader(`
+3.3.3.4 some.profile.loc
+# non-route-line
+3.3.3.4 first.loc
+3.3.3.4 first.loc
+`)
+		p, err := ParseProfile(r, false)
+		assert.NoError(t, err)
+		hosts, err := p.GetHostNames("3.3.3.4")
+		assert.NoError(t, err)
+		assert.Equal(t, []string{"some.profile.loc", "first.loc", "first.loc"}, hosts)
+	})
 }
 
 func TestParser(t *testing.T) {

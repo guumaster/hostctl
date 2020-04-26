@@ -10,13 +10,13 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/docker"
 )
 
 func testGetOptions(t *testing.T, cli *client.Client) getOptionsFn {
 	t.Helper()
 
-	return func(cmd *cobra.Command, profiles []string) (*profile.DockerOptions, error) {
+	return func(cmd *cobra.Command, profiles []string) (*docker.Options, error) {
 		opts, err := getDockerOptions(cmd, nil)
 		assert.NoError(t, err)
 

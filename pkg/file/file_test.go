@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
@@ -36,6 +36,8 @@ var (
 func TestNewWithFs(t *testing.T) {
 	t.Run("With file", func(t *testing.T) {
 		src := makeTempHostsFile(t, "etc_hosts")
+		defer os.Remove(src.Name())
+
 		fs := afero.NewOsFs()
 
 		m, err := NewWithFs(src.Name(), fs)
@@ -56,6 +58,7 @@ func TestNewWithFs(t *testing.T) {
 
 	t.Run("Without fs", func(t *testing.T) {
 		src := makeTempHostsFile(t, "etc_hosts")
+		defer os.Remove(src.Name())
 
 		m, err := NewWithFs(src.Name(), nil)
 		assert.NoError(t, err)
@@ -111,7 +114,7 @@ func TestManagerRoutes(t *testing.T) {
 		assert.NoError(t, err)
 
 		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := profile.NewProfileFromReader(r, true)
+		p, err := parser.ParseProfile(r, true)
 		assert.NoError(t, err)
 
 		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)

@@ -1,4 +1,4 @@
-package profile
+package parser
 
 import (
 	"bytes"
@@ -9,17 +9,9 @@ import (
 
 	"github.com/docker/docker/client"
 	"github.com/stretchr/testify/assert"
-)
 
-func TestNew(t *testing.T) {
-	opts := &DockerOptions{
-		Domain: "test",
-	}
-	err := checkCli(opts)
-	assert.NoError(t, err)
-	assert.NotNil(t, opts)
-	assert.NotNil(t, opts.Cli)
-}
+	"github.com/guumaster/hostctl/pkg/docker"
+)
 
 func TestNewProfileFromDocker(t *testing.T) {
 	t.Run("All containers", func(t *testing.T) {
@@ -37,7 +29,7 @@ func TestNewProfileFromDocker(t *testing.T) {
 }]`,
 		})
 
-		p, err := NewProfileFromDocker(&DockerOptions{
+		p, err := NewProfileFromDocker(&docker.Options{
 			Domain: "test",
 			Cli:    c,
 		})
@@ -61,7 +53,7 @@ func TestNewProfileFromDocker(t *testing.T) {
 }]`,
 		})
 
-		p, err := NewProfileFromDocker(&DockerOptions{
+		p, err := NewProfileFromDocker(&docker.Options{
 			Domain:  "test",
 			Cli:     c,
 			Network: "networkName2",
@@ -112,7 +104,7 @@ networks:
 }]`,
 		})
 
-		p, err := NewProfileFromDockerCompose(&DockerOptions{
+		p, err := NewProfileFromDockerCompose(&docker.Options{
 			Domain:      "loc",
 			Cli:         c,
 			ComposeFile: r,

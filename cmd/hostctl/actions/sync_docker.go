@@ -3,8 +3,9 @@ package actions
 import (
 	"github.com/spf13/cobra"
 
+	"github.com/guumaster/hostctl/pkg/docker"
 	"github.com/guumaster/hostctl/pkg/file"
-	"github.com/guumaster/hostctl/pkg/profile"
+	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
@@ -28,7 +29,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 				return err
 			}
 
-			p, err := profile.NewProfileFromDocker(opts)
+			p, err := parser.NewProfileFromDocker(opts)
 			if err != nil {
 				return err
 			}
@@ -54,7 +55,7 @@ Reads from Docker the list of containers and add names and IPs to a profile in y
 	}
 }
 
-func getDockerOptions(cmd *cobra.Command, _ []string) (*profile.DockerOptions, error) {
+func getDockerOptions(cmd *cobra.Command, _ []string) (*docker.Options, error) {
 	domain, _ := cmd.Flags().GetString("domain")
 	network, _ := cmd.Flags().GetString("network")
 
@@ -62,7 +63,7 @@ func getDockerOptions(cmd *cobra.Command, _ []string) (*profile.DockerOptions, e
 		domain = "loc"
 	}
 
-	return &profile.DockerOptions{
+	return &docker.Options{
 		Domain:  domain,
 		Network: network,
 		Cli:     nil,

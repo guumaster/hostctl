@@ -15,6 +15,16 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
+func TestNew(t *testing.T) {
+	opts := &Options{
+		Domain: "test",
+	}
+	err := checkCli(opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, opts)
+	assert.NotNil(t, opts.Cli)
+}
+
 func TestGetNetworkID(t *testing.T) {
 	cli := newClientWithResponse(t, map[string]string{
 		"/v1.22/networks": `[
@@ -57,7 +67,9 @@ func TestGetContainerList(t *testing.T) {
 }]`,
 	})
 
-	list, err := GetContainerList(context.Background(), cli, "")
+	list, err := GetContainerList(&Options{
+		Cli: cli,
+	})
 	assert.NoError(t, err)
 
 	assert.Len(t, list, 2)
