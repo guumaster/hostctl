@@ -47,6 +47,11 @@ func NewProfileFromDockerCompose(opts *DockerOptions) (*types.Profile, error) {
 func NewProfileFromDocker(opts *DockerOptions) (*types.Profile, error) {
 	p := &types.Profile{}
 
+	err := checkCli(opts)
+	if err != nil {
+		return nil, err
+	}
+
 	containers, err := getContainerList(opts)
 	if err != nil {
 		return nil, err
@@ -57,26 +62,30 @@ func NewProfileFromDocker(opts *DockerOptions) (*types.Profile, error) {
 	return p, err
 }
 
+func checkCli(opts *DockerOptions) error {
+	cli := opts.Cli
+	if cli == nil {
+		cli, err := client.NewEnvClient()
+		if err != nil {
+			return err
+		}
+
+		opts.Cli = cli
+	}
+
+	return nil
+}
+
 func getContainerList(opts *DockerOptions) ([]dtypes.Container, error) {
 	var (
 		networkID string
 		err       error
 	)
 
-	cli := opts.Cli
-	if cli == nil {
-		cli, err = client.NewEnvClient()
-		if err != nil {
-			return nil, err
-		}
-
-		defer cli.Close()
-	}
-
 	ctx := context.Background()
 
 	if opts.NetworkID == "" && opts.Network != "" {
-		networkID, err = docker.GetNetworkID(ctx, cli, opts.Network)
+		networkID, err = docker.GetNetworkID(ctx, opts.Cli, opts.Network)
 		if err != nil {
 			return nil, err
 		}
@@ -84,7 +93,7 @@ func getContainerList(opts *DockerOptions) ([]dtypes.Container, error) {
 		opts.NetworkID = networkID
 	}
 
-	return docker.GetContainerList(ctx, cli, networkID)
+	return docker.GetContainerList(ctx, opts.Cli, networkID)
 }
 
 func addFromContainer(profile *types.Profile, containers []dtypes.Container, opts *DockerOptions) {

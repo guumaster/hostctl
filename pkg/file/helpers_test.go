@@ -11,29 +11,22 @@ import (
 func makeTempHostsFile(t *testing.T, pattern string) *os.File {
 	t.Helper()
 
-	var (
-		defaultProfile = "127.0.0.1 localhost\n"
-
-		testEnabledProfile = `
-# profile.on profile1
-127.0.0.1 first.loc
-127.0.0.1 second.loc
-# end
-`
-		testDisabledProfile = `
-# profile.off profile2
-# 127.0.0.1 first.loc
-# 127.0.0.1 second.loc
-# end
-`
-	)
-
 	file, err := ioutil.TempFile("/tmp", pattern+"_")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	_, _ = file.WriteString(defaultProfile + testEnabledProfile + testDisabledProfile)
+	_, _ = file.WriteString(`
+127.0.0.1 localhost
+# profile.on profile1
+127.0.0.1 first.loc
+127.0.0.1 second.loc
+# end
+# profile.off profile2
+# 127.0.0.1 first.loc
+# 127.0.0.1 second.loc
+# end
+`)
 	defer file.Close()
 
 	return file
@@ -48,7 +41,18 @@ func createBasicFS(t *testing.T) afero.Fs {
 	f, _ := appFS.Create("/tmp/etc/hosts")
 	defer f.Close()
 
-	_, _ = f.WriteString(defaultProfile + Banner + testEnabledProfile + testDisabledProfile)
+	_, _ = f.WriteString(`
+127.0.0.1 localhost
+` + Banner + `
+# profile.on profile1
+127.0.0.1 first.loc
+127.0.0.1 second.loc
+# end
+# profile.off profile2
+# 127.0.0.1 first.loc
+# 127.0.0.1 second.loc
+# end
+`)
 
 	return appFS
 }

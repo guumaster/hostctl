@@ -11,6 +11,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestNew(t *testing.T) {
+	opts := &DockerOptions{
+		Domain: "test",
+	}
+	err := checkCli(opts)
+	assert.NoError(t, err)
+	assert.NotNil(t, opts)
+	assert.NotNil(t, opts.Cli)
+}
+
 func TestNewProfileFromDocker(t *testing.T) {
 	t.Run("All containers", func(t *testing.T) {
 		c := newClientWithResponse(t, map[string]string{
