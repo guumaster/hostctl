@@ -6,8 +6,10 @@ import (
 
 func Test_Status(t *testing.T) {
 	cmd := NewRootCmd()
+
 	r := NewRunner(t, cmd, "status")
 	defer r.Clean()
+
 	r.Run("hostctl status").
 		Contains(`
 			+----------+--------+

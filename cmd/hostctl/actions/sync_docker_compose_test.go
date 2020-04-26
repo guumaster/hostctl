@@ -84,5 +84,6 @@ networks:
   }
 }]`,
 	}
+
 	return newClientWithResponse(t, dockerResponse)
 }
