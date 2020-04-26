@@ -1,13 +1,10 @@
 linters:
-  disable:
-    - goimports
-    - gochecknoglobals
-    - gosec
-    - prealloc
   enable-all: true
 
 # all available settings of specific linters
 linters-settings:
+  unparam:
+    check-exported: true
   funlen:
     lines: 120
     statements: 80

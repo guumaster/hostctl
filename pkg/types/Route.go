@@ -10,6 +10,7 @@ type Route struct {
 	HostNames []string
 }
 
+// NewRoute creates an new Route
 func NewRoute(ip string, hostnames ...string) *Route {
 	return &Route{
 		IP:        net.ParseIP(ip),

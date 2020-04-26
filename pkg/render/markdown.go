@@ -2,10 +2,9 @@ package render
 
 import (
 	"github.com/guumaster/tablewriter"
-
-	"github.com/guumaster/hostctl/pkg/types"
 )
 
+// NewMarkdownRenderer creates an instance of TableRenderer
 func NewMarkdownRenderer(opts *TableRendererOptions) TableRenderer {
 	table := createTableWriter(opts)
 
@@ -21,7 +20,7 @@ func NewMarkdownRenderer(opts *TableRendererOptions) TableRenderer {
 		Columns: opts.Columns,
 		table:   table,
 		opts:    opts,
-		meta: &types.Meta{
+		meta: &meta{
 			Rows: 0,
 		},
 	}

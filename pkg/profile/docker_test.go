@@ -34,8 +34,7 @@ func TestNewProfileFromDocker(t *testing.T) {
 
 		assert.NoError(t, err)
 
-		hosts, err := p.GetAllHostNames()
-		assert.NoError(t, err)
+		hosts := p.GetAllHostNames()
 
 		assert.Equal(t, []string{"172.0.0.2", "172.0.0.3"}, p.IPList)
 		assert.Equal(t, []string{"container1.test", "container2.test"}, hosts)
@@ -60,8 +59,7 @@ func TestNewProfileFromDocker(t *testing.T) {
 
 		assert.NoError(t, err)
 
-		hosts, err := p.GetAllHostNames()
-		assert.NoError(t, err)
+		hosts := p.GetAllHostNames()
 
 		assert.Equal(t, []string{"172.0.0.3"}, p.IPList)
 		assert.Equal(t, []string{"container2.test"}, hosts)
@@ -113,8 +111,7 @@ networks:
 
 		assert.NoError(t, err)
 
-		hosts, err := p.GetAllHostNames()
-		assert.NoError(t, err)
+		hosts := p.GetAllHostNames()
 
 		assert.Equal(t, []string{"172.0.0.2", "172.0.0.3"}, p.IPList)
 		assert.Equal(t, []string{"container1_1.loc", "container2_1.loc"}, hosts)

@@ -52,7 +52,7 @@ func TestFile_AddProfile(t *testing.T) {
 
 		added, err := m.GetProfile("profile1")
 		assert.NoError(t, err)
-		hosts, err := added.GetHostNames(Localhost.String())
+		hosts, err := added.GetHostNames("127.0.0.1")
 		assert.NoError(t, err)
 
 		assert.Equal(t, hosts, []string{"first.loc", "second.loc", "added.loc"})

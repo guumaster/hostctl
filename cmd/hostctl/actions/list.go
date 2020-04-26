@@ -42,9 +42,10 @@ The "default" profile is all the content that is not handled by hostctl tool.
 	return listCmd
 }
 
-var makeListStatusCmd = func(status types.Status) *cobra.Command {
+func makeListStatusCmd(status types.Status) *cobra.Command {
 	cmd := ""
 	alias := ""
+
 	switch status {
 	case types.Enabled:
 		cmd = "enabled"
@@ -53,6 +54,7 @@ var makeListStatusCmd = func(status types.Status) *cobra.Command {
 		cmd = "disabled"
 		alias = "off"
 	}
+
 	return &cobra.Command{
 		Use:     cmd,
 		Aliases: []string{alias},

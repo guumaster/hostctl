@@ -19,7 +19,7 @@ func postRunListOnly(cmd *cobra.Command, args []string) error {
 	return postActionCmd(cmd, args, nil, true)
 }
 
-var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Command, list bool) error {
+func postActionCmd(cmd *cobra.Command, args []string, postCmd *cobra.Command, list bool) error {
 	listCmd := newListCmd()
 	quiet, _ := cmd.Flags().GetBool("quiet")
 	duration, _ := cmd.Flags().GetDuration("wait")
@@ -43,6 +43,7 @@ var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Comma
 	if !quiet {
 		p := strings.Join(args, ", ")
 		_, _ = fmt.Fprintln(cmd.OutOrStdout())
+
 		if duration == 0 {
 			cligger.Info("Waiting until ctrl+c to %s from profile '%s'\n\n", action, p)
 		} else if duration > 0 {
@@ -61,11 +62,14 @@ var postActionCmd = func(cmd *cobra.Command, args []string, postCmd *cobra.Comma
 		if err != nil {
 			return err
 		}
+
 		if quiet {
 			return nil
 		}
+
 		return listCmd.RunE(cmd, args)
 	}
+
 	return nil
 }
 

@@ -8,11 +8,13 @@ import (
 	"github.com/guumaster/cligger"
 )
 
+// nolint:gochecknoglobals
 var (
 	version   = "dev"
 	snapBuild string
 )
 
+// NewRootCmd creates the base command for hostctl
 func NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "hostctl",

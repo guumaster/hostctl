@@ -2,31 +2,31 @@ package file
 
 import (
 	"io/ioutil"
-	"net"
 	"os"
 	"testing"
 
 	"github.com/spf13/afero"
 )
 
-var Localhost = net.ParseIP("127.0.0.1")
+func makeTempHostsFile(t *testing.T, pattern string) *os.File {
+	t.Helper()
 
-var defaultProfile = "127.0.0.1 localhost\n"
-var testEnabledProfile = `
+	var (
+		defaultProfile = "127.0.0.1 localhost\n"
+
+		testEnabledProfile = `
 # profile.on profile1
 127.0.0.1 first.loc
 127.0.0.1 second.loc
 # end
 `
-var testDisabledProfile = `
+		testDisabledProfile = `
 # profile.off profile2
 # 127.0.0.1 first.loc
 # 127.0.0.1 second.loc
 # end
 `
-
-func makeTempHostsFile(t *testing.T, pattern string) *os.File {
-	t.Helper()
+	)
 
 	file, err := ioutil.TempFile("/tmp", pattern+"_")
 	if err != nil {

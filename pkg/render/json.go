@@ -7,12 +7,14 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
+// JSONRendererOptions contains options to render JSON content
 type JSONRendererOptions struct {
 	Writer      io.Writer
 	Columns     []string
 	OnlyEnabled bool
 }
 
+// JSONRenderer is the Renderer used to output JSON
 type JSONRenderer struct {
 	Type    RendererType
 	Columns []string
@@ -24,6 +26,7 @@ type data struct {
 	lines []line
 }
 
+// NewJSONRenderer creates an instance of JSONRenderer
 func NewJSONRenderer(opts *JSONRendererOptions) JSONRenderer {
 	if len(opts.Columns) == 0 {
 		opts.Columns = types.DefaultColumns
@@ -37,6 +40,7 @@ func NewJSONRenderer(opts *JSONRendererOptions) JSONRenderer {
 	}
 }
 
+// AddSeparator not used on JSONRenderer
 func (j JSONRenderer) AddSeparator() {
 	// not used
 }
@@ -48,6 +52,7 @@ type line struct {
 	Host    string
 }
 
+// AppendRow adds a new row to the list
 func (j JSONRenderer) AppendRow(row *types.Row) {
 	if row.Comment != "" {
 		return
@@ -62,6 +67,7 @@ func (j JSONRenderer) AppendRow(row *types.Row) {
 	j.data.lines = append(j.data.lines, l)
 }
 
+// Render returns a JSON representation of the list content
 func (j JSONRenderer) Render() error {
 	enc := json.NewEncoder(j.w)
 

@@ -2,10 +2,9 @@ package render
 
 import (
 	"github.com/guumaster/tablewriter"
-
-	"github.com/guumaster/hostctl/pkg/types"
 )
 
+// NewRawRenderer creates an instance of TableRenderer without borders
 func NewRawRenderer(opts *TableRendererOptions) TableRenderer {
 	table := createTableWriter(opts)
 
@@ -25,7 +24,7 @@ func NewRawRenderer(opts *TableRendererOptions) TableRenderer {
 		Columns: opts.Columns,
 		table:   table,
 		opts:    opts,
-		meta: &types.Meta{
+		meta: &meta{
 			Rows: 0,
 			Raw:  true,
 		},

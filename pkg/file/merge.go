@@ -6,9 +6,9 @@ import (
 
 // MergeFile joins new content with existing content
 func (f *File) MergeFile(from *File) {
-	var ps []*types.Profile
-	for _, p := range from.data.Profiles {
-		ps = append(ps, p)
+	ps := make([]*types.Profile, len(from.data.Profiles))
+	for i, name := range from.data.ProfileNames {
+		ps[i] = from.data.Profiles[name]
 	}
 
 	f.MergeProfiles(ps)

@@ -119,8 +119,7 @@ func TestReadFromURL(t *testing.T) {
 	p, err := profile.NewProfileFromReader(r, true)
 	assert.NoError(t, err)
 
-	hosts, err := p.GetAllHostNames()
-	assert.NoError(t, err)
+	hosts := p.GetAllHostNames()
 
 	assert.Equal(t, []string{"some.profile.loc"}, hosts)
 }

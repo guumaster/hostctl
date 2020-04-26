@@ -131,7 +131,7 @@ func isValidURL(s string) bool {
 }
 
 func readerFromURL(url string) (io.Reader, error) {
-	resp, err := http.Get(url)
+	resp, err := http.Get(url) // nolint:gosec
 	if err != nil {
 		return nil, err
 	}

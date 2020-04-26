@@ -25,7 +25,7 @@ func (p *Profile) GetStatus() string {
 	return string(p.Status)
 }
 
-func (p *Profile) AppendIP(n string) {
+func (p *Profile) appendIP(n string) {
 	for _, c := range p.IPList {
 		if c == n {
 			return
@@ -40,7 +40,7 @@ func (p *Profile) AddRoute(route *Route) {
 	p.AddRoutes([]*Route{route})
 }
 
-// AddRoute adds a single route to the profile
+// AddRouteUniq adds a single route to the profile and removes duplicates
 func (p *Profile) AddRouteUniq(route *Route) {
 	p.AddRoutesUniq([]*Route{route})
 }
@@ -54,7 +54,7 @@ func (p *Profile) AddRoutes(routes []*Route) {
 	for _, r := range routes {
 		ip := r.IP.String()
 		if p.Routes[ip] == nil {
-			p.AppendIP(ip)
+			p.appendIP(ip)
 			p.Routes[ip] = &Route{
 				IP:        net.ParseIP(ip),
 				HostNames: r.HostNames,
@@ -110,18 +110,18 @@ func (p *Profile) GetHostNames(ip string) ([]string, error) {
 }
 
 // GetAllHostNames returns all hostnames of the profile.
-func (p *Profile) GetAllHostNames() ([]string, error) {
+func (p *Profile) GetAllHostNames() []string {
 	list := []string{}
 
 	if p.IPList == nil {
-		return list, nil
+		return list
 	}
 
 	for _, ip := range p.IPList {
 		list = append(list, p.Routes[ip].HostNames...)
 	}
 
-	return list, nil
+	return list
 }
 
 // Render writes the profile content to the given StringWriter

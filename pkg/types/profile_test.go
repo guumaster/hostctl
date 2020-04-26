@@ -106,8 +106,7 @@ func TestProfile(t *testing.T) {
 		}
 
 		p.RemoveHostnames([]string{"another.profile.loc"})
-		names, err := p.GetAllHostNames()
-		assert.NoError(t, err)
+		names := p.GetAllHostNames()
 
 		assert.Equal(t, []string{"some.profile.loc"}, names)
 	})
@@ -132,9 +131,9 @@ func Test_appendIP(t *testing.T) {
 
 	p.AddRoute(NewRoute("3.3.3.4", "some.profile.loc"))
 
-	p.AppendIP("3.3.3.4")
-	p.AppendIP("3.3.3.4")
-	p.AppendIP("3.3.3.5")
+	p.appendIP("3.3.3.4")
+	p.appendIP("3.3.3.4")
+	p.appendIP("3.3.3.5")
 
 	assert.Equal(t, p.IPList, []string{"3.3.3.4", "3.3.3.5"})
 }

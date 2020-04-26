@@ -13,6 +13,24 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
+// nolint:gochecknoglobals
+var (
+	defaultProfile = "127.0.0.1 localhost\n"
+
+	testEnabledProfile = `
+# profile.on profile1
+127.0.0.1 first.loc
+127.0.0.1 second.loc
+# end
+`
+	testDisabledProfile = `
+# profile.off profile2
+# 127.0.0.1 first.loc
+# 127.0.0.1 second.loc
+# end
+`
+)
+
 func TestManagerStatus(t *testing.T) {
 	t.Run("Get Status", func(t *testing.T) {
 		mem := createBasicFS(t)

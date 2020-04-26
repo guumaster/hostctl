@@ -82,9 +82,10 @@ func TestFile_MergeProfiles(t *testing.T) {
 	p2, err := m.GetProfile("profile2")
 	assert.NoError(t, err)
 
+	ip := net.ParseIP("127.0.0.1")
 	modP2 := profiles[0]
 	modP2.IPList = []string{"127.0.0.1", "2.2.2.2"}
-	modP2.Routes[Localhost.String()] = &types.Route{IP: Localhost, HostNames: []string{"first.loc", "second.loc"}}
+	modP2.Routes[ip.String()] = &types.Route{IP: ip, HostNames: []string{"first.loc", "second.loc"}}
 	modP2.Status = types.Disabled
 	assert.Equal(t, modP2, p2)
 }

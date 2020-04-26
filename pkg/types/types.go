@@ -14,7 +14,7 @@ type Content struct {
 	Profiles       map[string]*Profile
 }
 
-// ProfileStatus represents the status of a Profile
+// Status represents the status of a Profile
 type Status string
 
 const (

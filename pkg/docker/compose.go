@@ -32,7 +32,8 @@ func ParseComposeFile(r io.Reader, projectName string) ([]string, error) {
 		return nil, fmt.Errorf("error parsing docker-compose content: %w", err)
 	}
 
-	var containers []string
+	containers := make([]string, len(data.Services))
+	i := 0
 
 	for serv, data := range data.Services {
 		name := data.ContainerName
@@ -40,7 +41,8 @@ func ParseComposeFile(r io.Reader, projectName string) ([]string, error) {
 			name = fmt.Sprintf("%s_%s", projectName, serv)
 		}
 
-		containers = append(containers, name)
+		containers[i] = name
+		i++
 	}
 
 	return containers, nil

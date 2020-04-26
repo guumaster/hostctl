@@ -10,6 +10,7 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
+// nolint:gochecknoglobals
 var (
 	profileNameRe = regexp.MustCompile(`# profile(?:.(on|off))?\s+([a-z0-9-_.\s]+)`)
 	profileEnd    = regexp.MustCompile(`(?i)# end\s*`)
@@ -17,6 +18,7 @@ var (
 	tabReplacer   = regexp.MustCompile(`\t+`)
 )
 
+// Parser is the interface for content parsers
 type Parser interface {
 	Parse(reader io.Reader) types.Content
 }

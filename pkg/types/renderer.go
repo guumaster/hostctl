@@ -1,10 +1,13 @@
 package types
 
-// DefaultColumns is the list of default columns to use when showing table list
-var DefaultColumns = []string{"profile", "status", "ip", "domain"}
+// nolint:gochecknoglobals
+var (
+	// DefaultColumns is the list of default columns to use when showing table list
+	DefaultColumns = []string{"profile", "status", "ip", "domain"}
 
-// ProfilesOnlyColumns are the columns used for profile status list
-var ProfilesOnlyColumns = []string{"profile", "status"}
+	// ProfilesOnlyColumns are the columns used for profile status list
+	ProfilesOnlyColumns = []string{"profile", "status"}
+)
 
 // Renderer is the interface to render hosts file content
 type Renderer interface {
@@ -20,9 +23,4 @@ type Row struct {
 	Status  string
 	IP      string
 	Host    string
-}
-
-type Meta struct {
-	Rows int
-	Raw  bool
 }
