@@ -36,13 +36,6 @@ brew install guumaster/tap/hostctl
 ```
 
 
-### Snap [DEPRECATED]
-
-**DEPRECATION NOTICE**: Last version supported on snap is `v1.0.11`. I think Snap is not for everyone. Certainly not for me. 
-I've tried to maintain a snap version but is too manual, cumbersome, random and boring.
-Please, get the `hostctl` binary in any other flavor.
-
-
 ### Scoop
 
 ```
@@ -51,3 +44,9 @@ scoop install hostctl
 
 *NOTE*: If you also installed `sudo` with Scoop, you can run the examples below with `sudo` instead of starting your terminal as administrator.
 
+
+### Snap [DEPRECATED]
+
+**DEPRECATION NOTICE**: Last version supported on snap is `v1.0.11`. I think Snap is not for everyone. Certainly not for me. 
+I've tried to maintain a snap version but is too manual, cumbersome, random and boring.
+Please, get the `hostctl` binary in any other flavor.
