@@ -28,4 +28,13 @@ var (
 
 	// ErrInvalidProfileHeader when the profile header is invalid
 	ErrInvalidProfileHeader = errors.New("invalid format for profile header")
+
+	// ErrMinikubeStatus when minikube profile is not running
+	ErrMinikubeStatus = errors.New("minikube profile has to be running")
+
+	// ErrMinikubeIngress when minikube doesn't have ingress addon enabled
+	ErrMinikubeIngress = errors.New("minikube profile doesn't have ingress addon enabled")
+
+	// ErrKubernetesNamespace when no namespace is given
+	ErrKubernetesNamespace = errors.New("namespace parameter is required or use --all-namespaces")
 )

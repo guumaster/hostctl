@@ -16,4 +16,6 @@ require (
 	github.com/spf13/cobra v1.0.0
 	github.com/stretchr/testify v1.5.1
 	gopkg.in/yaml.v2 v2.2.2
+	k8s.io/apimachinery v0.0.0-20190817020851-f2f3a405f61d
+	k8s.io/client-go v0.0.0-20190918200256-06eb1244587a
 )

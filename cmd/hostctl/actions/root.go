@@ -157,6 +157,13 @@ func registerCommands(rootCmd *cobra.Command) {
 	syncDockerComposeCmd.Flags().String("project-name", "", "docker compose project name")
 	syncDockerComposeCmd.Flags().Bool("prefix", false, "keep project name prefix from domain name")
 
+	// sync minikube
+	syncMinikubeCmd := newSyncMinikubeCmd(removeCmd)
+	syncMinikubeCmd.Flags().StringP("profile", "p", "minikube", "minikube profile to read from")
+	syncMinikubeCmd.Flags().Bool("all-namespaces", false, "read ingresses from all kubernetes namespace")
+	syncMinikubeCmd.Flags().
+		StringP("namespace", "n", "", "kubernetes namespace to read ingress data from")
+
 	// list
 	listCmd := newListCmd()
 
@@ -168,6 +175,7 @@ func registerCommands(rootCmd *cobra.Command) {
 	removeCmd.AddCommand(removeDomainsCmd)
 	syncCmd.AddCommand(syncDockerCmd)
 	syncCmd.AddCommand(syncDockerComposeCmd)
+	syncCmd.AddCommand(syncMinikubeCmd)
 
 	// register all commands
 	rootCmd.AddCommand(addCmd)
