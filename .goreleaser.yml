@@ -2,10 +2,6 @@
 # Make sure to check the documentation at http://goreleaser.com
 project_name: hostctl
 
-before:
-  hooks:
-    - go mod tidy
-
 builds:
   - id: hostctl
     binary: hostctl
@@ -62,7 +58,7 @@ nfpms:
 
 brews:
   - name: hostctl
-    github:
+    tap:
       owner: guumaster
       name: homebrew-tap
     homepage:  https://github.com/guumaster/hostctl
