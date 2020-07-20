@@ -36,13 +36,11 @@ brew install guumaster/tap/hostctl
 ```
 
 
-### Snap
+### Snap [DEPRECATED]
 
-**WARNING**: Still working out a permission issue * [hostctl snap - store-requests](https://forum.snapcraft.io/t/plugs-system-files-for-hostctl-snap/16199/5) 
-
-```
-[sudo] snap install hostctl
-```
+**DEPRECATION NOTICE**: Last version supported on snap is `v1.0.11`. I think Snap is not for everyone. Certainly not for me. 
+I've tried to maintain a snap version but is too manual, cumbersome, random and boring.
+Please, get the `hostctl` binary in any other flavor.
 
 
 ### Scoop

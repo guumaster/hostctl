@@ -42,11 +42,6 @@ Output:
 +---------+--------+----------------+------------------------------+
 ```
 
-{{<warning>}}
-If you installed from the Snap Store you **can't use** `--from file` due to Snap's confinement restriction. 
-See [stdin option](#add-new-profile-from-stdin)
-{{</warning>}}
-
 
 ### Add domains from args
 
@@ -76,10 +71,6 @@ You can add that content as a profile with this command:
 ### Add new profile from `stdin`
 
 Similar to the previous option, you can pipe from a previous command or redirect output to it.
-
-{{<warning>}}
-If you installed from the Snap Store this is the only way to add content from files due to Snap's confinement restrictions.
-{{</warning>}}
 
 Commands (both work similarly):
 
