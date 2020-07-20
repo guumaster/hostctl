@@ -10,8 +10,7 @@ import (
 
 // nolint:gochecknoglobals
 var (
-	version   = "dev"
-	snapBuild string
+	version = "dev"
 )
 
 // NewRootCmd creates the base command for hostctl
@@ -34,14 +33,9 @@ you need each time with a simple interface.
 				cligger.DisableColor()
 			}
 			cligger.SetWriter(cmd.OutOrStdout())
-			isSnapBuild := snapBuild == "yes"
-			err := checkSnapRestrictions(cmd, isSnapBuild)
-			if err != nil {
-				return err
-			}
 			host, _ := cmd.Flags().GetString("host-file")
 
-			showHostFile := host != getDefaultHostFile(isSnapBuild) || os.Getenv("HOSTCTL_FILE") != ""
+			showHostFile := host != getDefaultHostFile() || os.Getenv("HOSTCTL_FILE") != ""
 
 			quiet := needsQuietOutput(cmd)
 			isHelper := isHelperCmd(cmd)
@@ -56,10 +50,9 @@ you need each time with a simple interface.
 
 	// set CLI version
 	rootCmd.Version = version
-	isSnapBuild := snapBuild == "yes"
 
 	// rootCmd
-	rootCmd.PersistentFlags().String("host-file", getDefaultHostFile(isSnapBuild), "Hosts file path")
+	rootCmd.PersistentFlags().String("host-file", getDefaultHostFile(), "Hosts file path")
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Run command without output")
 	rootCmd.PersistentFlags().Bool("raw", false, "Output without borders (same as -o raw)")
 	rootCmd.PersistentFlags().StringP("out", "o", "table", "Output type (table|raw|markdown|json)")

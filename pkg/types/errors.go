@@ -28,8 +28,4 @@ var (
 
 	// ErrInvalidProfileHeader when the profile header is invalid
 	ErrInvalidProfileHeader = errors.New("invalid format for profile header")
-
-	// ErrSnapConfinement when trying to read files on snap installation
-	ErrSnapConfinement = errors.New("can't use --from or --host-file. " +
-		"Snap confinement restrictions doesn't allow to read other than /etc/hosts file")
 )

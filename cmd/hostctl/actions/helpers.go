@@ -80,9 +80,8 @@ func containsDefault(args []string) error {
 	return nil
 }
 
-func getDefaultHostFile(snapBuild bool) string {
-	// Snap confinement doesn't allow to read other than
-	if runtime.GOOS == "linux" && snapBuild {
+func getDefaultHostFile() string {
+	if runtime.GOOS == "linux" {
 		return "/etc/hosts"
 	}
 
@@ -96,23 +95,6 @@ func getDefaultHostFile(snapBuild bool) string {
 	}
 
 	return "/etc/hosts"
-}
-
-func checkSnapRestrictions(cmd *cobra.Command, isSnap bool) error {
-	from, _ := cmd.Flags().GetString("from")
-	src, _ := cmd.Flags().GetString("host-file")
-
-	defaultSrc := getDefaultHostFile(isSnap)
-
-	if !isSnap {
-		return nil
-	}
-
-	if from != "" || src != defaultSrc && !isValidURL(from) {
-		return types.ErrSnapConfinement
-	}
-
-	return nil
 }
 
 // isValidURL tests a string to determine if it is a well-structured url or not.

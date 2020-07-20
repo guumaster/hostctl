@@ -22,19 +22,6 @@ builds:
     ldflags:
       - -s -w -X github.com/guumaster/hostctl/cmd/hostctl/actions.version={{.Version}}
 
-  - id: hostctl-snap
-    binary: hostctl-snap
-    main: cmd/hostctl/main.go
-    env:
-      - GO111MODULE=on
-      - CGO_ENABLED=0
-    goos:
-      - linux
-    goarch:
-      - amd64
-    ldflags:
-      - -s -w -X github.com/guumaster/hostctl/cmd/hostctl/actions.version={{.Version}}-snap -X github.com/guumaster/hostctl/cmd/hostctl/actions.snapBuild=yes
-
 changelog:
   sort: desc
   filters:
@@ -92,18 +79,3 @@ scoop:
   homepage:  https://github.com/guumaster/hostctl
   description: Your dev tool to manage /etc/hosts like a pro
   license: MIT
-
-snapcrafts:
-  - id: hostctl-snap
-    name: hostctl
-    builds:
-      - hostctl-snap
-    summary: Your dev tool to manage /etc/hosts like a pro
-    description: Your dev tool to manage /etc/hosts like a pro.
-    grade: stable
-    confinement: strict
-    license: MIT
-    publish: true
-    apps:
-      hostctl:
-        plugs: ["network-control"]
