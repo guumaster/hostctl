@@ -2,6 +2,10 @@
 # Make sure to check the documentation at http://goreleaser.com
 project_name: hostctl
 
+before:
+  hooks:
+    - go mod tidy
+
 builds:
   - id: hostctl
     binary: hostctl
