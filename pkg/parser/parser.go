@@ -142,7 +142,7 @@ func parseProfileHeader(b []byte) (*types.Profile, error) {
 func parseRouteLine(str string) (*types.Route, bool) {
 	clean := spaceRemover.ReplaceAllString(str, " ")
 	clean = tabReplacer.ReplaceAllString(clean, " ")
-	clean = strings.TrimSpace(str)
+	clean = strings.TrimSpace(clean)
 	result := endingComment.FindStringSubmatch(clean)
 	tResult := strings.TrimSpace(result[1])
 	p := strings.Split(tResult, " ")
