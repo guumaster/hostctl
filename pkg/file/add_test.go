@@ -20,7 +20,7 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 		r := strings.NewReader(`127.0.0.1 added.loc`)
 
-		p, err := parser.ParseProfile(r, true)
+		p, err := parser.ParseProfile(r)
 		assert.NoError(t, err)
 		p.Name = "awesome"
 		p.Status = types.Enabled
@@ -41,7 +41,7 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 		r := strings.NewReader(`127.0.0.1 added.loc`)
 
-		p, err := parser.ParseProfile(r, true)
+		p, err := parser.ParseProfile(r)
 		assert.NoError(t, err)
 		p.Name = "profile1"
 
@@ -63,7 +63,7 @@ func TestFile_AddProfile(t *testing.T) {
 		assert.NoError(t, err)
 		r := strings.NewReader(`127.0.0.1 added.loc`)
 
-		p, err := parser.ParseProfile(r, true)
+		p, err := parser.ParseProfile(r)
 		assert.NoError(t, err)
 		p.Name = "default"
 

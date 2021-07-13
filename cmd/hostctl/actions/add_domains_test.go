@@ -60,4 +60,53 @@ func Test_AddDomains(t *testing.T) {
 				+----------+--------+-----------+----------------+
 `, r.Hostfile())
 	})
+
+	t.Run("Add domains uniq", func(t *testing.T) {
+		r := NewRunner(t, cmd, "add_uniq")
+		defer r.Clean()
+
+		r.Run("hostctl add domains awesome same.domain.loc --ip 3.3.3.3").
+			Run("hostctl add domains awesome same.domain.loc --ip 3.3.3.3").
+			Containsf(`
+				[ℹ] Using hosts file: %s
+
+				[✔] Domains 'same.domain.loc' added.
+
+        +---------+--------+---------+-----------------+
+        | PROFILE | STATUS |   IP    |     DOMAIN      |
+        +---------+--------+---------+-----------------+
+        | awesome | on     | 3.3.3.3 | same.domain.loc |
+        +---------+--------+---------+-----------------+
+			`, r.Hostfile())
+	})
+
+	t.Run("Add domains uniq per profile", func(t *testing.T) {
+		r := NewRunner(t, cmd, "multi_profile")
+		defer r.Clean()
+
+		r.Run("hostctl add domains another same.domain.loc --ip 3.3.3.3").
+			Run("hostctl add domains another same.domain.loc --ip 3.3.3.3").
+			Run("hostctl add domains awesome same.domain.loc --ip 3.3.3.3").
+			Run("hostctl add domains awesome same.domain.loc --ip 3.3.3.3").
+			Run("hostctl list another").
+			Containsf(`
+				[ℹ] Using hosts file: %s
+
+				+---------+--------+---------+-----------------+
+				| PROFILE | STATUS |   IP    |     DOMAIN      |
+				+---------+--------+---------+-----------------+
+				| another | on     | 3.3.3.3 | same.domain.loc |
+				+---------+--------+---------+-----------------+
+			`, r.Hostfile()).
+			Run("hostctl list awesome").
+			Containsf(`
+				[ℹ] Using hosts file: %s
+
+				+---------+--------+---------+-----------------+
+				| PROFILE | STATUS |   IP    |     DOMAIN      |
+				+---------+--------+---------+-----------------+
+				| awesome | on     | 3.3.3.3 | same.domain.loc |
+				+---------+--------+---------+-----------------+
+			`, r.Hostfile())
+	})
 }

@@ -138,7 +138,7 @@ func (f *File) AddRoutes(name string, routes []*types.Route) error {
 }
 
 // RemoveHostnames removes route information from a given types.
-// also removes the profile if gets empty.
+// also removes the profile if it gets empty.
 func (f *File) RemoveHostnames(name string, routes []string) (bool, error) {
 	p, err := f.GetProfile(name)
 	if err != nil {

@@ -12,11 +12,26 @@ func Test_Add(t *testing.T) {
 	r := NewRunner(t, cmd, "add")
 	defer r.Clean()
 
-	tmp := r.TempHostfile("source")
-	defer os.Remove(tmp.Name())
-
 	t.Run("Add from file", func(t *testing.T) {
-		r.Runf("hostctl add awesome --uniq --from %s", tmp.Name()).
+		tmp := r.TempHostfile("source")
+		defer os.Remove(tmp.Name())
+		r.Runf("hostctl add awesome --from %s", tmp.Name()).
+			Contains(`
+				+---------+--------+-----------+------------+
+				| PROFILE | STATUS |    IP     |   DOMAIN   |
+				+---------+--------+-----------+------------+
+				| awesome | on     | 127.0.0.1 | localhost  |
+				| awesome | on     | 127.0.0.1 | first.loc  |
+				| awesome | on     | 127.0.0.1 | second.loc |
+				+---------+--------+-----------+------------+
+			`)
+	})
+
+	t.Run("Add from file uniq", func(t *testing.T) {
+		tmp := r.TempHostfile("source")
+		defer os.Remove(tmp.Name())
+		r.Runf("hostctl add awesome --from %s", tmp.Name()).
+			Runf("hostctl add awesome --from %s", tmp.Name()).
 			Contains(`
 				+---------+--------+-----------+------------+
 				| PROFILE | STATUS |    IP     |   DOMAIN   |

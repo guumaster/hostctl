@@ -58,10 +58,9 @@ func makeAddReplace(actionFn addRemoveFn) func(cmd *cobra.Command, profiles []st
 	return func(cmd *cobra.Command, profiles []string) error {
 		src, _ := cmd.Flags().GetString("host-file")
 		from, _ := cmd.Flags().GetString("from")
-		uniq, _ := cmd.Flags().GetBool("uniq")
 		in := cmd.InOrStdin()
 
-		p, err := getProfileFromInput(in, from, uniq)
+		p, err := getProfileFromInput(in, from)
 		if err != nil {
 			return err
 		}
@@ -83,7 +82,7 @@ func makeAddReplace(actionFn addRemoveFn) func(cmd *cobra.Command, profiles []st
 	}
 }
 
-func getProfileFromInput(in io.Reader, from string, uniq bool) (*types.Profile, error) {
+func getProfileFromInput(in io.Reader, from string) (*types.Profile, error) {
 	var (
 		r   io.Reader
 		err error
@@ -104,5 +103,5 @@ func getProfileFromInput(in io.Reader, from string, uniq bool) (*types.Profile, 
 		return nil, err
 	}
 
-	return parser.ParseProfile(r, uniq)
+	return parser.ParseProfile(r)
 }

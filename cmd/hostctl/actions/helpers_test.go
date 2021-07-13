@@ -116,7 +116,7 @@ func TestReadFromURL(t *testing.T) {
 	r, err := readerFromURL(server.URL)
 	assert.NoError(t, err)
 
-	p, err := parser.ParseProfile(r, true)
+	p, err := parser.ParseProfile(r)
 	assert.NoError(t, err)
 
 	hosts := p.GetAllHostNames()

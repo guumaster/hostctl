@@ -114,7 +114,7 @@ func TestManagerRoutes(t *testing.T) {
 		assert.NoError(t, err)
 
 		r := strings.NewReader(`3.3.3.4 some.profile.loc`)
-		p, err := parser.ParseProfile(r, true)
+		p, err := parser.ParseProfile(r)
 		assert.NoError(t, err)
 
 		h, _ := mem.OpenFile("/tmp/etc/hosts", os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)

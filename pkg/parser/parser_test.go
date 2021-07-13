@@ -63,7 +63,7 @@ func TestNewProfile(t *testing.T) {
 3.3.3.4 some.profile.loc
 3.3.3.4 first.loc
 `)
-		p, err := ParseProfile(r, true)
+		p, err := ParseProfile(r)
 		assert.NoError(t, err)
 		hosts, err := p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
@@ -77,11 +77,11 @@ func TestNewProfile(t *testing.T) {
 3.3.3.4 first.loc
 3.3.3.4 first.loc
 `)
-		p, err := ParseProfile(r, false)
+		p, err := ParseProfile(r)
 		assert.NoError(t, err)
 		hosts, err := p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
-		assert.Equal(t, []string{"some.profile.loc", "first.loc", "first.loc"}, hosts)
+		assert.Equal(t, []string{"some.profile.loc", "first.loc"}, hosts)
 	})
 }
 

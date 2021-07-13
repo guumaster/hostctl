@@ -89,7 +89,7 @@ func TestProfile(t *testing.T) {
 		p := Profile{}
 
 		p.AddRoute(NewRoute("1.1.1.1", "another.loc", "added.loc"))
-		p.AddRouteUniq(NewRoute("1.1.1.1", "added.loc", "third.loc"))
+		p.AddRoute(NewRoute("1.1.1.1", "added.loc", "third.loc"))
 
 		names, err := p.GetHostNames("1.1.1.1")
 		assert.NoError(t, err)

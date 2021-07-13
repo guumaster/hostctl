@@ -101,7 +101,6 @@ func registerCommands(rootCmd *cobra.Command) {
 	addCmd.Flags().StringP("from", "f", "", "file to read")
 	addCmd.PersistentFlags().
 		DurationP("wait", "w", -1, "Enables a profile for a specific amount of time. (example: 5m, 1h)")
-	addCmd.PersistentFlags().BoolP("uniq", "u", false, "only keep uniq domains per IP")
 
 	// remove
 	removeCmd.Flags().Bool("all", false, "Remove all profiles")
@@ -113,7 +112,6 @@ func registerCommands(rootCmd *cobra.Command) {
 	// replace
 	replaceCmd := newReplaceCmd()
 	replaceCmd.Flags().StringP("from", "f", "", "file to read")
-	replaceCmd.Flags().BoolP("uniq", "u", false, "only keep uniq domains per IP")
 
 	// toggle
 	toggleCmd := newToggleCmd()

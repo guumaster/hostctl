@@ -162,7 +162,7 @@ func parseRouteLine(str string) (*types.Route, bool) {
 }
 
 // ParseProfile creates a new profile reading lines from a reader
-func ParseProfile(r io.Reader, uniq bool) (*types.Profile, error) {
+func ParseProfile(r io.Reader) (*types.Profile, error) {
 	p := &types.Profile{}
 	s := bufio.NewScanner(r)
 
@@ -186,11 +186,7 @@ func ParseProfile(r io.Reader, uniq bool) (*types.Profile, error) {
 		}
 	}
 
-	if uniq {
-		p.AddRoutesUniq(routes)
-	} else {
-		p.AddRoutes(routes)
-	}
+	p.AddRoutes(routes)
 
 	return p, nil
 }
