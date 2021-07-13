@@ -82,6 +82,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ddl-jbrown",
+      "name": "Josh Brown",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67287351?v=4",
+      "profile": "https://github.com/ddl-jbrown",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "lukasmrtvy",
+      "name": "Lukas M",
+      "avatar_url": "https://avatars.githubusercontent.com/u/768572?v=4",
+      "profile": "https://github.com/lukasmrtvy",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "projectName": "hostctl",
