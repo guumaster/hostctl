@@ -7,7 +7,7 @@ import (
 )
 
 func newCompletionCmd(rootCmd *cobra.Command) *cobra.Command {
-	var completionCmd = &cobra.Command{
+	completionCmd := &cobra.Command{
 		Use:    "completion <bash|zsh>",
 		Short:  "Generate bash or zsh completion script",
 		Hidden: true,

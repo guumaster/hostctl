@@ -1,14 +1,14 @@
 package actions
 
 import (
+	"context"
 	"io"
 	"os"
-
-	"github.com/spf13/cobra"
 
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/spf13/cobra"
 )
 
 type addRemoveFn func(h *file.File, p *types.Profile) error
@@ -93,7 +93,8 @@ func getProfileFromInput(in io.Reader, from string) (*types.Profile, error) {
 		r = in
 
 	case isValidURL(from):
-		r, err = readerFromURL(from)
+		ctx := context.Background()
+		r, err = readerFromURL(ctx, from)
 
 	default:
 		r, err = os.Open(from)

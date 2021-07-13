@@ -4,7 +4,7 @@ import (
 	"github.com/guumaster/tablewriter"
 )
 
-// NewMarkdownRenderer creates an instance of TableRenderer
+// NewMarkdownRenderer creates an instance of TableRenderer.
 func NewMarkdownRenderer(opts *TableRendererOptions) TableRenderer {
 	table := createTableWriter(opts)
 

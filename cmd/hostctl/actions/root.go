@@ -3,17 +3,15 @@ package actions
 import (
 	"os"
 
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/cligger"
+	"github.com/spf13/cobra"
 )
 
-// nolint:gochecknoglobals
 var (
 	version = "dev"
 )
 
-// NewRootCmd creates the base command for hostctl
+// NewRootCmd creates the base command for hostctl.
 func NewRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:     "hostctl",

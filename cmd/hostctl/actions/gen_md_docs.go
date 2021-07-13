@@ -14,6 +14,8 @@ import (
 	"github.com/spf13/cobra/doc"
 )
 
+var errPathNotDirectory = errors.New("path should be a directory")
+
 func newGenMdDocsCmd(rootCmd *cobra.Command) *cobra.Command {
 	return &cobra.Command{
 		Use:    "gen-md-docs",
@@ -31,7 +33,7 @@ Creates full markdown documentation and store it on the given path.
 			}
 
 			if !s.IsDir() {
-				return errors.New("path should be a directory")
+				return errPathNotDirectory
 			}
 
 			return nil
@@ -55,7 +57,7 @@ Creates full markdown documentation and store it on the given path.
 				fname := path.Base(src)
 
 				dst := strings.Replace(src, "hostctl_", "", 1)
-				if fname == "hostctl.md" {
+				if fname == "hostctl.md" { // nolint: goconst
 					dst = path.Join(output, "_index.md")
 					err = fixContent(rootCmd.Long, src)
 				} else {
@@ -92,7 +94,7 @@ func fixContent(desc, dst string) error {
 	wrapped := fmt.Sprintf("```\n%s\n```\n", desc)
 	final := strings.Replace(string(data), desc, wrapped, 1)
 
-	return ioutil.WriteFile(dst, []byte(final), 0666)
+	return ioutil.WriteFile(dst, []byte(final), 0666) // nolint: gosec
 }
 
 func filePrepender(filename string) string {

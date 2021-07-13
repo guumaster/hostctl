@@ -8,9 +8,8 @@ import (
 	"testing"
 
 	"github.com/docker/docker/client"
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/docker"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewProfileFromDocker(t *testing.T) {

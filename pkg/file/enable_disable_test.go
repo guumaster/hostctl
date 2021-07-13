@@ -3,9 +3,8 @@ package file
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFile_EnableDisable(t *testing.T) {

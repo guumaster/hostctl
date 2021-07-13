@@ -4,7 +4,7 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-// RemoveProfiles removes given profiles from the list
+// RemoveProfiles removes given profiles from the list.
 func (f *File) RemoveProfiles(profiles []string) error {
 	for _, p := range profiles {
 		err := f.RemoveProfile(p)
@@ -16,7 +16,7 @@ func (f *File) RemoveProfiles(profiles []string) error {
 	return nil
 }
 
-// RemoveProfile removes given profile from the list
+// RemoveProfile removes given profile from the list.
 func (f *File) RemoveProfile(name string) error {
 	var names []string
 

@@ -4,7 +4,7 @@ import (
 	"github.com/guumaster/tablewriter"
 )
 
-// NewRawRenderer creates an instance of TableRenderer without borders
+// NewRawRenderer creates an instance of TableRenderer without borders.
 func NewRawRenderer(opts *TableRendererOptions) TableRenderer {
 	table := createTableWriter(opts)
 

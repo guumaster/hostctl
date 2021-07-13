@@ -5,13 +5,11 @@ import (
 	"os"
 
 	"github.com/guumaster/cligger"
-
 	"github.com/guumaster/hostctl/cmd/hostctl/actions"
 )
 
 func main() {
 	_, err := os.Getwd()
-
 	if err != nil {
 		cligger.Fatal("error: %w\n", err)
 	}

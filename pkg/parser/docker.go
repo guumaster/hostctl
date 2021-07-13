@@ -5,12 +5,11 @@ import (
 	"strings"
 
 	dtypes "github.com/docker/docker/api/types"
-
 	"github.com/guumaster/hostctl/pkg/docker"
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-// NewProfileFromDocker creates a new profile from docker info
+// NewProfileFromDocker creates a new profile from docker info.
 func NewProfileFromDocker(opts *docker.Options) (*types.Profile, error) {
 	p := &types.Profile{}
 
@@ -24,7 +23,7 @@ func NewProfileFromDocker(opts *docker.Options) (*types.Profile, error) {
 	return p, err
 }
 
-// NewProfileFromDockerCompose creates a new profile from docker info
+// NewProfileFromDockerCompose creates a new profile from docker info.
 func NewProfileFromDockerCompose(opts *docker.Options) (*types.Profile, error) {
 	p := &types.Profile{}
 

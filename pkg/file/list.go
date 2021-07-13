@@ -26,7 +26,7 @@ func includeProfile(needle string, stack []string) bool {
 	return false
 }
 
-// ProfileStatus shows a table only with profile names status
+// ProfileStatus shows a table only with profile names status.
 func (f *File) ProfileStatus(r types.Renderer, profiles []string) {
 	for _, name := range f.data.ProfileNames {
 		currProfile := f.data.Profiles[name]
@@ -44,7 +44,7 @@ func (f *File) ProfileStatus(r types.Renderer, profiles []string) {
 	_ = r.Render()
 }
 
-// List shows a table with profile names status and routing information
+// List shows a table with profile names status and routing information.
 func (f *File) List(r types.Renderer, opts *ListOptions) {
 	addDefault(f, r, opts)
 

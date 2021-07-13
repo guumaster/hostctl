@@ -6,11 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/spf13/afero"
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/spf13/afero"
+	"github.com/stretchr/testify/assert"
 )
 
 // nolint:gochecknoglobals
@@ -133,7 +132,7 @@ func TestManagerRoutes(t *testing.T) {
 		assert.NoError(t, err)
 
 		assert.Contains(t, string(c), onlyEnabled)
-		var added = `
+		added := `
 # profile.off profile2
 # 127.0.0.1 first.loc
 # 127.0.0.1 second.loc
@@ -162,7 +161,7 @@ func TestManagerRoutes(t *testing.T) {
 		assert.NoError(t, err)
 
 		assert.Contains(t, string(c), onlyEnabled)
-		var added = `
+		added := `
 # profile.on awesome
 3.3.3.4 host1.loc
 3.3.3.4 host2.loc
@@ -191,7 +190,7 @@ func TestManagerRoutes(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Contains(t, string(c), onlyEnabled)
 
-		var added = `
+		added := `
 # profile.off profile2
 # 127.0.0.1 first.loc
 # end

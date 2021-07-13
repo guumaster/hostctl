@@ -2,16 +2,16 @@ package actions
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"sync"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/render"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestContainsDefault(t *testing.T) {
@@ -113,7 +113,8 @@ func TestReadFromURL(t *testing.T) {
 	})
 	defer server.Close()
 
-	r, err := readerFromURL(server.URL)
+	ctx := context.Background()
+	r, err := readerFromURL(ctx, server.URL)
 	assert.NoError(t, err)
 
 	p, err := parser.ParseProfile(r)

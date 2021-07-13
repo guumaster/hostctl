@@ -7,13 +7,12 @@ import (
 	"os"
 	"sync"
 
-	"github.com/spf13/afero"
-
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/spf13/afero"
 )
 
-// File container to handle a hosts file
+// File container to handle a hosts file.
 type File struct {
 	fs        afero.Fs
 	src       afero.File
@@ -22,12 +21,12 @@ type File struct {
 	mutex     sync.Mutex
 }
 
-// NewFile creates a new File from the given src on default OS filesystem
+// NewFile creates a new File from the given src on default OS filesystem.
 func NewFile(src string) (*File, error) {
 	return NewWithFs(src, afero.NewOsFs())
 }
 
-// NewWithFs creates a new File with src and an existing filesystem
+// NewWithFs creates a new File with src and an existing filesystem.
 func NewWithFs(src string, fs afero.Fs) (*File, error) {
 	if fs == nil {
 		fs = afero.NewOsFs()
@@ -51,7 +50,7 @@ func NewWithFs(src string, fs afero.Fs) (*File, error) {
 	return f, nil
 }
 
-// GetStatus returns a map with the status of the given profiles
+// GetStatus returns a map with the status of the given profiles.
 func (f *File) GetStatus(profiles []string) map[string]types.Status {
 	st := map[string]types.Status{}
 
@@ -67,7 +66,7 @@ func (f *File) GetStatus(profiles []string) map[string]types.Status {
 	return st
 }
 
-// GetEnabled returns a list of profiles that are Enabled
+// GetEnabled returns a list of profiles that are Enabled.
 func (f *File) GetEnabled() []string {
 	enabled := []string{}
 
@@ -80,7 +79,7 @@ func (f *File) GetEnabled() []string {
 	return enabled
 }
 
-// GetDisabled returns a list of profiles that are Enabled
+// GetDisabled returns a list of profiles that are Enabled.
 func (f *File) GetDisabled() []string {
 	disabled := []string{}
 
@@ -93,7 +92,7 @@ func (f *File) GetDisabled() []string {
 	return disabled
 }
 
-// GetProfile return a Profile from the list
+// GetProfile return a Profile from the list.
 func (f *File) GetProfile(name string) (*types.Profile, error) {
 	p, ok := f.data.Profiles[name]
 	if !ok {
@@ -103,17 +102,17 @@ func (f *File) GetProfile(name string) (*types.Profile, error) {
 	return p, nil
 }
 
-// GetProfileNames return a list of all profile names
+// GetProfileNames return a list of all profile names.
 func (f *File) GetProfileNames() []string {
 	return f.data.ProfileNames
 }
 
-// AddRoute adds a single route information to a given profile
+// AddRoute adds a single route information to a given profile.
 func (f *File) AddRoute(name string, route *types.Route) error {
 	return f.AddRoutes(name, []*types.Route{route})
 }
 
-// AddRoutes adds routes information to a given profile
+// AddRoutes adds routes information to a given profile.
 func (f *File) AddRoutes(name string, routes []*types.Route) error {
 	p, err := f.GetProfile(name)
 	if err != nil && !errors.Is(err, types.ErrUnknownProfile) {
@@ -159,7 +158,7 @@ func (f *File) RemoveHostnames(name string, routes []string) (bool, error) {
 	return false, nil
 }
 
-// WriteTo overwrite file with hosts info
+// WriteTo overwrite file with hosts info.
 func (f *File) WriteTo(src string) error {
 	h, err := f.fs.OpenFile(src, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 	if err != nil {
@@ -169,7 +168,7 @@ func (f *File) WriteTo(src string) error {
 	return f.writeToFile(h)
 }
 
-// Flush overwrite file with hosts info
+// Flush overwrite file with hosts info.
 func (f *File) Flush() error {
 	h, err := f.fs.OpenFile(f.src.Name(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 	if err != nil {
@@ -180,7 +179,7 @@ func (f *File) Flush() error {
 	return f.writeToFile(h)
 }
 
-// writeToFile overwrite file with hosts info
+// writeToFile overwrite file with hosts info.
 func (f *File) writeToFile(dst afero.File) error {
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
@@ -226,7 +225,7 @@ func (f *File) writeBanner(w io.StringWriter) {
 	f.hasBanner = true
 }
 
-// Close closes the underlying file
+// Close closes the underlying file.
 func (f *File) Close() {
 	f.src.Close()
 }
