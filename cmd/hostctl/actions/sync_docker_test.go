@@ -7,10 +7,9 @@ import (
 	"testing"
 
 	"github.com/docker/docker/client"
+	"github.com/guumaster/hostctl/pkg/docker"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/guumaster/hostctl/pkg/docker"
 )
 
 func testGetOptions(t *testing.T, cli *client.Client) getOptionsFn {

@@ -7,14 +7,14 @@ import (
 	"strings"
 )
 
-// Content contains complete data of all profiles
+// Content contains complete data of all profiles.
 type Content struct {
 	DefaultProfile DefaultProfile
 	ProfileNames   []string
 	Profiles       map[string]*Profile
 }
 
-// Status represents the status of a Profile
+// Status represents the status of a Profile.
 type Status string
 
 const (
@@ -23,14 +23,14 @@ const (
 	// Disabled marks a profile not active on your hosts file.
 	Disabled Status = "off"
 
-	// Default is the name of the default profile
+	// Default is the name of the default profile.
 	Default = "default"
 )
 
-// DefaultProfile contains data for the default profile
+// DefaultProfile contains data for the default profile.
 type DefaultProfile []*Row
 
-// Render writes the default profile content to the given StringWriter
+// Render writes the default profile content to the given StringWriter.
 func (d DefaultProfile) Render(w io.StringWriter) error {
 	tmp := bytes.NewBufferString("")
 

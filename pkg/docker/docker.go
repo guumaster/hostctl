@@ -8,11 +8,10 @@ import (
 	dtypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/client"
-
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-// Options contains parameters to sync with docker and docker-compose
+// Options contains parameters to sync with docker and docker-compose.
 type Options struct {
 	Domain      string
 	Network     string
@@ -23,7 +22,7 @@ type Options struct {
 	Cli         *client.Client
 }
 
-// GetContainerList returns a list of running docker containers, filter by network if networkID passed
+// GetContainerList returns a list of running docker containers, filter by network if networkID passed.
 func GetContainerList(opts *Options) ([]dtypes.Container, error) {
 	var (
 		networkID string
@@ -56,7 +55,7 @@ func GetContainerList(opts *Options) ([]dtypes.Container, error) {
 	return opts.Cli.ContainerList(ctx, dtypes.ContainerListOptions{Filters: f})
 }
 
-// GetNetworkID returns the an ID that match a network name
+// GetNetworkID returns the an ID that match a network name.
 func GetNetworkID(ctx context.Context, cli *client.Client, network string) (string, error) {
 	var networkID string
 

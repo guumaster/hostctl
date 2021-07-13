@@ -10,15 +10,15 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-// nolint:gochecknoglobals
 var (
 	profileNameRe = regexp.MustCompile(`# profile(?:.(on|off))?\s+([a-z0-9-_.\s]+)`)
 	profileEnd    = regexp.MustCompile(`(?i)# end\s*`)
 	spaceRemover  = regexp.MustCompile(`\s+`)
 	tabReplacer   = regexp.MustCompile(`\t+`)
+	endingComment = regexp.MustCompile(`(.[^#]*).*`)
 )
 
-// Parser is the interface for content parsers
+// Parser is the interface for content parsers.
 type Parser interface {
 	Parse(reader io.Reader) types.Content
 }
@@ -142,8 +142,9 @@ func parseRouteLine(str string) (*types.Route, bool) {
 	clean := spaceRemover.ReplaceAllString(str, " ")
 	clean = tabReplacer.ReplaceAllString(clean, " ")
 	clean = strings.TrimSpace(clean)
-
-	p := strings.Split(clean, " ")
+	result := endingComment.FindStringSubmatch(clean)
+	tResult := strings.TrimSpace(result[1])
+	p := strings.Split(tResult, " ")
 
 	i := 0
 	if p[0] == "#" && len(p) > 1 {
@@ -159,8 +160,8 @@ func parseRouteLine(str string) (*types.Route, bool) {
 	return &types.Route{IP: ip, HostNames: p[i+1:]}, true
 }
 
-// ParseProfile creates a new profile reading lines from a reader
-func ParseProfile(r io.Reader, uniq bool) (*types.Profile, error) {
+// ParseProfile creates a new profile reading lines from a reader.
+func ParseProfile(r io.Reader) (*types.Profile, error) {
 	p := &types.Profile{}
 	s := bufio.NewScanner(r)
 
@@ -184,11 +185,7 @@ func ParseProfile(r io.Reader, uniq bool) (*types.Profile, error) {
 		}
 	}
 
-	if uniq {
-		p.AddRoutesUniq(routes)
-	} else {
-		p.AddRoutes(routes)
-	}
+	p.AddRoutes(routes)
 
 	return p, nil
 }

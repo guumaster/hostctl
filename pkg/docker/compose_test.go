@@ -9,7 +9,7 @@ import (
 )
 
 func TestParseComposeFile(t *testing.T) {
-	var composeFile = `
+	composeFile := `
 version: "3"
 services:
 

@@ -4,18 +4,17 @@ import (
 	"io"
 	"os"
 
-	"github.com/guumaster/tablewriter"
-
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/guumaster/tablewriter"
 )
 
-// TableRendererOptions contains options to render a table
+// TableRendererOptions contains options to render a table.
 type TableRendererOptions struct {
 	Writer  io.Writer
 	Columns []string
 }
 
-// RendererType represents all the existing renderers
+// RendererType represents all the existing renderers.
 type RendererType string
 
 // nolint:gochecknoglobals
@@ -31,7 +30,7 @@ type meta struct {
 	Raw  bool
 }
 
-// TableRenderer is the Renderer used to output tables
+// TableRenderer is the Renderer used to output tables.
 type TableRenderer struct {
 	Type    RendererType
 	Columns []string
@@ -56,7 +55,7 @@ func createTableWriter(opts *TableRendererOptions) *tablewriter.Table {
 	return table
 }
 
-// NewTableRenderer creates an instance of TableRenderer
+// NewTableRenderer creates an instance of TableRenderer.
 func NewTableRenderer(opts *TableRendererOptions) TableRenderer {
 	table := createTableWriter(opts)
 
@@ -71,7 +70,7 @@ func NewTableRenderer(opts *TableRendererOptions) TableRenderer {
 	}
 }
 
-// AppendRow adds a new row to the list
+// AppendRow adds a new row to the list.
 func (t TableRenderer) AppendRow(row *types.Row) {
 	r := []string{}
 
@@ -98,15 +97,15 @@ func (t TableRenderer) AppendRow(row *types.Row) {
 	}
 }
 
-// AddSeparator adds a separator line to the list
+// AddSeparator adds a separator line to the list.
 func (t TableRenderer) AddSeparator() {
 	if !t.meta.Raw && t.meta.Rows > 0 {
 		t.table.AddSeparator()
 	}
 }
 
-// Render prints a table representation of row content
-func (t TableRenderer) Render() error { // nolint:unparam
+// Render prints a table representation of row content.
+func (t TableRenderer) Render() error { // nolint: unparam
 	if t.meta.Rows > 0 {
 		t.table.Render()
 	}

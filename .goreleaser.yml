@@ -2,10 +2,6 @@
 # Make sure to check the documentation at http://goreleaser.com
 project_name: hostctl
 
-before:
-  hooks:
-    - go mod tidy
-
 builds:
   - id: hostctl
     binary: hostctl
@@ -62,9 +58,10 @@ nfpms:
 
 brews:
   - name: hostctl
-    github:
+    tap:
       owner: guumaster
       name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     homepage:  https://github.com/guumaster/hostctl
     description: Your dev tool to manage /etc/hosts like a pro
     commit_author:

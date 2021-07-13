@@ -2,6 +2,7 @@ package actions
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -9,10 +10,9 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/hostctl/pkg/render"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/spf13/cobra"
 )
 
 func commonCheckProfileOnly(_ *cobra.Command, args []string) error {
@@ -58,7 +58,7 @@ func commonCheckArgs(_ *cobra.Command, args []string) error {
 	return nil
 }
 
-// isPiped detect if there is any input through STDIN
+// isPiped detect if there is any input through STDIN.
 func isPiped() bool {
 	info, err := os.Stdin.Stat()
 	if err != nil {
@@ -82,7 +82,7 @@ func containsDefault(args []string) error {
 
 func getDefaultHostFile() string {
 	if runtime.GOOS == "linux" {
-		return "/etc/hosts"
+		return "/etc/hosts" // nolint: goconst
 	}
 
 	envHostFile := os.Getenv("HOSTCTL_FILE")
@@ -112,11 +112,17 @@ func isValidURL(s string) bool {
 	return true
 }
 
-func readerFromURL(url string) (io.Reader, error) {
-	resp, err := http.Get(url) // nolint:gosec
+func readerFromURL(ctx context.Context, url string) (io.Reader, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
@@ -141,6 +147,7 @@ func getRenderer(cmd *cobra.Command, opts *render.TableRendererOptions) types.Re
 		opts.Writer = cmd.OutOrStdout()
 	}
 
+	// nolint: goconst
 	switch {
 	case raw || out == "raw":
 		return render.NewRawRenderer(opts)

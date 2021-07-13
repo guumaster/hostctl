@@ -4,7 +4,7 @@ import (
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
-// MergeFile joins new content with existing content
+// MergeFile joins new content with existing content.
 func (f *File) MergeFile(from *File) {
 	ps := make([]*types.Profile, len(from.data.Profiles))
 	for i, name := range from.data.ProfileNames {
@@ -14,7 +14,7 @@ func (f *File) MergeFile(from *File) {
 	f.MergeProfiles(ps)
 }
 
-// MergeProfiles joins new profiles with existing content
+// MergeProfiles joins new profiles with existing content.
 func (f *File) MergeProfiles(profiles []*types.Profile) {
 	for _, newP := range profiles {
 		newName := newP.Name

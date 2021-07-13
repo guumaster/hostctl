@@ -7,12 +7,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/hostctl/pkg/docker"
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/spf13/cobra"
 )
 
 type composeInfo struct {

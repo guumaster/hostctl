@@ -8,9 +8,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/cligger"
+	"github.com/spf13/cobra"
 )
 
 const longWaitTime = 999999

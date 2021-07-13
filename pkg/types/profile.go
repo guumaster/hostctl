@@ -7,7 +7,9 @@ import (
 	"net"
 )
 
-// Profile contains all data of a single profile
+const disabledPrefix = "# "
+
+// Profile contains all data of a single profile.
 type Profile struct {
 	Name   string
 	Status Status
@@ -15,12 +17,12 @@ type Profile struct {
 	Routes map[string]*Route
 }
 
-// String returns a string representation of the profile
+// String returns a string representation of the profile.
 func (p *Profile) String() string {
 	return fmt.Sprintf("[%s]%s", p.Status, p.Name)
 }
 
-// GetStatus returns a string value of ProfileStatus
+// GetStatus returns a string value of ProfileStatus.
 func (p *Profile) GetStatus() string {
 	return string(p.Status)
 }
@@ -35,17 +37,12 @@ func (p *Profile) appendIP(n string) {
 	p.IPList = append(p.IPList, n)
 }
 
-// AddRoute adds a single route to the profile
+// AddRoute adds a single route to the profile.
 func (p *Profile) AddRoute(route *Route) {
 	p.AddRoutes([]*Route{route})
 }
 
-// AddRouteUniq adds a single route to the profile and removes duplicates
-func (p *Profile) AddRouteUniq(route *Route) {
-	p.AddRoutesUniq([]*Route{route})
-}
-
-// AddRoutes adds a list of routes to the profile
+// AddRoutes adds non duplicated routes to a profile.
 func (p *Profile) AddRoutes(routes []*Route) {
 	if p.Routes == nil {
 		p.Routes = map[string]*Route{}
@@ -57,32 +54,15 @@ func (p *Profile) AddRoutes(routes []*Route) {
 			p.appendIP(ip)
 			p.Routes[ip] = &Route{
 				IP:        net.ParseIP(ip),
-				HostNames: r.HostNames,
+				HostNames: uniqueStrings(r.HostNames),
 			}
 		} else {
-			p.Routes[ip].HostNames = append(p.Routes[ip].HostNames, r.HostNames...)
+			p.Routes[ip].HostNames = uniqueStrings(append(p.Routes[ip].HostNames, r.HostNames...))
 		}
 	}
 }
 
-// AddRoutesUniq adds non duplicated routes to a profile
-func (p *Profile) AddRoutesUniq(routes []*Route) {
-	p.AddRoutes(routes)
-
-	done := map[string]bool{}
-
-	for _, r := range routes {
-		ip := r.IP.String()
-		if _, ok := done[ip]; ok {
-			continue
-		}
-
-		p.Routes[ip].HostNames = uniqueStrings(p.Routes[ip].HostNames)
-		done[ip] = true
-	}
-}
-
-// RemoveHostnames removes multiple hostnames of a profile
+// RemoveHostnames removes multiple hostnames of a profile.
 func (p *Profile) RemoveHostnames(hostnames []string) {
 	for _, h := range hostnames {
 		for _, ip := range p.IPList {
@@ -124,7 +104,7 @@ func (p *Profile) GetAllHostNames() []string {
 	return list
 }
 
-// Render writes the profile content to the given StringWriter
+// Render writes the profile content to the given StringWriter.
 func (p *Profile) Render(w io.StringWriter) error {
 	tmp := bytes.NewBufferString("")
 
@@ -138,7 +118,7 @@ func (p *Profile) Render(w io.StringWriter) error {
 		for _, host := range route.HostNames {
 			prefix := ""
 			if p.Status == Disabled {
-				prefix = "# "
+				prefix = disabledPrefix
 			}
 
 			_, err = tmp.WriteString(fmt.Sprintf("%s%s %s\n", prefix, ip, host))
@@ -153,14 +133,14 @@ func (p *Profile) Render(w io.StringWriter) error {
 		return err
 	}
 
-	// Write to input writer after knowing the profile is well formed
+	// Write to input writer after knowing the profile is well-formed
 	_, err = w.WriteString(tmp.String())
 
 	return err
 }
 
 func uniqueStrings(xs []string) []string {
-	var list []string
+	list := []string{}
 
 	keys := make(map[string]bool)
 

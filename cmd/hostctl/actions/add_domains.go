@@ -3,12 +3,10 @@ package actions
 import (
 	"strings"
 
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/cligger"
-
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/spf13/cobra"
 )
 
 func newAddRemoveDomainsCmd() (*cobra.Command, *cobra.Command) {

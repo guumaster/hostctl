@@ -5,9 +5,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewJSONRenderer(t *testing.T) {

@@ -10,9 +10,8 @@ import (
 
 	dtypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNew(t *testing.T) {

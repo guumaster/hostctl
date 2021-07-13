@@ -1,9 +1,8 @@
 package actions
 
 import (
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/hostctl/pkg/file"
+	"github.com/spf13/cobra"
 )
 
 type enableDisableFn func(h *file.File, profiles []string, only, all bool) error

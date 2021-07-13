@@ -6,9 +6,8 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewRawRenderer(t *testing.T) {

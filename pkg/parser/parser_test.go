@@ -5,9 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHostFile(t *testing.T) {
@@ -63,7 +62,7 @@ func TestNewProfile(t *testing.T) {
 3.3.3.4 some.profile.loc
 3.3.3.4 first.loc
 `)
-		p, err := ParseProfile(r, true)
+		p, err := ParseProfile(r)
 		assert.NoError(t, err)
 		hosts, err := p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
@@ -77,11 +76,11 @@ func TestNewProfile(t *testing.T) {
 3.3.3.4 first.loc
 3.3.3.4 first.loc
 `)
-		p, err := ParseProfile(r, false)
+		p, err := ParseProfile(r)
 		assert.NoError(t, err)
 		hosts, err := p.GetHostNames("3.3.3.4")
 		assert.NoError(t, err)
-		assert.Equal(t, []string{"some.profile.loc", "first.loc", "first.loc"}, hosts)
+		assert.Equal(t, []string{"some.profile.loc", "first.loc"}, hosts)
 	})
 }
 
@@ -93,7 +92,8 @@ func TestParser(t *testing.T) {
 		}
 		appendLine(p, "127.0.0.1 first.loc")
 		appendLine(p, "127.0.0.1 second.loc")
-		assert.Len(t, p.Routes["127.0.0.1"].HostNames, 2)
+		appendLine(p, "127.0.0.1 third.loc # test comment")
+		assert.Len(t, p.Routes["127.0.0.1"].HostNames, 3)
 	})
 
 	t.Run("appendLine disabled", func(t *testing.T) {
@@ -102,7 +102,8 @@ func TestParser(t *testing.T) {
 			Routes: map[string]*types.Route{},
 		}
 		appendLine(p, "# 127.0.0.1 first.loc")
-		assert.Len(t, p.Routes["127.0.0.1"].HostNames, 1)
+		appendLine(p, "# 127.0.0.1 second.loc # test comment")
+		assert.Len(t, p.Routes["127.0.0.1"].HostNames, 2)
 	})
 
 	t.Run("appendLine invalid lines", func(t *testing.T) {

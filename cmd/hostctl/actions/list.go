@@ -3,10 +3,9 @@ package actions
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/types"
+	"github.com/spf13/cobra"
 )
 
 func newListCmd() *cobra.Command {

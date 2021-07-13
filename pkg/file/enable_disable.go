@@ -28,12 +28,12 @@ func (f *File) DisableAll() error {
 	return f.changeTo(f.GetProfileNames(), types.Disabled)
 }
 
-// DisableOnly marks profiles as disable and enable all other profiles
+// DisableOnly marks profiles as disable and enable all other profiles.
 func (f *File) DisableOnly(profiles []string) error {
 	return f.changeToSplitted(profiles, types.Disabled)
 }
 
-// EnableOnly marks profiles as enable and disable all other profiles
+// EnableOnly marks profiles as enable and disable all other profiles.
 func (f *File) EnableOnly(profiles []string) error {
 	return f.changeToSplitted(profiles, types.Enabled)
 }
@@ -61,6 +61,7 @@ func invertStatus(s types.Status) types.Status {
 
 	return types.Enabled
 }
+
 func (f *File) changeTo(profiles []string, status types.Status) error {
 	for _, name := range profiles {
 		if name == types.Default {

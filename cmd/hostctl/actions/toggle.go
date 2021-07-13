@@ -1,9 +1,8 @@
 package actions
 
 import (
-	"github.com/spf13/cobra"
-
 	"github.com/guumaster/hostctl/pkg/file"
+	"github.com/spf13/cobra"
 )
 
 func newToggleCmd() *cobra.Command {

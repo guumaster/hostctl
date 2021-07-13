@@ -73,18 +73,22 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/gkze"><img src="https://avatars0.githubusercontent.com/u/3131232?v=4" width="50px;" alt=""/><br /><sub><b>George Kontridze</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=gkze" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/pacodes"><img src="https://avatars2.githubusercontent.com/u/28688410?v=4" width="50px;" alt=""/><br /><sub><b>Pacodes</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Tests">⚠️</a> <a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Code">💻</a></td>
-    <td align="center"><a href="https://772424.com"><img src="https://avatars3.githubusercontent.com/u/64371?v=4" width="50px;" alt=""/><br /><sub><b>BarbUk</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=BarbUk" title="Code">💻</a> <a href="#ideas-BarbUk" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/devopsbrett"><img src="https://avatars1.githubusercontent.com/u/4403441?v=4" width="50px;" alt=""/><br /><sub><b>Brett Mack</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=devopsbrett" title="Code">💻</a></td>
-    <td align="center"><a href="https://peterthaleikis.com"><img src="https://avatars0.githubusercontent.com/u/8433587?v=4" width="50px;" alt=""/><br /><sub><b>Peter Thaleikis</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=spekulatius" title="Code">💻</a> <a href="https://github.com/guumaster/hostctl/commits?author=spekulatius" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/smhmd"><img src="https://avatars0.githubusercontent.com/u/46059092?v=4" width="50px;" alt=""/><br /><sub><b>simohamed</b></sub></a><br /><a href="#ideas-smhmd" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/guumaster/hostctl/commits?author=smhmd" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/fabiang"><img src="https://avatars2.githubusercontent.com/u/348344?v=4" width="50px;" alt=""/><br /><sub><b>Fabian Grutschus</b></sub></a><br /><a href="#ideas-fabiang" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/gkze"><img src="https://avatars0.githubusercontent.com/u/3131232?v=4?s=50" width="50px;" alt=""/><br /><sub><b>George Kontridze</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=gkze" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/pacodes"><img src="https://avatars2.githubusercontent.com/u/28688410?v=4?s=50" width="50px;" alt=""/><br /><sub><b>Pacodes</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Tests">⚠️</a> <a href="https://github.com/guumaster/hostctl/commits?author=pacodes" title="Code">💻</a></td>
+    <td align="center"><a href="https://772424.com"><img src="https://avatars3.githubusercontent.com/u/64371?v=4?s=50" width="50px;" alt=""/><br /><sub><b>BarbUk</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=BarbUk" title="Code">💻</a> <a href="#ideas-BarbUk" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/devopsbrett"><img src="https://avatars1.githubusercontent.com/u/4403441?v=4?s=50" width="50px;" alt=""/><br /><sub><b>Brett Mack</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=devopsbrett" title="Code">💻</a></td>
+    <td align="center"><a href="https://peterthaleikis.com"><img src="https://avatars0.githubusercontent.com/u/8433587?v=4?s=50" width="50px;" alt=""/><br /><sub><b>Peter Thaleikis</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=spekulatius" title="Code">💻</a> <a href="https://github.com/guumaster/hostctl/commits?author=spekulatius" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/smhmd"><img src="https://avatars0.githubusercontent.com/u/46059092?v=4?s=50" width="50px;" alt=""/><br /><sub><b>simohamed</b></sub></a><br /><a href="#ideas-smhmd" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/guumaster/hostctl/commits?author=smhmd" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/fabiang"><img src="https://avatars2.githubusercontent.com/u/348344?v=4?s=50" width="50px;" alt=""/><br /><sub><b>Fabian Grutschus</b></sub></a><br /><a href="#ideas-fabiang" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/kadern0"><img src="https://avatars.githubusercontent.com/u/13137996?v=4?s=50" width="50px;" alt=""/><br /><sub><b>Pablo Caderno</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/commits?author=kadern0" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/ddl-jbrown"><img src="https://avatars.githubusercontent.com/u/67287351?v=4?s=50" width="50px;" alt=""/><br /><sub><b>Josh Brown</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/issues?q=author%3Addl-jbrown" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/lukasmrtvy"><img src="https://avatars.githubusercontent.com/u/768572?v=4?s=50" width="50px;" alt=""/><br /><sub><b>Lukas M</b></sub></a><br /><a href="https://github.com/guumaster/hostctl/issues?q=author%3Alukasmrtvy" title="Bug reports">🐛</a> <a href="#ideas-lukasmrtvy" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
@@ -127,7 +131,7 @@ If you like this tool and think is worth it, you can invite me a coffee:
 [awesome-go-link]: https://github.com/avelino/awesome-go
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[all-contributors-badge]: https://img.shields.io/badge/contributors-7-blue.svg
+[all-contributors-badge]: https://img.shields.io/badge/contributors-10-blue.svg
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [all-contributors-link]: #contributors-
 
