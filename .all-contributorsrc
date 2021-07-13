@@ -73,11 +73,21 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "kadern0",
+      "name": "Pablo Caderno",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13137996?v=4",
+      "profile": "https://github.com/kadern0",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "hostctl",
   "projectOwner": "guumaster",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "none"
 }
