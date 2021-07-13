@@ -16,6 +16,7 @@ var (
 	profileEnd    = regexp.MustCompile(`(?i)# end\s*`)
 	spaceRemover  = regexp.MustCompile(`\s+`)
 	tabReplacer   = regexp.MustCompile(`\t+`)
+	endingComment = regexp.MustCompile(`(.[^#]*).*`)
 )
 
 // Parser is the interface for content parsers
@@ -142,8 +143,9 @@ func parseRouteLine(str string) (*types.Route, bool) {
 	clean := spaceRemover.ReplaceAllString(str, " ")
 	clean = tabReplacer.ReplaceAllString(clean, " ")
 	clean = strings.TrimSpace(clean)
-
-	p := strings.Split(clean, " ")
+	result := endingComment.FindStringSubmatch(clean)
+	tResult := strings.TrimSpace(result[1])
+	p := strings.Split(tResult, " ")
 
 	i := 0
 	if p[0] == "#" && len(p) > 1 {
