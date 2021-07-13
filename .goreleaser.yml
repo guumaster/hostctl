@@ -61,6 +61,7 @@ brews:
     tap:
       owner: guumaster
       name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     homepage:  https://github.com/guumaster/hostctl
     description: Your dev tool to manage /etc/hosts like a pro
     commit_author:
