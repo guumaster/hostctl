@@ -31,10 +31,12 @@ hostctl remove [profiles] [flags]
 ### Options inherited from parent commands
 
 ```
-  -c, --column strings     Columns to show on lists
+  -c, --column strings     Column names to show on lists. comma separated
       --host-file string   Hosts file path (default "/etc/hosts")
+      --no-color           force colorless output
+  -o, --out string         Output type (table|raw|markdown|json) (default "table")
   -q, --quiet              Run command without output
-      --raw                Output without table borders
+      --raw                Output without borders (same as -o raw)
 ```
 
 ##### SEE ALSO

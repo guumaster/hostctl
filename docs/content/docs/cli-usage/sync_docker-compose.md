@@ -21,7 +21,9 @@ hostctl sync docker-compose [profile] [flags]
 
 ```
       --compose-file string   path to docker-compose.yml
+  -d, --domain string         domain where your docker containers will be added (default "loc")
   -h, --help                  help for docker-compose
+      --network string        Filter containers from a specific network
       --prefix                keep project name prefix from domain name
       --project-name string   docker compose project name
 ```
@@ -29,12 +31,12 @@ hostctl sync docker-compose [profile] [flags]
 ### Options inherited from parent commands
 
 ```
-  -c, --column strings     Columns to show on lists
-  -d, --domain string      domain where your docker containers will be added (default "loc")
+  -c, --column strings     Column names to show on lists. comma separated
       --host-file string   Hosts file path (default "/etc/hosts")
-      --network string     Filter containers from a specific network
+      --no-color           force colorless output
+  -o, --out string         Output type (table|raw|markdown|json) (default "table")
   -q, --quiet              Run command without output
-      --raw                Output without table borders
+      --raw                Output without borders (same as -o raw)
   -w, --wait duration      Enables a profile for a specific amount of time (default -1ns)
 ```
 

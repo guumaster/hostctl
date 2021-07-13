@@ -11,13 +11,6 @@ Your dev tool to manage /etc/hosts like a pro
 
 ```
 
-    __                    __           __     __
-   / /_   ____    _____  / /_  _____  / /_   / /
-  / __ \ / __ \  / ___/ / __/ / ___/ / __/  / /
- / / / // /_/ / (__  ) / /_  / /__  / /_   / /
-/_/ /_/ \____/ /____/  \__/  \___/  \__/  /_/
-
-
 hostctl is a CLI tool to manage your hosts file with ease.
 You can have multiple profiles, enable/disable exactly what
 you need each time with a simple interface.
@@ -28,11 +21,13 @@ you need each time with a simple interface.
 ### Options
 
 ```
-  -c, --column strings     Columns to show on lists
+  -c, --column strings     Column names to show on lists. comma separated
   -h, --help               help for hostctl
       --host-file string   Hosts file path (default "/etc/hosts")
+      --no-color           force colorless output
+  -o, --out string         Output type (table|raw|markdown|json) (default "table")
   -q, --quiet              Run command without output
-      --raw                Output without table borders
+      --raw                Output without borders (same as -o raw)
 ```
 
 #### SEE ALSO
