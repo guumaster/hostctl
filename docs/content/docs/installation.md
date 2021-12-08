@@ -29,6 +29,13 @@ yay -Sy hostctl
 ```
 
 
+### Nix
+
+```
+nix-env -iA nixpkgs.hostctl
+```
+
+
 ### HomeBrew
 
 ```
