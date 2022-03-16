@@ -69,6 +69,7 @@ func (p *Profile) RemoveHostnames(hostnames []string) {
 			p.Routes[ip].HostNames = remove(p.Routes[ip].HostNames, h)
 			if len(p.Routes[ip].HostNames) == 0 {
 				delete(p.Routes, ip)
+				p.IPList = remove(p.IPList, ip)
 			}
 		}
 	}
