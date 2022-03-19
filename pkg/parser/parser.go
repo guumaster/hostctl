@@ -147,7 +147,7 @@ func parseRouteLine(str string) (*types.Route, bool) {
 	p := strings.Split(tResult, " ")
 
 	i := 0
-	if p[0] == "#" && len(p) > 1 {
+	if p[0] != "#" && len(p) > 1 {
 		i = 1
 	}
 
