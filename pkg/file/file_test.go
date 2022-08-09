@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// nolint:gochecknoglobals
+//nolint:gochecknoglobals
 var (
 	defaultProfile = "127.0.0.1 localhost\n"
 

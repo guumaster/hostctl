@@ -57,7 +57,7 @@ Creates full markdown documentation and store it on the given path.
 				fname := path.Base(src)
 
 				dst := strings.Replace(src, "hostctl_", "", 1)
-				if fname == "hostctl.md" { // nolint: goconst
+				if fname == "hostctl.md" { //nolint: goconst
 					dst = path.Join(output, "_index.md")
 					err = fixContent(rootCmd.Long, src)
 				} else {
@@ -94,7 +94,7 @@ func fixContent(desc, dst string) error {
 	wrapped := fmt.Sprintf("```\n%s\n```\n", desc)
 	final := strings.Replace(string(data), desc, wrapped, 1)
 
-	return ioutil.WriteFile(dst, []byte(final), 0666) // nolint: gosec
+	return ioutil.WriteFile(dst, []byte(final), 0666) //nolint: gosec,gomnd
 }
 
 func filePrepender(filename string) string {

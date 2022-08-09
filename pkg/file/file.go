@@ -160,7 +160,7 @@ func (f *File) RemoveHostnames(name string, routes []string) (bool, error) {
 
 // WriteTo overwrite file with hosts info.
 func (f *File) WriteTo(src string) error {
-	h, err := f.fs.OpenFile(src, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	h, err := f.fs.OpenFile(src, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644) //nolint: gomnd
 	if err != nil {
 		return err
 	}
@@ -170,7 +170,7 @@ func (f *File) WriteTo(src string) error {
 
 // Flush overwrite file with hosts info.
 func (f *File) Flush() error {
-	h, err := f.fs.OpenFile(f.src.Name(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	h, err := f.fs.OpenFile(f.src.Name(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644) //nolint: gomnd
 	if err != nil {
 		return err
 	}
