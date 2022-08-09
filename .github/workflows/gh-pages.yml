@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: docs
           submodules: true
@@ -21,7 +21,7 @@ jobs:
           cp .all-contributorsrc docs/data/contributors.json
 
       - name: Set up Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v3
         with:
           go-version: 1.14.x
 
