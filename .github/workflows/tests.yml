@@ -13,7 +13,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        go-version: [1.14.x]
+        go-version: [1.18.x]
         platform: [macos-latest, ubuntu-latest] # , windows-latest // TODO: Review Tests on windows
     runs-on: ${{ matrix.platform }}
     steps:
