@@ -1,7 +1,6 @@
 package file
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -11,7 +10,7 @@ import (
 func makeTempHostsFile(t *testing.T, pattern string) *os.File {
 	t.Helper()
 
-	file, err := ioutil.TempFile("/tmp", pattern+"_")
+	file, err := os.CreateTemp("/tmp", pattern+"_")
 	if err != nil {
 		t.Fatal(err)
 	}

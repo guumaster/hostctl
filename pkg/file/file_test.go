@@ -1,7 +1,6 @@
 package file
 
 import (
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -249,7 +248,7 @@ func TestManagerWrite(t *testing.T) {
 		assert.NoError(t, err)
 		f.Close()
 
-		c, err := ioutil.ReadFile(f.Name())
+		c, err := os.ReadFile(f.Name())
 		assert.NoError(t, err)
 		assert.Contains(t, string(c), fullHostfile)
 	})

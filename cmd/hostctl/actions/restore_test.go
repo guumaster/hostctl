@@ -1,7 +1,6 @@
 package actions
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -17,7 +16,7 @@ func Test_Restore(t *testing.T) {
 	from := r.TempHostfile("restoreFrom")
 	defer os.Remove(from.Name())
 
-	to, err := ioutil.TempFile("/tmp", "restoreTo")
+	to, err := os.CreateTemp("/tmp", "restoreTo")
 	assert.NoError(t, err)
 
 	defer os.Remove(to.Name())
@@ -41,7 +40,7 @@ func Test_Restore(t *testing.T) {
 			+----------+--------+-----------+------------+
 		`, to.Name(), from.Name())
 
-	toData, _ := ioutil.ReadFile(to.Name())
-	fromData, _ := ioutil.ReadFile(from.Name())
+	toData, _ := os.ReadFile(to.Name())
+	fromData, _ := os.ReadFile(from.Name())
 	assert.Equal(t, string(toData), string(fromData))
 }

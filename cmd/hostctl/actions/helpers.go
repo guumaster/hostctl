@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -125,7 +124,7 @@ func readerFromURL(ctx context.Context, url string) (io.Reader, error) {
 
 	defer resp.Body.Close()
 
-	b, err := ioutil.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
 
 	return bytes.NewReader(b), err
 }
