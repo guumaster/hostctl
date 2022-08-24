@@ -44,6 +44,22 @@ func TestHostFile(t *testing.T) {
 	})
 }
 
+func TestWrongHostFile(t *testing.T) {
+	testFile := `
+# This file should be parsed as comment
+# 1.1.1.1
+`
+
+	t.Run("Wrong Content", func(t *testing.T) {
+		f := strings.NewReader(testFile)
+
+		data, err := Parse(f)
+		assert.NoError(t, err)
+		assert.Len(t, data.ProfileNames, 0)
+		assert.Equal(t, data.DefaultProfile[2].Comment, "# 1.1.1.1")
+	})
+}
+
 func appendLine(p *types.Profile, line string) {
 	if line == "" {
 		return

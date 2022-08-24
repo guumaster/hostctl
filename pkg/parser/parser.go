@@ -152,12 +152,13 @@ func parseRouteLine(str string) (*types.Route, bool) {
 	}
 
 	ip := net.ParseIP(p[i])
+	hostnames := p[i+1:]
 
-	if ip == nil {
+	if ip == nil || len(hostnames) == 0 {
 		return nil, false
 	}
 
-	return &types.Route{IP: ip, HostNames: p[i+1:]}, true
+	return &types.Route{IP: ip, HostNames: hostnames}, true
 }
 
 // ParseProfile creates a new profile reading lines from a reader.
