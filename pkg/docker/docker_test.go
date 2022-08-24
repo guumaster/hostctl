@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -111,7 +111,7 @@ func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client 
 				}
 				return &http.Response{
 					StatusCode: http.StatusOK,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte(b))),
+					Body:       io.NopCloser(bytes.NewReader([]byte(b))),
 				}, nil
 			}),
 		},

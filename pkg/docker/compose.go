@@ -3,7 +3,6 @@ package docker
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 
 	"gopkg.in/yaml.v2"
 )
@@ -20,7 +19,7 @@ type composeService struct {
 
 // ParseComposeFile returns a list of containers from a docker-compose.yml file.
 func ParseComposeFile(r io.Reader, projectName string) ([]string, error) {
-	bytes, err := ioutil.ReadAll(r)
+	bytes, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
 	}

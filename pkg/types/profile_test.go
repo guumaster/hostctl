@@ -2,7 +2,7 @@ package types
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -38,7 +38,7 @@ func TestProfile(t *testing.T) {
 		err := p.Render(b)
 		assert.NoError(t, err)
 
-		c, err := ioutil.ReadAll(b)
+		c, err := io.ReadAll(b)
 		assert.NoError(t, err)
 
 		assert.Contains(t, string(c), testEnabledProfile)
@@ -153,7 +153,7 @@ func TestDefaultProfile_Render(t *testing.T) {
 	err := d.Render(b)
 	assert.NoError(t, err)
 
-	c, err := ioutil.ReadAll(b)
+	c, err := io.ReadAll(b)
 	assert.NoError(t, err)
 
 	out := "\n" + string(c)

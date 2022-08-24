@@ -2,7 +2,7 @@ package render
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/guumaster/hostctl/pkg/types"
@@ -29,7 +29,7 @@ func TestNewJSONRenderer(t *testing.T) {
 	err := r.Render()
 	assert.NoError(t, err)
 
-	out, err := ioutil.ReadAll(b)
+	out, err := io.ReadAll(b)
 	assert.NoError(t, err)
 
 	expected := `

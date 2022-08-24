@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -82,7 +81,7 @@ func containsDefault(args []string) error {
 
 func getDefaultHostFile() string {
 	if runtime.GOOS == "linux" {
-		return "/etc/hosts" // nolint: goconst
+		return "/etc/hosts" //nolint: goconst
 	}
 
 	envHostFile := os.Getenv("HOSTCTL_FILE")
@@ -125,7 +124,7 @@ func readerFromURL(ctx context.Context, url string) (io.Reader, error) {
 
 	defer resp.Body.Close()
 
-	b, err := ioutil.ReadAll(resp.Body)
+	b, err := io.ReadAll(resp.Body)
 
 	return bytes.NewReader(b), err
 }
@@ -147,7 +146,7 @@ func getRenderer(cmd *cobra.Command, opts *render.TableRendererOptions) types.Re
 		opts.Writer = cmd.OutOrStdout()
 	}
 
-	// nolint: goconst
+	//nolint: goconst
 	switch {
 	case raw || out == "raw":
 		return render.NewRawRenderer(opts)

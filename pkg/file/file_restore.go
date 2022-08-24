@@ -13,7 +13,7 @@ func (f *File) Restore(from string) error {
 	}
 	defer fromFile.Close()
 
-	dstFile, err := f.fs.OpenFile(f.src.Name(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
+	dstFile, err := f.fs.OpenFile(f.src.Name(), os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644) //nolint: gomnd
 	if err != nil {
 		return err
 	}

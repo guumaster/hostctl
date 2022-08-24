@@ -3,7 +3,7 @@ package actions
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 	"testing"
@@ -107,7 +107,7 @@ func (c *cmdRunner) Run(cmd string) Runner {
 	err := c.root.Execute()
 	assert.NoError(err)
 
-	out, err := ioutil.ReadAll(b)
+	out, err := io.ReadAll(b)
 	assert.NoError(err)
 
 	c.out = "\n" + string(out)
@@ -132,7 +132,7 @@ func (c *cmdRunner) RunE(cmd string, expectedErr error) Runner {
 	actualErr := c.root.Execute()
 	assert.EqualError(actualErr, expectedErr.Error())
 
-	out, err := ioutil.ReadAll(b)
+	out, err := io.ReadAll(b)
 	assert.NoError(err)
 
 	c.out = "\n" + string(out)
@@ -141,7 +141,7 @@ func (c *cmdRunner) RunE(cmd string, expectedErr error) Runner {
 }
 
 func (c *cmdRunner) TempHostfile(pattern string) *os.File {
-	file, err := ioutil.TempFile("/tmp", fmt.Sprintf("%s_%s_", c.root.Name(), pattern))
+	file, err := os.CreateTemp("/tmp", fmt.Sprintf("%s_%s_", c.root.Name(), pattern))
 	as.NoError(c.t, err)
 
 	_, _ = file.WriteString(`

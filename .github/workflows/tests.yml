@@ -13,17 +13,17 @@ jobs:
   tests:
     strategy:
       matrix:
-        go-version: [1.14.x]
+        go-version: [1.19.x]
         platform: [macos-latest, ubuntu-latest] # , windows-latest // TODO: Review Tests on windows
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Install Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Test
         run: |
@@ -41,12 +41,12 @@ jobs:
     needs: tests
     steps:
       - name: Install Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - run: git fetch --prune --unshallow
 
       - name: Download coverage report

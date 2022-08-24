@@ -85,7 +85,7 @@ func waitSignalOrDuration(d time.Duration) <-chan struct{} {
 		d = longWaitTime * time.Hour
 	}
 
-	signal.Notify(sig, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	signal.Notify(sig, os.Interrupt, syscall.SIGTERM, syscall.SIGINT) //nolint: govet
 
 	go func() {
 		for {

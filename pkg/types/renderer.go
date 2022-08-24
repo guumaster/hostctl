@@ -1,6 +1,6 @@
 package types
 
-// nolint:gochecknoglobals
+//nolint:gochecknoglobals
 var (
 	// DefaultColumns is the list of default columns to use when showing table list.
 	DefaultColumns = []string{"profile", "status", "ip", "domain"}

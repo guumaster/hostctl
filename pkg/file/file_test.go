@@ -1,7 +1,6 @@
 package file
 
 import (
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -12,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// nolint:gochecknoglobals
+//nolint:gochecknoglobals
 var (
 	defaultProfile = "127.0.0.1 localhost\n"
 
@@ -249,7 +248,7 @@ func TestManagerWrite(t *testing.T) {
 		assert.NoError(t, err)
 		f.Close()
 
-		c, err := ioutil.ReadFile(f.Name())
+		c, err := os.ReadFile(f.Name())
 		assert.NoError(t, err)
 		assert.Contains(t, string(c), fullHostfile)
 	})
