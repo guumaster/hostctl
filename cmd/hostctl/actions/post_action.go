@@ -92,9 +92,11 @@ func waitSignalOrDuration(d time.Duration) <-chan struct{} {
 			select {
 			case <-time.After(d):
 				done <- struct{}{}
+
 				return
 			case <-sig:
 				done <- struct{}{}
+
 				return
 			}
 		}

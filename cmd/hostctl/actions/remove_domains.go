@@ -4,8 +4,9 @@ import (
 	"strings"
 
 	"github.com/guumaster/cligger"
-	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/spf13/cobra"
+
+	"github.com/guumaster/hostctl/pkg/file"
 )
 
 func newRemoveDomainsCmd() *cobra.Command {

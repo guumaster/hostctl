@@ -5,10 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/guumaster/hostctl/pkg/parser"
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/parser"
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 //nolint:gochecknoglobals

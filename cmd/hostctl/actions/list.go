@@ -3,9 +3,10 @@ package actions
 import (
 	"fmt"
 
+	"github.com/spf13/cobra"
+
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/spf13/cobra"
 )
 
 func newListCmd() *cobra.Command {
@@ -31,6 +32,7 @@ The "default" profile is all the content that is not handled by hostctl tool.
 			h.List(r, &file.ListOptions{
 				Profiles: profiles,
 			})
+
 			return nil
 		},
 	}

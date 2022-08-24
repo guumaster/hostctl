@@ -5,10 +5,11 @@ import (
 	"io"
 	"os"
 
+	"github.com/spf13/cobra"
+
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/spf13/cobra"
 )
 
 type addRemoveFn func(h *file.File, p *types.Profile) error

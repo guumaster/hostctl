@@ -5,9 +5,10 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/guumaster/hostctl/pkg/render"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestFile_List(t *testing.T) {

@@ -5,8 +5,9 @@ import (
 	"io"
 	"testing"
 
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func TestNewMarkdownRenderer(t *testing.T) {

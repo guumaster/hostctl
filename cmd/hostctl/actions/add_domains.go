@@ -4,9 +4,10 @@ import (
 	"strings"
 
 	"github.com/guumaster/cligger"
+	"github.com/spf13/cobra"
+
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/spf13/cobra"
 )
 
 func newAddRemoveDomainsCmd() (*cobra.Command, *cobra.Command) {
@@ -42,6 +43,7 @@ If the profile already exists it will be added to it.`,
 			if !quiet {
 				cligger.Success("Domains '%s' added.\n", strings.Join(args[1:], ", "))
 			}
+
 			return nil
 		},
 	}

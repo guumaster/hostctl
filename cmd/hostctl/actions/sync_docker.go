@@ -1,11 +1,12 @@
 package actions
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/guumaster/hostctl/pkg/docker"
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/spf13/cobra"
 )
 
 func newSyncDockerCmd(removeCmd *cobra.Command, optsFn getOptionsFn) *cobra.Command {

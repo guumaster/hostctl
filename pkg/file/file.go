@@ -7,9 +7,10 @@ import (
 	"os"
 	"sync"
 
+	"github.com/spf13/afero"
+
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/spf13/afero"
 )
 
 // File container to handle a hosts file.

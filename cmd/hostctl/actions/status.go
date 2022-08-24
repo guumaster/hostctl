@@ -1,10 +1,11 @@
 package actions
 
 import (
+	"github.com/spf13/cobra"
+
 	"github.com/guumaster/hostctl/pkg/file"
 	"github.com/guumaster/hostctl/pkg/render"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/spf13/cobra"
 )
 
 func newStatusCmd() *cobra.Command {

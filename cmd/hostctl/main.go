@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/guumaster/cligger"
+
 	"github.com/guumaster/hostctl/cmd/hostctl/actions"
 )
 

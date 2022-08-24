@@ -4,8 +4,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/guumaster/tablewriter"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 // TableRendererOptions contains options to render a table.

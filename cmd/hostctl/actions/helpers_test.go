@@ -8,10 +8,11 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/guumaster/hostctl/pkg/parser"
 	"github.com/guumaster/hostctl/pkg/render"
 	"github.com/guumaster/hostctl/pkg/types"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestContainsDefault(t *testing.T) {
