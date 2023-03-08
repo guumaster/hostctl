@@ -142,6 +142,9 @@ func parseRouteLine(str string) (*types.Route, bool) {
 	clean := spaceRemover.ReplaceAllString(str, " ")
 	clean = tabReplacer.ReplaceAllString(clean, " ")
 	clean = strings.TrimSpace(clean)
+	if len(clean) == 0 {
+		return nil, false
+	}
 	result := endingComment.FindStringSubmatch(clean)
 	tResult := strings.TrimSpace(result[1])
 	p := strings.Split(tResult, " ")
