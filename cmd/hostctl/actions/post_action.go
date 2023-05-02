@@ -74,7 +74,7 @@ func postActionCmd(cmd *cobra.Command, args []string, postCmd *cobra.Command, li
 
 func waitSignalOrDuration(d time.Duration) <-chan struct{} {
 	done := make(chan struct{})
-	sig := make(chan os.Signal)
+	sig := make(chan os.Signal, 1)
 
 	if d < 0 {
 		d = -d

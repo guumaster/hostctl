@@ -146,7 +146,7 @@ func parseRouteLine(str string) (*types.Route, bool) {
 	if len(clean) == 0 {
 		return nil, false
 	}
-	
+
 	result := endingComment.FindStringSubmatch(clean)
 	tResult := strings.TrimSpace(result[1])
 	p := strings.Split(tResult, " ")

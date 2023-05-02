@@ -130,7 +130,7 @@ func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client 
 	t.Helper()
 
 	v := "1.22"
-	c, err := client.NewClient("tcp://fake:2345", v,
+	c, err := client.NewClient("tcp://fake:2345", v, //nolint: staticcheck
 		&http.Client{
 			Transport: transportFunc(func(req *http.Request) (*http.Response, error) {
 				url := req.URL.Path
