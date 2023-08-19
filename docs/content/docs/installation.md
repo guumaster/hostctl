@@ -42,6 +42,12 @@ nix-env -iA nixpkgs.hostctl
 brew install guumaster/tap/hostctl
 ```
 
+### asdf
+
+```
+asdf plugin add hostctl https://github.com/svenluijten/asdf-hostctl.git
+asdf install hostctl latest
+```
 
 ### Scoop
 
