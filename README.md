@@ -112,8 +112,8 @@ If you like this tool and think is worth it, you can invite me a coffee:
 
 
 <!-- JUST BADGES & LINKS -->
-[tests-badge]: https://img.shields.io/github/workflow/status/guumaster/hostctl/Test
-[tests-link]: https://github.com/guumaster/hostctl/actions?query=workflow%3ATest
+[tests-badge]: https://img.shields.io/github/actions/workflow/status/guumaster/hostctl/tests.yml
+[tests-link]: https://github.com/guumaster/hostctl/actions/workflows/tests.yml
 
 [release-badge]: https://img.shields.io/github/release/guumaster/hostctl.svg?logo=github&labelColor=262b30
 [release-link]: https://github.com/guumaster/hostctl/releases
