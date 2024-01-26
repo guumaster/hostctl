@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"strings"
 	"testing"
 
@@ -141,7 +142,9 @@ func (c *cmdRunner) RunE(cmd string, expectedErr error) Runner {
 }
 
 func (c *cmdRunner) TempHostfile(pattern string) *os.File {
-	file, err := os.CreateTemp("/tmp", fmt.Sprintf("%s_%s_", c.root.Name(), pattern))
+	deep_path := path.Dir(pattern)
+	tmp_path := path.Join("/tmp", deep_path)
+	file, err := os.CreateTemp(tmp_path, fmt.Sprintf("%s_%s_", c.root.Name(), path.Base(pattern)))
 	as.NoError(c.t, err)
 
 	_, _ = file.WriteString(`
