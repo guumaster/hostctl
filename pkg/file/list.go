@@ -83,14 +83,12 @@ func addProfiles(p *types.Profile, r types.Renderer, opts *ListOptions) {
 
 	for _, ip := range p.IPList {
 		route := p.Routes[ip]
-		for _, h := range route.HostNames {
-			r.AppendRow(&types.Row{
-				Profile: p.Name,
-				Status:  p.GetStatus(),
-				IP:      route.IP.String(),
-				Host:    h,
-			})
-		}
+		r.AppendRow(&types.Row{
+			Profile: p.Name,
+			Status:  p.GetStatus(),
+			IP:      route.IP.String(),
+			Hosts:    route.HostNames,
+		})
 	}
 
 	if len(p.IPList) > 0 {

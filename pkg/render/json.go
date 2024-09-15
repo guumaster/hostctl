@@ -49,7 +49,7 @@ type line struct {
 	Profile string
 	Status  string
 	IP      string
-	Host    string
+	Hosts   []string
 }
 
 // AppendRow adds a new row to the list.
@@ -62,7 +62,7 @@ func (j JSONRenderer) AppendRow(row *types.Row) {
 		Profile: row.Profile,
 		Status:  row.Status,
 		IP:      row.IP,
-		Host:    row.Host,
+		Hosts:   row.Hosts,
 	}
 	j.data.lines = append(j.data.lines, l)
 }

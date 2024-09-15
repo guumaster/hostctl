@@ -22,5 +22,5 @@ type Row struct {
 	Profile string
 	Status  string
 	IP      string
-	Host    string
+	Hosts   []string
 }

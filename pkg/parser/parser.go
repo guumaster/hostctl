@@ -113,7 +113,7 @@ func parseToDefault(b []byte, currProfile string) *types.Row {
 			Profile: types.Default,
 			Status:  string(status),
 			IP:      line.IP.String(),
-			Host:    line.HostNames[0],
+			Hosts:   line.HostNames,
 		}
 	}
 

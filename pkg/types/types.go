@@ -69,7 +69,8 @@ func getLine(row *Row) string {
 			prefix = "# "
 		}
 
-		line = fmt.Sprintf("%s%s %s", prefix, row.IP, row.Host)
+		hosts := strings.Join(row.Hosts, " ")
+		line = fmt.Sprintf("%s%s %s", prefix, row.IP, hosts)
 	}
 
 	return strings.TrimSpace(line)

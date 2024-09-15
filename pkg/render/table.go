@@ -3,6 +3,7 @@ package render
 import (
 	"io"
 	"os"
+	"strings"
 
 	"github.com/guumaster/tablewriter"
 
@@ -88,7 +89,8 @@ func (t TableRenderer) AppendRow(row *types.Row) {
 		case "ip", "ips":
 			r = append(r, row.IP)
 		case "domain", "domains":
-			r = append(r, row.Host)
+			hosts := strings.Join(row.Hosts, " ")
+			r = append(r, hosts)
 		}
 	}
 
